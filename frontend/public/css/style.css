@@ -1,0 +1,210 @@
+@font-face{ 
+    font-family:'BPreplayExtended'; 
+    src:url('../fonts/BPreplayExtended.otf') format('otf'); 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+@font-face{ 
+    font-family:'BPreplayExtended'; 
+    src:url('../fonts/BPreplayExtendedBold.otf'); 
+    font-weight: bold; 
+    font-style: normal; 
+}
+
+@font-face{ 
+    font-family:'BPreplayExtended'; 
+    src:url('../fonts/BPreplayExtendedItalics.otf'); 
+    font-weight: normal; 
+    font-style: italic;
+}
+
+@font-face{ 
+    font-family:'BPreplayExtended'; 
+    src:url('../fonts/BPreplayExtendedBoldItalics.otf'); 
+    font-weight: bold; 
+    font-style: italic;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #293046;
+    font-family: BPreplayExtended;
+    font-style: normal; 
+    font-weight: normal;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* 메인 소개글 스타일 시트 */
+#main-overview {
+    margin-top: 80px;
+}
+
+#main-overview h1 {
+    font-size: 50px;
+    font-weight: 800;
+    padding-top: 50px;
+}
+
+#main-overview h4 {
+    font-weight: 300;
+    /*padding-top: 150px;*/
+}
+
+#main-overview a.btn {
+    margin-top: 15px;
+}
+
+.breadcrumb {
+    padding-top: 100px;
+}
+
+#my-item .myitem {
+    padding: 10px !important;
+}
+
+/* 상품 리스트 스타일 시트 */
+#auction-list,
+#artwork-list {
+    padding: 50px 0;
+}
+
+#auction-list .auction,
+#artwork-list .artwork {
+    padding: 20px 10px;
+    text-align: center;
+}
+
+#auction-list .auction img,
+#artwork-list .artwork img {
+    width: 100%;
+}
+
+#auction-list .auction h4,
+#artwork-list .artwork h4 {
+    padding-top: 40px;
+}
+
+#auction-list .auction p,
+#artwork-list .artwork p {
+    padding-top: 10px;
+}
+
+/* 로그인 & 회원가입 스타일 시트 */
+#register-form,
+#login-form {
+    margin-top: 150px;
+    padding: 30px;
+}
+
+/* 마이페이지 > 서브 메뉴 */
+.sub-nav .nav-item.nav-link {
+    background: #fff;
+    margin-right: 10px;
+    border: 1px solid #eaeaea;
+    color: #354a67 !important;
+}
+.sub-nav .nav-item.nav-link:hover {
+    background: #eaeaea;
+    border: 1px solid #eaeaea;
+}
+.sub-nav .nav-item.nav-link.active {
+    background: #354a67;
+    border: 1px solid #354a67;
+    color: white !important;
+}
+
+/* 마이페이지 > 내 상품 스타일 시트 */
+#my-item {
+    margin-bottom: 300px;
+}
+
+#my-item .myitem {
+    padding: 20px 40px;
+    text-align: center;
+}
+
+#my-item .myitem img {
+    width: 100px;
+    height: 100px;
+    margin: 20px 0;
+}
+
+/* 마이페이지 > 내 지갑 정보 스타일 시트 */
+.card .table {
+    padding: 0;
+    margin: 0;
+}
+
+nav.bottom-pagination {
+    display: inline-block;
+}
+
+/* 상품 리스트 > 상품 상세 정보 > 사용자 별 상품 조회 */
+.work-list-item {
+    display: block;
+    border-bottom: 1px solid #eee;
+    color: #aaa;
+    padding: 10px;
+}
+
+.work-list-item:hover {
+    text-decoration :none;
+    background: #f7f7f7;
+}
+
+.work-list-item:hover h4 {
+    color: #4444bb;
+}
+
+.work-list-item:hover p {
+    color: #4444bb;
+}
+
+.work-list-item h4 {
+    color: #333;
+    padding: 0;
+    margin: 0;
+}
+
+.work-list-item p {
+    padding: 0;
+    margin: 0;
+}
+
+/* 폰트 변경 */
+.navbar { 
+    font-family: 'BPreplayExtended';
+    font-weight: bold;
+}
+
+/* Shop Card의 아이템 상태 */
+#item-status-S {
+    background: #d7ffcd;
+    border-color: #238f08;
+    border-radius: 5px;
+}
+#item-status-D {
+    background: #fff3cd;
+    border-color: #ffeeba;
+    border-radius: 5px;
+}
+#item-status-C {
+    background: #7cb0e0;
+    border-color: #1a69b3;
+    border-radius: 5px;
+}
+#item-status-X {
+    background: rgb(235, 176, 176);
+    border-color: red;
+    border-radius: 5px;
+}
+#item-status-N {
+    background: lightgray;
+    border-color: gray;
+    border-radius: 5px;
+}
