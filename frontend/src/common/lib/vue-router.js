@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useStore } from 'vuex'
+//import { useStore } from 'vuex'
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -36,24 +36,23 @@ const router = createRouter({
     routes,
 });
 
-const store = useStore()
+// const store = useStore()
 
-const isLoggedIn = function(){
-    store.getters['root/isLoggedIn']
-}
+// const isLoggedIn = function(){
+//     store.getters['root/isLoggedIn']
+// }
 
-router.beforeEach((to, from, next) => {
-    // if(to.meta.loginRequired){
-    //     if(isLoggedIn()){
-    //     next()
-    //     }else{
-    //     alert("로그인이 필요합니다!")
-    //     next("/")
-    //     }
-    // }else{
-    //     next()
-    // }
-    next()
-})
+// router.beforeEach((to, from, next) => {
+//     if(to.meta.loginRequired){
+//         if(isLoggedIn()){
+//         next()
+//         }else{
+//         alert("로그인이 필요합니다!")
+//         next("/")
+//         }
+//     }else{
+//         next()
+//     }
+// })
 
 export default router;
