@@ -61,56 +61,58 @@ Design Tool 사용 : X
 
 # Git convention
 
-> 21.07.26. | SSAFY5_6반\_7조
+### Commit
 
-```git
-git commit -m "커밋 제목
-(한 줄 띄우고)
-커밋 내용
-(한 줄 띄우고)
-커밋 꼬릿말
-"
+```
+[#Jira 이슈번호] type: 행위 요약
+
+body
 ```
 
 ```
-<type>(<scope>): <subject>          -- 헤더
-<BLANK LINE>
-<body>                              -- 본문
-<BLANK LINE>
-<footer>                            -- 바닥글
+[#S05P12A607-141] feat: 회원정보 등록 api 구현
 
-===========================================
-<type>
-
-feat : 새로운 기능에 대한 커밋
-fix : 버그 수정에 대한 커밋
-build : 빌드 관련 파일 수정에 대한 커밋
-chore : 그 외 자잘한 수정에 대한 커밋
-ci : CI관련 설정 수정에 대한 커밋
-docs : 문서 수정에 대한 커밋
-style : 코드 스타일 혹은 포맷 등에 관한 커밋
-refactor :  코드 리팩토링에 대한 커밋
-test : 테스트 코드 수정에 대한 커밋
-
-=============================================
-<footer>
-
-Fixes: 이슈 수정중 (아직 해결되지 않은 경우)
-Resolves: 이슈를 해결했을 때 사용
-Ref: 참고할 이슈가 있을 때 사용
-Related to: 해당 커밋에 관련된 이슈번호 (아직 해결되지 않은 경우)
-
+행위에 대한 자세한 설명 (What & Why)
 ```
 
-```git
-// i.g.
-git commit -m "feat: 패킷 송신 이벤트에 관련된 로그 출력 기능 추가
+- **type 종류**
 
-커밋에 대한 자세한 설명을 써줍니다(What & Why)
+| type     | 설명                                 |
+| -------- | ------------------------------------ |
+| feat     | 새로운 기능에 대한 커밋              |
+| fix      | 버그 수정에 대한 커밋                |
+| build    | 빌드 관련 파일 수정에 대한 커밋      |
+| chore    | 그 외 자잘한 수정에 대한 커밋        |
+| ci       | CI 관련 설정 수정에 대한 커밋        |
+| docs     | 문서 수정에 대한 커밋                |
+| style    | 코드 스타일 혹은 포맷 등에 관한 커밋 |
+| refactor | 코드 리팩토링에 대한 커밋            |
+| test     | 테스트 코드 수정에 대한 커밋         |
+| design   | CSS 등 UI 수정에 대한 커밋           |
+| comment  | 주석 추가 및 수정에 대한 커밋        |
 
-Resolves: #123
-Ref: #456
-Related to: #48
-"
+### Branch
 
-```
+master
+
+|
+
+develop
+
+|
+
+feature (각 기능 단위)
+
+- develop은 develop-be, develop-fe로 나뉨
+
+  - back-end 관련 작업과 front-end 관련 작업을 각각 처리
+
+- feature의 기능 단위는 Jira Sub-Task 기준
+
+  - 필요에 따라 통합해서 사용해도 괜찮음
+
+- 예시
+  - feature/fe-**signup**
+  - feature/be-**signup**
+
+<br>
