@@ -26,7 +26,7 @@ public class RankingController {
 
     @GetMapping("/funding/{funding_id}")
     @ApiOperation(value = "펀딩 내 참여자 랭킹")
-    public ResponseEntity<?> getFundingRanking(@PathVariable Long funding_id){
+    public ResponseEntity<List<FundingRankingRes>> getFundingRanking(@PathVariable Long funding_id){
         return ResponseEntity.status(HttpStatus.OK).body(rankingService.getFundingRanking(funding_id));
     }
 }

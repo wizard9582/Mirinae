@@ -1,10 +1,11 @@
 package com.a506.mirinae.domain.donation;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FundingRankingRes {
     private String userThumbnail;
     private String userNickname;
