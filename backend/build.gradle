@@ -36,6 +36,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.batch:spring-batch-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	//validator
+	implementation('org.hibernate.validator:hibernate-validator:6.1.2.Final')
+	implementation('org.glassfish:jakarta.el:3.0.3')
 }
 
 test {
