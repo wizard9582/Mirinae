@@ -20,13 +20,18 @@ public class RankingService {
     private final DonationRepository donationRepository;
 
     @Transactional
-    public List<RankingRes> getFundingRanking(Long funding_id) {
+    public List<RankingRes> getFundingRanking(Long fundingId) {
         Page<Donation> donations = donationRepository
-                .findAllByFundingId(funding_id, PageRequest.of(0,10, Sort.Direction.ASC, "amount"));
+                .findAllByFundingId(fundingId, PageRequest.of(0,10, Sort.Direction.ASC, "amount"));
         List<RankingRes> rankingResList = new ArrayList<>();
         for(Donation donation : donations)
             rankingResList.add(new RankingRes(donation));
         return rankingResList;
     }
 
+    public List<RankingRes> getCategoryRanking(Long categoryId) {
+//        Page<Donation> donations = donationRepository
+//                .findAllByFundingCategoryId(categoryId, )
+        return null;
+    }
 }

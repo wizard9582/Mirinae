@@ -22,15 +22,15 @@ public class RankingController {
 
     private final RankingService rankingService;
 
-    @GetMapping("/funding/{funding_id}")
+    @GetMapping("/funding/{fundingId}")
     @ApiOperation(value = "펀딩 내 참여자 랭킹")
-    public ResponseEntity<List<RankingRes>> getFundingRanking(@PathVariable Long funding_id){
-        return ResponseEntity.status(HttpStatus.OK).body(rankingService.getFundingRanking(funding_id));
+    public ResponseEntity<List<RankingRes>> getFundingRanking(@PathVariable Long fundingId){
+        return ResponseEntity.status(HttpStatus.OK).body(rankingService.getFundingRanking(fundingId));
     }
 
-    @GetMapping("/category/{category_id}")
+    @GetMapping("/category/{categoryId}")
     @ApiOperation(value = "카테고리별 누적 개인랭킹")
-    public ResponseEntity<List<RankingRes>> getCategoryRanking(@PathVariable Long category_id){
-        return ResponseEntity.status(HttpStatus.OK).body(rankingService.getCategoryRanking(category_id));
+    public ResponseEntity<List<RankingRes>> getCategoryRanking(@PathVariable Long categoryId){
+        return ResponseEntity.status(HttpStatus.OK).body(rankingService.getCategoryRanking(categoryId));
     }
 }
