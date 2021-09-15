@@ -1,13 +1,14 @@
 <template>
     <div>
-        <content-welcome/>
+        <content-welcome class="bg-local bg-galaxy-pattern bg-no-repeat bg-cover"
+        @openKakaoLogin="onOpenKakaoLogin"
+        @openNaverLogin="onOpenNaverLogin"
+        @openGoogleLogin="onOpenGoogleLogin"/>
         <main-footer/>
     </div>
 </template>
-
 <script>
 import ContentWelcome from '@/components/welcome/ContentWelcome.vue'
-import MainHeader from '@/components/main/MainHeader.vue'
 import MainFooter from '@/components/main/MainFooter.vue'
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
@@ -18,7 +19,6 @@ export default {
     components: {
         ContentWelcome,
         MainFooter,
-        MainHeader,
     },
 
     setup(){
@@ -27,7 +27,17 @@ export default {
         const state = reactive({
         })
 
-        return { state }
+        const onOpenKakaoLogin = ()=>{
+            
+        }
+        const onOpenNaverLogin = ()=>{
+
+        }
+        const onOpenGoogleLogin = ()=>{
+
+        }
+
+        return { state, onOpenKakaoLogin, onOpenNaverLogin, onOpenGoogleLogin,  }
     }
 };
 </script>
