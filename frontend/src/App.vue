@@ -1,5 +1,7 @@
 <template>
-  <router-view/>
+  <div>
+    <router-view/>
+  </div>
 </template>
 
 <style src="./common/css/main.css">
@@ -9,5 +11,8 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+body {
+  margin: 0;
 }
 </style>

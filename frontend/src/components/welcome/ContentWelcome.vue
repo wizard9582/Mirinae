@@ -1,15 +1,11 @@
 <template>
-    <div></div>
+    <div>mainwelcome</div>
 </template>
 
 <script>
 export default {
-    name: 'PopLogin',
-    components: {
-    },
-
+    name: 'MainWelcome',
     setup(){
-
         return {}
     }
 };

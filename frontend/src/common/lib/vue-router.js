@@ -23,12 +23,6 @@ const routes = [
         name: 'Ranking',
         component: RankingPage,
     },
-    {
-        path: '*', 
-        name: 'ERROR404',
-        component: ErrorPage,
-        meta:{ loginRequired: false }
-    },
 ];
 
 const router = createRouter({
