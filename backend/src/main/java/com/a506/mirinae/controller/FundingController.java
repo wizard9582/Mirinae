@@ -1,5 +1,7 @@
 package com.a506.mirinae.controller;
 
+import com.a506.mirinae.domain.funding.FundingIdRes;
+import com.a506.mirinae.domain.funding.FundingReq;
 import com.a506.mirinae.domain.funding.FundingRes;
 import com.a506.mirinae.service.FundingService;
 import io.swagger.annotations.Api;
@@ -24,6 +26,17 @@ public class FundingController {
     @GetMapping("/{category_id}")
     public ResponseEntity<List<FundingRes>> getFundingList(@PathVariable("category_id") String categoryName, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryName, pageable));
+    }
+
+    @ApiOperation(value = "펀딩 개설")
+    @PostMapping("/")
+    public ResponseEntity<FundingIdRes> createFunding(@RequestBody @ApiParam(value = "펀딩 이름, 카테고리 이름, 펀딩 설명, 목표금액, " +
+                                                                         "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq) {
+        String JWT = null; // JWT 토큰
+        FundingIdRes fundingIdRes = fundingService.createFunding(fundingReq, JWT);
+        if(fundingIdRes.getFunding_id()==null)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.createFunding(fundingReq, JWT));
     }
 
 }

@@ -1,10 +1,11 @@
 package com.a506.mirinae.service;
 
+import com.a506.mirinae.domain.category.Category;
+import com.a506.mirinae.domain.category.CategoryRepository;
 import com.a506.mirinae.domain.donation.Donation;
 import com.a506.mirinae.domain.donation.DonationRepository;
-import com.a506.mirinae.domain.funding.Funding;
-import com.a506.mirinae.domain.funding.FundingRepository;
-import com.a506.mirinae.domain.funding.FundingRes;
+import com.a506.mirinae.domain.funding.*;
+import com.a506.mirinae.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public List<FundingRes> getFundingList(String categoryName, Pageable pageable) {
@@ -38,5 +40,15 @@ public class FundingService {
             fundingResList.add(fundingRes);
         }
         return fundingResList;
+    }
+
+    @Transactional
+    public FundingIdRes createFunding(FundingReq fundingReq, String JWT) {
+        String wallet = "null";
+        User user = null;   //JWT로 user 변환해주기
+        Category category = categoryRepository.findByName(fundingReq.getCategory_name())
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리=" + fundingReq.getCategory_name()));
+        Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
+        return new FundingIdRes(funding.getId());
     }
 }
