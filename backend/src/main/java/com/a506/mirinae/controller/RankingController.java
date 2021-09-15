@@ -1,12 +1,10 @@
 package com.a506.mirinae.controller;
 
-import com.a506.mirinae.domain.donation.FundingRankingRes;
+import com.a506.mirinae.domain.donation.RankingRes;
 import com.a506.mirinae.service.RankingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +24,13 @@ public class RankingController {
 
     @GetMapping("/funding/{funding_id}")
     @ApiOperation(value = "펀딩 내 참여자 랭킹")
-    public ResponseEntity<List<FundingRankingRes>> getFundingRanking(@PathVariable Long funding_id){
+    public ResponseEntity<List<RankingRes>> getFundingRanking(@PathVariable Long funding_id){
         return ResponseEntity.status(HttpStatus.OK).body(rankingService.getFundingRanking(funding_id));
+    }
+
+    @GetMapping("/category/{category_id}")
+    @ApiOperation(value = "카테고리별 누적 개인랭킹")
+    public ResponseEntity<List<RankingRes>> getCategoryRanking(@PathVariable Long category_id){
+        return ResponseEntity.status(HttpStatus.OK).body(rankingService.getCategoryRanking(category_id));
     }
 }

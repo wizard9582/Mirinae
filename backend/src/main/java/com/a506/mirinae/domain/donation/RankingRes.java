@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FundingRankingRes {
+public class RankingRes {
     private String userThumbnail;
     private String userNickname;
     private Long amount;
 
-    public FundingRankingRes(Donation donation){
+    public RankingRes(Donation donation){
         this.userThumbnail = donation.getUser().getProfileImage();
         this.userNickname = donation.getUser().getNickname();
         this.amount = donation.getAmount();
