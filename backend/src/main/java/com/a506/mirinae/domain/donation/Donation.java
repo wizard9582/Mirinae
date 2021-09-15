@@ -3,6 +3,7 @@ package com.a506.mirinae.domain.donation;
 
 import com.a506.mirinae.domain.funding.Funding;
 import com.a506.mirinae.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
