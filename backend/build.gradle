@@ -42,6 +42,11 @@ dependencies {
 	//validator
 	implementation('org.hibernate.validator:hibernate-validator:6.1.2.Final')
 	implementation('org.glassfish:jakarta.el:3.0.3')
+
+	//swagger
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.2'
 }
 
 test {
