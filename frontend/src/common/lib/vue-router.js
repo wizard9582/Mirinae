@@ -5,6 +5,7 @@ import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
 import RankingPage from '@/views/RankingPage.vue';
 import ErrorPage from '@/views/ErrorPage.vue';
+import OauthCallback from '@/components/oauth/OauthCallback.vue';
 
 const routes = [
     {
@@ -22,6 +23,11 @@ const routes = [
         path: '/rank',
         name: 'Ranking',
         component: RankingPage,
+    },
+    {
+        path: '/oauth/:portal',
+        name: 'Oauth',
+        component: OauthCallback,
     },
 ];
 

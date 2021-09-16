@@ -12,7 +12,5 @@ const app = createApp(App);
 app.use(VueAxios, axios);
 app.use(store);
 app.use(router);
-app.use(oauth);
-
 
 app.mount("#app");

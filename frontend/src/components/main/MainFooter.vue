@@ -1,7 +1,7 @@
 <template>
     <div class="grid grid-cols-2 p-8 w-full h-lg bg-dark text-myfont">
         <div clsss="text-left whitespace-nowrap">       
-            <div class="text-xl font-semibold">
+            <div class="ml-6 mt-6 text-xl font-semibold">
                 {{state.time}}까지<br/>
                 <br/>
                 {{state.totalFunding}}개의 펀딩에 {{state.donator}}명의 후원자께서<br/>
@@ -14,7 +14,8 @@
         <div clsss="text-right whitespace-nowrap">
             <div class="text-md font-semibold">
                 <p class="text-right">
-                    아이콘 아이콘 아이콘<br/>
+                    <br/>
+                    <br/>
                     <br/>
                     SSAFY 5기 블록체인 특화 프로젝트<br/>
                     <br/>

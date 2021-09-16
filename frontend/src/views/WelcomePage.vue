@@ -28,7 +28,10 @@ export default {
         })
 
         const onOpenKakaoLogin = ()=>{
-            
+            const params = {
+                redirectUri: "https://localhost:8080/oauth/kakao",
+            };
+            window.Kakao.Auth.authorize(params);
         }
         const onOpenNaverLogin = ()=>{
 

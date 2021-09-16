@@ -31,6 +31,7 @@ module.exports = {
     }),
     textColor: theme => theme('colors'),
     textColor: {
+      'green': '#4AA96C',
       'black': '#000000',
       'dark': '#222831',
       'dark-gray': '#393E46',
