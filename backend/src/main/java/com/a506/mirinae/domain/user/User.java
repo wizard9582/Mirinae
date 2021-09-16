@@ -41,7 +41,7 @@ public class User {
     @Column(columnDefinition = "boolean default false")
     private Boolean isAdmin;
 
-    private Oauth oauth;
+    private OauthType oauthType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Funding> fundings = new ArrayList<>();
@@ -51,7 +51,7 @@ public class User {
 
     @Builder
     public User(long id, String email, String nickname, String profileImage,
-                LocalDateTime createdDatetime, String wallet, String sign, Boolean isAdmin, Oauth oauth) {
+                LocalDateTime createdDatetime, String wallet, String sign, Boolean isAdmin, OauthType oauthType) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
@@ -60,6 +60,6 @@ public class User {
         this.wallet = wallet;
         this.sign = sign;
         this.isAdmin = isAdmin;
-        this.oauth = oauth;
+        this.oauthType = oauthType;
     }
 }

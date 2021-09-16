@@ -1,5 +1,5 @@
 package com.a506.mirinae.domain.user;
 
-public enum Oauth {
+public enum OauthType {
     KAKAO, GOOGLE, NAVER
 }
