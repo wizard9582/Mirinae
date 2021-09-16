@@ -28,9 +28,8 @@ public class RankingService {
 
     @Transactional
     public List<RankingRes> getCategoryRanking(Long categoryId) {
-        return null;
-//        donationRepository
-//                .findAllByFundingCategoryIdGroupByUser(categoryId, PageRequest.of(0,10,Sort.Direction.DESC, "amount"))
-//                .stream().map(RankingRes::new).collect(Collectors.toList());
+        return donationRepository
+                .findRankingByCategoryId(categoryId, PageRequest.of(0,10,Sort.Direction.DESC, "amount"))
+                .stream().map(RankingRes::new).collect(Collectors.toList());
     }
 }
