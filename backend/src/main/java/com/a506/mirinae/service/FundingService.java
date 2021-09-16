@@ -5,6 +5,7 @@ import com.a506.mirinae.domain.category.CategoryRepository;
 import com.a506.mirinae.domain.category.CategoryRes;
 import com.a506.mirinae.domain.donation.Donation;
 import com.a506.mirinae.domain.donation.DonationRepository;
+import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class FundingService {
     @Transactional
     public FundingIdRes createFunding(FundingReq fundingReq, String JWT) {
         String wallet = "null";
-        User user = null;   //JWT로 user 변환해주기
+        User user = User.builder().build();   //JWT로 user 변환해주기
         Category category = categoryRepository.findByName(fundingReq.getCategory_name())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리=" + fundingReq.getCategory_name()));
         Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
@@ -61,5 +62,18 @@ public class FundingService {
             categoryResList.add(new CategoryRes(c));
         }
         return categoryResList;
+    }
+
+    @Transactional
+    public Boolean joinFunding(DonationReq donationReq, String JWT) {
+        User user = User.builder().build();   //JWT로 user 변환
+        Funding funding = fundingRepository.findById(donationReq.getFunding_id())
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFunding_id()));
+        String tx_id = "null"; //블록체인 구현 후 tx id 받기
+        Donation donation = donationRepository.save(donationReq.toEntity(user, funding, tx_id));
+        if(donation==null)
+            return false;
+        else
+            return true;
     }
 }
