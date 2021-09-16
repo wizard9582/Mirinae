@@ -55,11 +55,16 @@ public class Funding {
     @NotNull
     private Long goal;
 
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isAccept;
+
     @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
     private List<Donation> donations = new ArrayList<>();
 
     @Builder
-    public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image, LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Long goal) {
+    public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image,
+                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Long goal, Boolean isAccept) {
         this.id = id;
         this.user = user;
         this.category = category;
@@ -72,5 +77,6 @@ public class Funding {
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.goal = goal;
+        this.isAccept = isAccept;
     }
 }
