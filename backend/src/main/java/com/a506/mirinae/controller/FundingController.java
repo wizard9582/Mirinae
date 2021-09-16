@@ -1,5 +1,6 @@
 package com.a506.mirinae.controller;
 
+import com.a506.mirinae.domain.category.CategoryRes;
 import com.a506.mirinae.domain.funding.FundingIdRes;
 import com.a506.mirinae.domain.funding.FundingReq;
 import com.a506.mirinae.domain.funding.FundingRes;
@@ -37,6 +38,12 @@ public class FundingController {
         if(fundingIdRes.getFunding_id()==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.createFunding(fundingReq, JWT));
+    }
+
+    @ApiOperation(value = "펀딩 카테고리리스트")
+    @GetMapping("/category")
+    public ResponseEntity<List<CategoryRes>> getCategoryList() {
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getCategoryList());
     }
 
 }
