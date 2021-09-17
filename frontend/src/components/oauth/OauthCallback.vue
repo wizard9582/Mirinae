@@ -24,7 +24,9 @@ export default {
             let code = router.currentRoute.value.query.code
             store.dispatch('root/getKakaoToken', { code: code })
             .then((result)=>{
-                console.log(result)
+                //console.log(result)
+                let access_token = result.data.access_token
+                let refresh_token = result.data.refresh_token
             })
             .catch()
 
