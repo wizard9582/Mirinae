@@ -1,19 +1,15 @@
 <template>
     <div>
-        <main-header/>
-        <main-welcome/>
+        <content-welcome class="bg-local bg-galaxy-pattern bg-no-repeat bg-cover"
+        @openKakaoLogin="onOpenKakaoLogin"
+        @openNaverLogin="onOpenNaverLogin"
+        @openGoogleLogin="onOpenGoogleLogin"/>
         <main-footer/>
-        <pop-login :open="state.PopLoginOpen" @closePopLogin="onClosePopLogin"/>
-        <pop-logout :open="state.PopLogoutOpen" @closePopLogout="onClosePopLogout"/>
     </div>
 </template>
-
 <script>
-import MainWelcome from '@/components/main/MainWelcome.vue'
-import MainHeader from '@/components/main/MainHeader.vue'
+import ContentWelcome from '@/components/welcome/ContentWelcome.vue'
 import MainFooter from '@/components/main/MainFooter.vue'
-import PopLogin from '@/components/main/PopLogin.vue'
-import PopLogout from '@/components/main/PopLogout.vue'
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -21,32 +17,30 @@ import { useRouter } from 'vue-router'
 export default {
     name: 'WelcomePage',
     components: {
-        MainWelcome,
+        ContentWelcome,
         MainFooter,
-        MainHeader,
-        PopLogin,
-        PopLogout,
     },
 
     setup(){
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            PopLoginOpen: false,
-            PopLogoutOpen: false,
         })
 
-        const onClosePopLogin = ()=> {
-            state.PopLoginOpen = false;
-            if(store.getters['root/isLoggedIn']){
-                router.push("/main")
-            }
+        const onOpenKakaoLogin = ()=>{
+            const params = {
+                redirectUri: "https://localhost:8080/oauth/kakao",
+            };
+            window.Kakao.Auth.authorize(params);
         }
-        const onClosePopLogout = ()=> {
-            state.PopLogoutOpen = false;
+        const onOpenNaverLogin = ()=>{
+
+        }
+        const onOpenGoogleLogin = ()=>{
+
         }
 
-        return { state, onClosePopLogin, onClosePopLogout }
+        return { state, onOpenKakaoLogin, onOpenNaverLogin, onOpenGoogleLogin,  }
     }
 };
 </script>
