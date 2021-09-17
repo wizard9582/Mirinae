@@ -5,6 +5,7 @@ import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
 import RankingPage from '@/views/RankingPage.vue';
 import ErrorPage from '@/views/ErrorPage.vue';
+import OauthCallback from '@/components/oauth/OauthCallback.vue';
 
 const routes = [
     {
@@ -24,10 +25,9 @@ const routes = [
         component: RankingPage,
     },
     {
-        path: '*', 
-        name: 'ERROR404',
-        component: ErrorPage,
-        meta:{ loginRequired: false }
+        path: '/oauth/:portal',
+        name: 'Oauth',
+        component: OauthCallback,
     },
 ];
 
