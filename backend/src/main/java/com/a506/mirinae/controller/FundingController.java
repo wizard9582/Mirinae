@@ -23,8 +23,8 @@ public class FundingController {
     private final FundingService fundingService;
 
     @ApiOperation(value = "전체펀딩리스트")
-    @GetMapping("/{category_id}")
-    public ResponseEntity<List<FundingRes>> getFundingList(@PathVariable("category_id") String categoryName, Pageable pageable) {
+    @GetMapping("/{categoryName}")
+    public ResponseEntity<List<FundingRes>> getFundingList(@PathVariable("categoryName") String categoryName, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryName, pageable));
     }
 
@@ -34,7 +34,7 @@ public class FundingController {
                                                                          "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq) {
         String JWT = "null"; // JWT 토큰
         FundingIdRes fundingIdRes = fundingService.createFunding(fundingReq, JWT);
-        if(fundingIdRes.getFunding_id()==null)
+        if(fundingIdRes.getFundingId()==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.createFunding(fundingReq, JWT));
     }

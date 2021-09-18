@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class DonationReq {
-    Long funding_id;
+    Long fundingId;
     Long amount;
 
     public Donation toEntity(User user, Funding funding, String tx_id) {

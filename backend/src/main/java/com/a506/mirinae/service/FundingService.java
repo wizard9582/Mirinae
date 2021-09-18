@@ -9,6 +9,7 @@ import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,18 +29,13 @@ public class FundingService {
         List<Funding> funding;
         List<FundingRes> fundingResList = new ArrayList<>();
         if(categoryName.equals("all")) {
-            funding = fundingRepository.findAll(pageable).getContent();
+            funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
         else {
-            funding = fundingRepository.findByCategory_Name(categoryName, pageable).getContent();
+            funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
         for(Funding f : funding) {
-            Long balance = 0l;
-            for (Donation d : f.getDonations()) {
-                balance += d.getAmount();
-            }
-            FundingRes fundingRes = new FundingRes(f, balance);
-            fundingResList.add(fundingRes);
+            fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
         }
         return fundingResList;
     }
@@ -67,8 +63,8 @@ public class FundingService {
     @Transactional
     public Boolean joinFunding(DonationReq donationReq, String JWT) {
         User user = User.builder().build();   //JWT로 user 변환
-        Funding funding = fundingRepository.findById(donationReq.getFunding_id())
-                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFunding_id()));
+        Funding funding = fundingRepository.findById(donationReq.getFundingId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         Donation donation = donationRepository.save(donationReq.toEntity(user, funding, tx_id));
         if(donation==null)

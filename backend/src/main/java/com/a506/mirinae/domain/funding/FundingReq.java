@@ -14,8 +14,8 @@ public class FundingReq {
     Long goal;
     String thumbnail;
     String image;
-    LocalDateTime start_datetime;
-    LocalDateTime end_datetime;
+    LocalDateTime startDatetime;
+    LocalDateTime endDatetime;
 
     public Funding toEntity(User user, String wallet, Category category) {
         return Funding.builder()
@@ -26,8 +26,8 @@ public class FundingReq {
                 .wallet(wallet)
                 .thumbnail(thumbnail)
                 .image(image)
-                .startDatetime(start_datetime)
-                .endDatetime(end_datetime)
+                .startDatetime(startDatetime)
+                .endDatetime(endDatetime)
                 .goal(goal)
                 .build();
     }

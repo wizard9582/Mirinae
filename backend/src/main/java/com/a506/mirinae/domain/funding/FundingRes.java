@@ -4,19 +4,19 @@ import lombok.Getter;
 
 @Getter
 public class FundingRes {
-    Long funding_id;
+    Long fundingId;
     String title;
-    String category_name;
+    String categoryName;
     Long balance;
     Long goal;
     String thumbnail;
 
-    public FundingRes(Funding funding, Long balance) {
-        this.funding_id = funding.getId();
-        this.title = funding.getTitle();
-        this.category_name = funding.getCategory().getName();
-        this.balance = balance;
-        this.goal = funding.getGoal();
-        this.thumbnail = funding.getThumbnail();
+    public FundingRes(FundingResInterface fundingResInterface) {
+        this.fundingId = fundingResInterface.getId();
+        this.title = fundingResInterface.getTitle();
+        this.categoryName = fundingResInterface.getCategoryName();
+        this.balance = fundingResInterface.getBalance();
+        this.goal = fundingResInterface.getGoal();
+        this.thumbnail = fundingResInterface.getThumbnail();
     }
 }
