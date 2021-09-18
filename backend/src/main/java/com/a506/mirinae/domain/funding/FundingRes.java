@@ -12,7 +12,7 @@ public class FundingRes {
     String thumbnail;
 
     public FundingRes(FundingResInterface fundingResInterface) {
-        this.fundingId = fundingResInterface.getId();
+        this.fundingId = fundingResInterface.getFundingId();
         this.title = fundingResInterface.getTitle();
         this.categoryName = fundingResInterface.getCategoryName();
         this.balance = fundingResInterface.getBalance();
