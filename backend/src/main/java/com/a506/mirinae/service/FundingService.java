@@ -72,4 +72,16 @@ public class FundingService {
         else
             return true;
     }
+
+    @Transactional
+    public Boolean checkFundingOwner(Long fundingId, String JWT) {
+        User user = User.builder().build();   //JWT로 user 변환
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+
+        if(funding.getUser().getId() == user.getId())
+            return true;
+        else
+            return false;
+    }
 }

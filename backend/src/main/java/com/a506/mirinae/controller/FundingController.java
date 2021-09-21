@@ -55,4 +55,16 @@ public class FundingController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    @ApiOperation(value = "펀딩 작성자 본인 확인")
+    @GetMapping("/owner/{fundingId}")
+    public ResponseEntity<Boolean> checkFundingOwner(@PathVariable("fundingId") Long fundingId) {
+        String JWT = "null"; // JWT 토큰
+        if(JWT == null)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if(fundingService.checkFundingOwner(fundingId, JWT))
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        else
+            return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
+
 }
