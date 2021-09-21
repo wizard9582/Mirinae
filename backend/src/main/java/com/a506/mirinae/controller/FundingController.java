@@ -1,6 +1,7 @@
 package com.a506.mirinae.controller;
 
 import com.a506.mirinae.domain.category.CategoryRes;
+import com.a506.mirinae.domain.funding.FundingDetailRes;
 import com.a506.mirinae.domain.funding.FundingIdRes;
 import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.FundingReq;
@@ -67,4 +68,9 @@ public class FundingController {
             return ResponseEntity.status(HttpStatus.OK).body(false);
     }
 
+    @ApiOperation(value = "펀딩 상세")
+    @GetMapping("/detail/{fundingId}")
+    public ResponseEntity<FundingDetailRes> detailFunding(@PathVariable("fundingId") Long fundingId) {
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.detailFunding(fundingId));
+    }
 }

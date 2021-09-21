@@ -84,4 +84,14 @@ public class FundingService {
         else
             return false;
     }
+
+    @Transactional
+    public FundingDetailRes detailFunding(Long fundingId) {
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+
+        FundingRes fundingRes = new FundingRes(donationRepository.findDonationByFundingId(funding.getId()));
+
+        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getStartDatetime(), funding.getEndDatetime());
+    }
 }
