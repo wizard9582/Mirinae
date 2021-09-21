@@ -58,19 +58,31 @@ public class FundingController {
 
     @ApiOperation(value = "펀딩 작성자 본인 확인")
     @GetMapping("/owner/{fundingId}")
-    public ResponseEntity<Boolean> checkFundingOwner(@PathVariable("fundingId") Long fundingId) {
+    public ResponseEntity<String> checkFundingOwner(@PathVariable("fundingId") Long fundingId) {
         String JWT = "null"; // JWT 토큰
         if(JWT == null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         if(fundingService.checkFundingOwner(fundingId, JWT))
-            return ResponseEntity.status(HttpStatus.OK).body(true);
+            return ResponseEntity.status(HttpStatus.OK).body("true");
         else
-            return ResponseEntity.status(HttpStatus.OK).body(false);
+            return ResponseEntity.status(HttpStatus.OK).body("false");
     }
 
     @ApiOperation(value = "펀딩 상세")
     @GetMapping("/detail/{fundingId}")
     public ResponseEntity<FundingDetailRes> detailFunding(@PathVariable("fundingId") Long fundingId) {
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.detailFunding(fundingId));
+    }
+
+    @ApiOperation(value = "펀딩 취소")
+    @DeleteMapping("/{fundingId}")
+    public ResponseEntity<String> deleteFunding(@PathVariable("fundingId") Long fundingId) {
+        String JWT = "null"; // JWT 토큰
+        if(JWT == null)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if(fundingService.deleteFunding(fundingId, JWT))
+            return ResponseEntity.status(HttpStatus.OK).body("true");
+        else
+            return ResponseEntity.status(HttpStatus.OK).body("false");
     }
 }

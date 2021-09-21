@@ -94,4 +94,19 @@ public class FundingService {
 
         return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getStartDatetime(), funding.getEndDatetime());
     }
+
+    @Transactional
+    public Boolean deleteFunding(Long fundingId, String JWT) {
+        if(!checkFundingOwner(fundingId, JWT))
+            return false;
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+        try {
+            fundingRepository.delete(funding);
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
 }
