@@ -39,14 +39,20 @@ dependencies {
 	testImplementation 'org.springframework.batch:spring-batch-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	//validator
+	// validator
 	implementation('org.hibernate.validator:hibernate-validator:6.1.2.Final')
 	implementation('org.glassfish:jakarta.el:3.0.3')
 
-	//swagger
+	// swagger
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.2'
+
+	// JWT
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.1'
+	implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
+
 }
 
 test {
