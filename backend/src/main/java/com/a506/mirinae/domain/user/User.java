@@ -32,10 +32,8 @@ public class User {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDatetime;
 
-    @NotNull
     private String wallet;
 
-    @NotNull
     private String sign;
 
     @NotNull

@@ -11,13 +11,11 @@ public class LoginReq {
     private String email;
     private String nickname;
 
-    public User toEntity(String wallet, String sign){
+    public User toEntity(){
         return User.builder()
                 .oauthType(OauthType.valueOf(this.oauthType))
                 .email(this.email)
                 .nickname(this.nickname)
-                .wallet(wallet)
-                .sign(sign)
                 .build();
     }
 }

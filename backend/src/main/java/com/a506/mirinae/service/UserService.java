@@ -14,8 +14,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    //TODO wallet, sign 채우기
-    @Transactional
     public LoginRes login(LoginReq loginReq){
         Optional<User> user = userRepository.findByEmailAndOauthType(loginReq.getEmail(), OauthType.valueOf(loginReq.getOauthType()));
         Boolean isJoin = user.isPresent();
@@ -24,9 +22,7 @@ public class UserService {
         if(isJoin)
             joinedUser = user.get();
         else { //가입
-            String wallet = "";
-            String sign = "";
-            joinedUser = loginReq.toEntity(wallet, sign);
+            joinedUser = loginReq.toEntity();
             userRepository.save(joinedUser);
         }
 
