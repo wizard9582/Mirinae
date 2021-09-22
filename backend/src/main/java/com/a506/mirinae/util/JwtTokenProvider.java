@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Base64;
 import java.util.Date;
@@ -26,8 +25,8 @@ import java.util.Date;
 public class JwtTokenProvider {
     @Value("${spring.jwt.secret}")
     private String secretKey;
-    @Value("jwt.expiration")
-    private final Long tokenValidTime;
+    @Value("${jwt.expiration}")
+    private Long tokenValidTime;
 
     private final UserDetailsService userDetailsService;
 
@@ -37,7 +36,7 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(@NotNull Long id, Boolean isAdmin, String nickname) {
+    public String createToken(Long id, Boolean isAdmin, String nickname) {
         Date now = new Date();
         byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(secretKey);
 
