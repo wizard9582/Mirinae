@@ -26,7 +26,7 @@ public class UserService {
             userRepository.save(joinedUser);
         }
 
-        String jwt = jwtTokenProvider.createToken(joinedUser.getId(), joinedUser.getIsAdmin(), joinedUser.getNickname());
+        String jwt = jwtTokenProvider.createToken(joinedUser.getId(), joinedUser.getIsAdmin());
         return new LoginRes(joinedUser, isJoin, jwt);
     }
 

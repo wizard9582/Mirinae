@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(Long id, Boolean isAdmin, String nickname) {
+    public String createToken(Long id, Boolean isAdmin) {
         Date now = new Date();
         byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(secretKey);
 
@@ -44,7 +44,6 @@ public class JwtTokenProvider {
                 .setHeaderParam("typ", "JWT")
                 .setSubject(String.valueOf(id))
                 .claim("isAdmin", isAdmin)
-                .claim("nickname", nickname)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidTime))
                 .signWith(Keys.hmacShaKeyFor(secretKeyBytes), SignatureAlgorithm.HS256)
