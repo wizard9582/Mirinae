@@ -42,6 +42,7 @@ public class User {
     @Column(columnDefinition = "boolean default false")
     private Boolean isAdmin;
 
+    @Enumerated(EnumType.STRING)
     private OauthType oauthType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
