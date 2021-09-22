@@ -33,4 +33,12 @@ public class UserService {
         String jwt = jwtTokenProvider.createToken(joinedUser.getId(), joinedUser.getIsAdmin(), joinedUser.getNickname());
         return new LoginRes(joinedUser, isJoin, jwt);
     }
+
+    public UserRes getUserInfo(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+        String walletBalance = ""; // 블록체인 구현 후
+
+        return new UserRes(user, walletBalance);
+    }
 }
