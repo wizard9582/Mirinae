@@ -24,6 +24,7 @@ public class User {
     @NotNull
     private String email;
 
+    @NotNull
     private String nickname;
 
     private String profileImage;
