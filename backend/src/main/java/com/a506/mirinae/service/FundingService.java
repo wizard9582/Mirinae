@@ -42,7 +42,6 @@ public class FundingService {
         return fundingResList;
     }
 
-    @Transactional
     public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
         String wallet = "null";
         User user = userRepository.findById(id)
@@ -74,15 +73,13 @@ public class FundingService {
     }
 
     @Transactional
-    public Boolean checkFundingOwner(Long fundingId, String JWT) {
-        User user = User.builder().build();   //JWT로 user 변환
+    public Boolean checkFundingOwner(Long fundingId, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
 
-        if(funding.getUser().getId() == user.getId())
-            return true;
-        else
-            return false;
+        return funding.getUser().getId() == user.getId();
     }
 
     @Transactional
@@ -96,17 +93,11 @@ public class FundingService {
     }
 
     @Transactional
-    public Boolean deleteFunding(Long fundingId, String JWT) {
-        if(!checkFundingOwner(fundingId, JWT))
-            return false;
+    public void deleteFunding(Long fundingId, Long id) {
+        if(!checkFundingOwner(fundingId, id))
+            throw new IllegalArgumentException("삭제 권한이 없습니다!");
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
-        try {
-            fundingRepository.delete(funding);
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
+        fundingRepository.delete(funding);
     }
 }
