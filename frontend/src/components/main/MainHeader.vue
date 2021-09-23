@@ -19,6 +19,9 @@
             <div @click="clickFundingOpen">
                 <p class="ml-10 text-sm text-gray-700 cursor-pointer">펀딩열기</p>
             </div>
+            <div>
+                <a href="https://localhost:8080/main/tx/id" class="ml-10 text-sm text-gray-700 cursor-pointer">트랜잭션 조회 페이지(dev)</a>
+            </div>
         </div>
     </div>
 </template>
