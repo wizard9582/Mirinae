@@ -33,6 +33,8 @@ export default {
     },
 
     setup(){
+        const store = useStore()
+        const router = useRouter()
         const state = reactive({
             userName: "이름"
         })
@@ -40,13 +42,13 @@ export default {
             router.push('/main/all')
         }
         const clickUser = ()=>{
-            router.push('/user')
+            router.push('/main/user/id')
         }
         const clickFundingList = ()=>{
             router.push('/main/all')
         }
         const clickFundingOpen = ()=>{
-            router.push('/funding/open')
+            router.push('/main/fund/create')
         }
         return {state, clickHome, clickUser, clickFundingList, clickFundingOpen}
     }
