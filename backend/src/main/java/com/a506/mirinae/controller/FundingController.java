@@ -39,7 +39,7 @@ public class FundingController {
     @PostMapping("/")
     public ResponseEntity<FundingIdRes> createFunding(@ApiIgnore final Authentication authentication,
                                                       @RequestBody @ApiParam(value = "펀딩 이름, 카테고리 id, 펀딩 설명, 목표금액, " +
-                                                        "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq) {
+                                                              "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq) {
         if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Long id = ((User)authentication.getPrincipal()).getId();
@@ -67,12 +67,15 @@ public class FundingController {
     @ApiOperation(value = "펀딩 작성자 본인 확인")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/owner/{fundingId}")
-    public ResponseEntity<Boolean> checkFundingOwner(@ApiIgnore final Authentication authentication,
+    public ResponseEntity<String> checkFundingOwner(@ApiIgnore final Authentication authentication,
                                                     @PathVariable("fundingId") Long fundingId){
         if(authentication==null || !authentication.isAuthenticated())
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Expired");
         Long id = ((User)authentication.getPrincipal()).getId();
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.checkFundingOwner(fundingId, id));
+        if(fundingService.checkFundingOwner(fundingId, id))
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        else
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Denied");
     }
 
     @ApiOperation(value = "펀딩 상세")
