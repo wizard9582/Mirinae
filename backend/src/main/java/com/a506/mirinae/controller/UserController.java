@@ -1,5 +1,6 @@
 package com.a506.mirinae.controller;
 
+import com.a506.mirinae.domain.funding.MyFundingRes;
 import com.a506.mirinae.domain.user.*;
 import com.a506.mirinae.service.UserService;
 import com.a506.mirinae.util.JwtTokenProvider;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -58,5 +61,15 @@ public class UserController {
         Long id = ((User)authentication.getPrincipal()).getId();
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
+
+    @GetMapping("/donation")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @ApiOperation(value = "내가 참여한 펀딩 리스트")
+    public ResponseEntity<List<MyFundingRes>> getMyDonation(@ApiIgnore final Authentication authentication) {
+        if(authentication==null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getMyDonation(id));
     }
 }
