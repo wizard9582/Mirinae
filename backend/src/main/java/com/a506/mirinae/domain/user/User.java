@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "boolean default false")
     private Boolean isAdmin;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private OauthType oauthType;
 
