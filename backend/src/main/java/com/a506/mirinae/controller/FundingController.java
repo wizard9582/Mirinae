@@ -38,7 +38,7 @@ public class FundingController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/")
     public ResponseEntity<FundingIdRes> createFunding(@RequestBody @ApiParam(value = "펀딩 이름, 카테고리 id, 펀딩 설명, 목표금액, " +
-                                                                         "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq,
+            "타이틀 이미지, 설명 이미지, 시작일시, 종료일시") FundingReq fundingReq,
                                                       @ApiIgnore final Authentication authentication) {
         if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -53,13 +53,15 @@ public class FundingController {
     }
 
     @ApiOperation(value = "펀딩 참여")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/join")
-    public ResponseEntity<String> joinFunding(@RequestBody @ApiParam(value = "펀딩 Id, 기부금액") DonationReq donationReq) {
-        String JWT = "null"; // JWT 토큰
-        if(fundingService.joinFunding(donationReq, JWT))
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        else
+    public ResponseEntity<String> joinFunding(@RequestBody @ApiParam(value = "펀딩 Id, 기부금액") DonationReq donationReq,
+                                              @ApiIgnore final Authentication authentication) {
+        if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        fundingService.joinFunding(donationReq, id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     @ApiOperation(value = "펀딩 작성자 본인 확인")

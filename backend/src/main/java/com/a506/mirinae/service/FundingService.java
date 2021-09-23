@@ -64,16 +64,13 @@ public class FundingService {
     }
 
     @Transactional
-    public Boolean joinFunding(DonationReq donationReq, String JWT) {
-        User user = User.builder().build();   //JWT로 user 변환
+    public void joinFunding(DonationReq donationReq, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Funding funding = fundingRepository.findById(donationReq.getFundingId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
-        Donation donation = donationRepository.save(donationReq.toEntity(user, funding, tx_id));
-        if(donation==null)
-            return false;
-        else
-            return true;
+        donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
 
     @Transactional
