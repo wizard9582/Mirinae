@@ -18,7 +18,7 @@
             <p class="text-sm text-gray mb-3">다른 방법으로 시작하기</p>
             <div class="flex items-center mb-10">
                 <div class="flex items-center bg-gray-200 w-sm h-sm ml-auto mr-3 rounded-3xl cursor-pointer" @click="clickLogin('naver')">
-                    <img class="fill-current text-green ml-auto mr-auto w-6 h-6" src="../../assets/svg/naver.svg" alt="naver">
+                    <svg class="fill-current text-green ml-auto mr-auto w-6 h-6" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg"><g id="N"><path d="m164.828 233.178 182.359 278.822h118.813v-512h-118.623v285.956l-185.215-285.956h-116.162v512h118.828z"/></g></svg>
                 </div>
                 <div class="flex items-center bg-gray-200 w-sm h-sm rounded-3xl cursor-pointer" @click="clickLogin('google')">
                     <img class="ml-auto mr-auto w-6 h-6" src="../../assets/svg/google.svg" alt="google">
