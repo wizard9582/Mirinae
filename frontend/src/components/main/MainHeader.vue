@@ -13,10 +13,10 @@
             </div>
         </div>
         <div class="ml-10 flex items-end">
-            <div>
+            <div @click="clickFundingList">
                 <p class="text-sm text-gray-700">펀딩리스트</p>
             </div>
-            <div>
+            <div @click="clickFundingOpen">
                 <p class="ml-10 text-sm text-gray-700">펀딩열기</p>
             </div>
         </div>
@@ -36,7 +36,19 @@ export default {
         const state = reactive({
             userName: "이름"
         })
-        return {state}
+        const clickHome = ()=>{
+            router.push('/main/all')
+        }
+        const clickUser = ()=>{
+            router.push('/user')
+        }
+        const clickFundingList = ()=>{
+            router.push('/main/all')
+        }
+        const clickFundingOpen = ()=>{
+            router.push('/funding/open')
+        }
+        return {state, clickHome, clickUser, clickFundingList, clickFundingOpen}
     }
 };
 </script>

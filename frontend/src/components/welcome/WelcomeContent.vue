@@ -36,7 +36,7 @@
 
 <script>
 export default {
-    name: 'MainWelcome',
+    name: 'WelcomeContent',
 
     setup(props, {emit}){
 

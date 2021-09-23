@@ -1,14 +1,21 @@
 <template>
-    <div>
-    </div>
+    <div></div>
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+//import 123 from '@/'
 export default {
-    name: '',
+    name: 'UserContent',
+    components: {
+    },
 
-    setup(props, {emit}){
-        return { }
+    setup(){
+        const state = reactive({})
+
+        return {state}
     }
 };
 </script>

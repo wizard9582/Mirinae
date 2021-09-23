@@ -63,7 +63,9 @@ export default {
     name: 'Ranking',
     components: {
     },
-
+    props:{
+        rankingData:[]
+    },
     setup(){
         const state = reactive({
             rankingTitle:"title",
