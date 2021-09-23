@@ -65,6 +65,11 @@
                 </div>
             </div>
         </div>
+        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
+            <ranking/>
+            <ranking/>
+            <ranking/>
+        </div>
     </div>
 </template>
 
