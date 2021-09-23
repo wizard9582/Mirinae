@@ -72,4 +72,15 @@ public class UserController {
         Long id = ((User)authentication.getPrincipal()).getId();
         return ResponseEntity.status(HttpStatus.OK).body(userService.getMyDonation(id));
     }
+
+    @GetMapping("/funding")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @ApiOperation(value = "내가 개설한 펀딩 리스트")
+    public ResponseEntity<List<MyFundingRes>> getMyFunding(@ApiIgnore final Authentication authentication) {
+        if(authentication==null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getMyFunding(id));
+    }
+
 }

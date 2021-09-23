@@ -65,4 +65,12 @@ public class UserService {
 
         return user.getDonations().stream().map(MyFundingRes::new).collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<MyFundingRes> getMyFunding(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+
+        return user.getFundings().stream().map(MyFundingRes::new).collect(Collectors.toList());
+    }
 }

@@ -14,4 +14,10 @@ public class MyFundingRes {
         this.title = donation.getFunding().getTitle();
         this.thumbnail = donation.getFunding().getThumbnail();
     }
+
+    public MyFundingRes(Funding funding) {
+        this.fundingId = funding.getId();
+        this.title = funding.getTitle();
+        this.thumbnail = funding.getThumbnail();
+    }
 }
