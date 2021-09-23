@@ -73,4 +73,15 @@ public class UserService {
 
         return user.getFundings().stream().map(MyFundingRes::new).collect(Collectors.toList());
     }
+
+    public void saveWallet(WalletReq walletReq, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+
+        if(!(user.getWallet()==null || "".equals(user.getWallet())))
+            throw new IllegalArgumentException("이미 개설된 계좌가 존재합니다!");
+
+        user.updateWallet(walletReq);
+        userRepository.save(user);
+    }
 }
