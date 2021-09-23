@@ -5,14 +5,21 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
     name: 'MainAddon',
     components: {
     },
 
     setup(){
+        const store = useStore()
+        const router = useRouter()
+        const state = reactive({})
 
-        return {}
+        return {state}
     }
 };
 </script>

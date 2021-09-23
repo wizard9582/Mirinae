@@ -14,10 +14,10 @@
         </div>
         <div class="ml-10 flex items-end">
             <div @click="clickFundingList">
-                <p class="text-sm text-gray-700">펀딩리스트</p>
+                <p class="text-sm text-gray-700 cursor-pointer">펀딩리스트</p>
             </div>
             <div @click="clickFundingOpen">
-                <p class="ml-10 text-sm text-gray-700">펀딩열기</p>
+                <p class="ml-10 text-sm text-gray-700 cursor-pointer">펀딩열기</p>
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white shadow-md">
             <div class="m-8 divide-y divide-black">
-                <div class="w-full h-16">
+                <div class="w-full">
                     <p>내 정보</p>
                 </div>
                 <div class="w-full h-60"></div>
@@ -21,18 +21,18 @@
                 </div>
             </div>
             <div class="m-8 divide-y divide-black">
-                <div class="w-full h-16">
+                <div class="w-full">
                     <p>내가 참여한 펀딩</p>
                 </div>
-                <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-80 overflow-x-auto">
+                <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id"/>
                 </div>
             </div>
             <div class="m-8 divide-y divide-black">
-                <div class="w-full h-16">
+                <div class="w-full">
                     <p>내가 개설한 펀딩</p>
                 </div>
-                <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-80 overflow-x-auto">
+                <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     <funding-thumbnail v-for="funding in state.myFundings" :key="funding.id"/>
                 </div>
             </div>

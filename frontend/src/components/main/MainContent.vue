@@ -11,7 +11,7 @@
         <div class="max-w-2xl mt-1 mx-auto py-4 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-t-0 border-4 border-black bg-white divide-y divide-black">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">{{state.category}}</h2>
             <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3  sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id"/>
+                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" @click="clickFunding"/>
             </div>
             <div class="bg-white mt-10 px-4 pt-6 pb-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div class="flex-1 flex justify-between sm:hidden">
@@ -68,6 +68,8 @@ export default {
     },
 
     setup(){
+        const store = useStore()
+        const router = useRouter()
         const state = reactive({
             category: "카테고리명",
             page: 1,
@@ -123,7 +125,12 @@ export default {
                 },
             ]
         })
-        return { state, }
+
+        const clickFunding = () =>{
+            router.push("/main/fund/id")
+        }
+
+        return { state, clickFunding}
     }
 };
 </script>
