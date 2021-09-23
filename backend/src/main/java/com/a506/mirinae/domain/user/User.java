@@ -111,4 +111,8 @@ public class User implements UserDetails {
         this.nickname = updateReq.getNickname();
         this.profileImage = updateReq.getImage();
     }
+
+    public void updateWallet(WalletReq walletReq) {
+        this.wallet = walletReq.getWalletAddress();
+    }
 }
