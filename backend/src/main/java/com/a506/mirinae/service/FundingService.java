@@ -8,6 +8,7 @@ import com.a506.mirinae.domain.donation.DonationRepository;
 import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
+import com.a506.mirinae.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FundingService {
+    private final UserRepository userRepository;
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
@@ -40,12 +42,12 @@ public class FundingService {
         return fundingResList;
     }
 
-    @Transactional
-    public FundingIdRes createFunding(FundingReq fundingReq, String JWT) {
+    public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
         String wallet = "null";
-        User user = User.builder().build();   //JWT로 user 변환해주기
-        Category category = categoryRepository.findByName(fundingReq.getCategory_name())
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리=" + fundingReq.getCategory_name()));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+        Category category = categoryRepository.findById(fundingReq.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리 ID=" + fundingReq.getCategoryId()));
         Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
         return new FundingIdRes(funding.getId());
     }
@@ -61,28 +63,23 @@ public class FundingService {
     }
 
     @Transactional
-    public Boolean joinFunding(DonationReq donationReq, String JWT) {
-        User user = User.builder().build();   //JWT로 user 변환
+    public void joinFunding(DonationReq donationReq, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Funding funding = fundingRepository.findById(donationReq.getFundingId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
-        Donation donation = donationRepository.save(donationReq.toEntity(user, funding, tx_id));
-        if(donation==null)
-            return false;
-        else
-            return true;
+        donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
 
     @Transactional
-    public Boolean checkFundingOwner(Long fundingId, String JWT) {
-        User user = User.builder().build();   //JWT로 user 변환
+    public Boolean checkFundingOwner(Long fundingId, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
 
-        if(funding.getUser().getId() == user.getId())
-            return true;
-        else
-            return false;
+        return funding.getUser().getId() == user.getId();
     }
 
     @Transactional
@@ -96,17 +93,11 @@ public class FundingService {
     }
 
     @Transactional
-    public Boolean deleteFunding(Long fundingId, String JWT) {
-        if(!checkFundingOwner(fundingId, JWT))
-            return false;
+    public void deleteFunding(Long fundingId, Long id) {
+        if(!checkFundingOwner(fundingId, id))
+            throw new IllegalArgumentException("삭제 권한이 없습니다!");
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
-        try {
-            fundingRepository.delete(funding);
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
+        fundingRepository.delete(funding);
     }
 }
