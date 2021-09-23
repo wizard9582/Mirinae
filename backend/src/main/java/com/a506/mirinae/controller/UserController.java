@@ -47,7 +47,16 @@ public class UserController {
         Long id = ((User)authentication.getPrincipal()).getId();
         userService.updateUser(updateReq, id);
         return ResponseEntity.status(HttpStatus.OK).body("success");
-
     }
 
+    @DeleteMapping("/")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @ApiOperation(value = "회원 탈퇴")
+    public ResponseEntity<String> deleteUser(@ApiIgnore final Authentication authentication) {
+        if(authentication==null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
 }

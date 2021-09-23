@@ -44,4 +44,11 @@ public class UserService {
         user.updateUser(updateReq);
         userRepository.save(user);
     }
+
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+
+        userRepository.delete(user);
+    }
 }
