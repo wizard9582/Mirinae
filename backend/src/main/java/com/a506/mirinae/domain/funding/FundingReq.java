@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class FundingReq {
     String title;
-    String category_name;
+    Long categoryId;
     String content;
     Long goal;
     String thumbnail;
@@ -29,6 +29,7 @@ public class FundingReq {
                 .startDatetime(startDatetime)
                 .endDatetime(endDatetime)
                 .goal(goal)
+                .isAccept(false)
                 .build();
     }
 }
