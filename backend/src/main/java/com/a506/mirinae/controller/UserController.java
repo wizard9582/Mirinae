@@ -83,4 +83,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getMyFunding(id));
     }
 
+    @PatchMapping("/wallet")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @ApiOperation(value = "지갑 주소 저장")
+    public ResponseEntity<String> saveWallet(@ApiIgnore final Authentication authentication,
+                                             @RequestBody WalletReq walletReq) {
+        if(authentication==null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        userService.saveWallet(walletReq, id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
+
 }
