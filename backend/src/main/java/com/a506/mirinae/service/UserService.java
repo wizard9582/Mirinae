@@ -22,11 +22,10 @@ public class UserService {
         if(isJoin)
             joinedUser = user.get();
         else { //가입
-            joinedUser = loginReq.toEntity();
-            userRepository.save(joinedUser);
+            joinedUser = userRepository.save(loginReq.toEntity());
         }
 
-        String jwt = jwtTokenProvider.createToken(joinedUser.getId(), joinedUser.getIsAdmin());
+        String jwt = jwtTokenProvider.createToken(joinedUser.getId(), joinedUser.getRoles());
         return new LoginRes(joinedUser, isJoin, jwt);
     }
 
@@ -36,5 +35,13 @@ public class UserService {
         String walletBalance = ""; // 블록체인 구현 후
 
         return new UserRes(user, walletBalance);
+    }
+
+    public void updateUser(UpdateReq updateReq, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+
+        user.updateUser(updateReq);
+        userRepository.save(user);
     }
 }

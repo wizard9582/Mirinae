@@ -14,6 +14,7 @@ public class LoginReq {
     public User toEntity(){
         return User.builder()
                 .oauthType(OauthType.valueOf(this.oauthType))
+                .isAdmin(false)
                 .email(this.email)
                 .nickname(this.nickname)
                 .build();

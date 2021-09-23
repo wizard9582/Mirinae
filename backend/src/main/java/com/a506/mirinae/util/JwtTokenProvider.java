@@ -5,7 +5,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -36,17 +36,16 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(Long id, Boolean isAdmin) {
+    public String createToken(Long id, List<String> roles) {
+        String userId = String.valueOf(id);
+        Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
+        claims.put("roles", roles);
         Date now = new Date();
-        byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(secretKey);
-
         return Jwts.builder()
-                .setHeaderParam("typ", "JWT")
-                .setSubject(String.valueOf(id))
-                .claim("isAdmin", isAdmin)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidTime))
-                .signWith(Keys.hmacShaKeyFor(secretKeyBytes), SignatureAlgorithm.HS256)
+                .setClaims(claims) // 정보 저장
+                .setIssuedAt(now) // 토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + tokenValidTime)) // set Expire Time
+                .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
                 .compact();
     }
 
