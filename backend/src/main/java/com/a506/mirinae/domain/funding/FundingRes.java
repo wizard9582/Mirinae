@@ -2,6 +2,8 @@ package com.a506.mirinae.domain.funding;
 
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class FundingRes {
     Long fundingId;
@@ -10,6 +12,8 @@ public class FundingRes {
     Long balance;
     Long goal;
     String thumbnail;
+    LocalDateTime startDatetime;
+    LocalDateTime endDatetime;
 
     public FundingRes(FundingResInterface fundingResInterface) {
         this.fundingId = fundingResInterface.getFundingId();
@@ -18,5 +22,7 @@ public class FundingRes {
         this.balance = fundingResInterface.getBalance();
         this.goal = fundingResInterface.getGoal();
         this.thumbnail = fundingResInterface.getThumbnail();
+        this.startDatetime = fundingResInterface.getStartDatetime();
+        this.endDatetime = fundingResInterface.getEndDatetime();
     }
 }

@@ -8,6 +8,7 @@ import com.a506.mirinae.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -47,9 +48,11 @@ public class Funding {
     private LocalDateTime createdDatetime;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDatetime;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDatetime;
 
     @NotNull
