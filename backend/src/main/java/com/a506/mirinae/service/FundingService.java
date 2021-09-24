@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class FundingService {
             funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
         for(Funding f : funding) {
-            fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
+            if(f.getIsAccept())
+                fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
         }
         return fundingResList;
     }
@@ -68,6 +70,11 @@ public class FundingService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Funding funding = fundingRepository.findById(donationReq.getFundingId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
+        if(funding.getStartDatetime().isAfter(LocalDateTime.now()))
+            throw new IllegalArgumentException("해당 펀딩은 아직 시작되지 않았습니다!");
+        if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다.");
+
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
@@ -98,6 +105,9 @@ public class FundingService {
             throw new IllegalArgumentException("삭제 권한이 없습니다!");
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+
+        if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException("종료된 펀딩은 삭제할 수 없습니다!");
         fundingRepository.delete(funding);
     }
 }
