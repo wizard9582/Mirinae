@@ -39,7 +39,11 @@ public class FundingService {
         }
         for(Funding f : funding) {
             if(f.getIsAccept())
-                fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
+                if(f.getDonations().size()==0)
+                    fundingResList.add(new FundingRes(f));
+                else {
+                    fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
+                }
         }
         return fundingResList;
     }

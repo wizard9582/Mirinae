@@ -49,10 +49,6 @@ dependencies {
 	implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.2'
 
 	// JWT
-//	implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.1'
-//	implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
-//	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7'
-//	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.7'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
 

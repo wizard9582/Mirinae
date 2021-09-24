@@ -25,4 +25,15 @@ public class FundingRes {
         this.startDatetime = fundingResInterface.getStartDatetime();
         this.endDatetime = fundingResInterface.getEndDatetime();
     }
+
+    public FundingRes(Funding f) {
+        this.fundingId = f.getId();
+        this.title = f.getTitle();
+        this.categoryName = f.getCategory().getName();
+        this.balance = 0L;
+        this.goal = f.getGoal();
+        this.thumbnail = f.getThumbnail();
+        this.startDatetime = f.getStartDatetime();
+        this.endDatetime = f.getEndDatetime();
+    }
 }
