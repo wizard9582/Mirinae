@@ -28,12 +28,12 @@ export default {
         })
 
         const onOpenKakaoLogin = ()=>{
-            // 카카오 로그인 주석처리해놓음
-            // const params = {
-            //     redirectUri: "https://localhost:8080/oauth/kakao",
-            // };
-            // window.Kakao.Auth.authorize(params);
-            router.push('/main/all')
+            //카카오 로그인
+            const params = {
+                redirectUri: "https://localhost:8083/oauth/kakao",
+            };
+            window.Kakao.Auth.authorize(params);
+            //router.push('/main/all')
         }
         const onOpenNaverLogin = ()=>{
 

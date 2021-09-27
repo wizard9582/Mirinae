@@ -22,11 +22,36 @@ export default {
 
         if(portal==="kakao"){
             let code = router.currentRoute.value.query.code
+
             store.dispatch('root/getKakaoToken', { code: code })
             .then((result)=>{
                 //console.log(result)
                 let access_token = result.data.access_token
                 let refresh_token = result.data.refresh_token
+
+                localStorage.setItem('kakao_access', access_token)
+                localStorage.setItem('kakao_refresh', refresh_token)
+
+                store.dispatch('root/getKakaoInfo', { access_token: access_token })
+                .then((result)=>{
+                    //console.log(result)
+                    let email = result.data.kakao_account.email
+                    let nickname = result.data.kakao_account.profile.nickname
+                    let oauthType = 'KAKAO'
+
+                    store.dispatch('root/login', { email:email, nickname:nickname, oauthType:oauthType })
+                    .then((result)=>{
+                        //console.log(result)
+                        if(result.status === 200){
+                            localStorage.setItem('jwt', result.data.jwt)
+                            router.push('/main/all')
+                        }else{
+                            router.push('/error')
+                        }
+                    })
+                    .catch()
+                })
+                .catch()
             })
             .catch()
 
