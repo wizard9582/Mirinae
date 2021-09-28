@@ -9,8 +9,8 @@ public class FundingRes {
     Long fundingId;
     String title;
     String categoryName;
-    Long balance;
-    Long goal;
+    Double balance;
+    Double goal;
     String thumbnail;
     LocalDateTime startDatetime;
     LocalDateTime endDatetime;
@@ -30,7 +30,7 @@ public class FundingRes {
         this.fundingId = f.getId();
         this.title = f.getTitle();
         this.categoryName = f.getCategory().getName();
-        this.balance = 0L;
+        this.balance = 0.0;
         this.goal = f.getGoal();
         this.thumbnail = f.getThumbnail();
         this.startDatetime = f.getStartDatetime();

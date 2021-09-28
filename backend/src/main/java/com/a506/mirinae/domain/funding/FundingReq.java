@@ -11,7 +11,7 @@ public class FundingReq {
     String title;
     Long categoryId;
     String content;
-    Long goal;
+    Double goal;
     String thumbnail;
     String image;
     LocalDateTime startDatetime;
