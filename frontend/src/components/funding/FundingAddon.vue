@@ -1,6 +1,8 @@
 <template>
-    <div class="w-10 h-10 bg-red-800 text-gray">
-        ?
+    <div class="fixed opacity-80 bottom-0 left-0 w-full h-24 bg-gray-200">
+        <div class="mr-10 ml-auto mt-10 h-1/2 w-40 bg-gray-700 opacity-100 text-myfont">
+            펀딩 참여하기
+        </div>
     </div>
 </template>
 
@@ -10,7 +12,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 export default {
-    name: 'MainAddon',
+    name: 'FundingAddon',
     components: {
     },
 

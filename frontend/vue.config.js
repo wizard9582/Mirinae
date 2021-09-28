@@ -1,18 +1,25 @@
+const kakaoAPI = 'https://kapi.kakao.com/'
+const backendAPI = 'https://localhost:8080/'
+
 module.exports = {
     devServer: {
         https: true,
-        port: 8080,
+        port: 8083,
         open: true,
-        // proxy: {
-        //   '^/api/v1': {
-        //     target: 'https://localhost:8443/',
-        //     changeOrigin: true
-        //   },
-        //   '/websocket':{
-        //     target: 'https://localhost:8443/',
-        //     changeOrigin: true
-        //   },
-        // },
+        proxy: {
+            '^/api': {
+                target: backendAPI,
+                changeOrigin: true
+            },
+            '/v1': {
+                target: kakaoAPI,
+                changeOrigin: true
+            },
+            '/v2': {
+                target: kakaoAPI,
+                changeOrigin: true
+            },
+        },
         historyApiFallback: true,
         hot: true
     },

@@ -1,4 +1,4 @@
 export default {
-    authToken: "",
+    jwt: "",
     userId: "",
 }
