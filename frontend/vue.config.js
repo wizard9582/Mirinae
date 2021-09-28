@@ -24,6 +24,4 @@ module.exports = {
         hot: true
     },
     lintOnSave: false,
-    outputDir: '../dist'
-    
 }
