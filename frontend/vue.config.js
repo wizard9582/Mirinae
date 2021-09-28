@@ -1,4 +1,5 @@
 const kakaoAPI = 'https://kapi.kakao.com/'
+const backendAPI = 'https://localhost:8080/'
 
 module.exports = {
     devServer: {
@@ -6,8 +7,8 @@ module.exports = {
         port: 8083,
         open: true,
         proxy: {
-            '/api': {
-                target: 'https://localhost:8080/',
+            '^/api': {
+                target: backendAPI,
                 changeOrigin: true
             },
             '/v1': {

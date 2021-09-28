@@ -39,8 +39,24 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            userName: "이름"
+            isLoggedIn: false,
+            userMail: "",
+            userName: "",
+            userProfile: "",
+            userWallet: "",
+            userBalance: "",
         })
+        const init = ()=>{
+            if(store.getters['root/isLoggedIn']){
+                state.isLoggedIn = true
+
+                store.dispatch('root/getUserInfo', store.getters['root/getAuthToken'])
+                .then((result)=>{
+                    console.log(result)
+                })
+                .catch()
+            }
+        }
         const clickHome = ()=>{
             router.push('/main/all')
         }
@@ -53,6 +69,7 @@ export default {
         const clickFundingOpen = ()=>{
             router.push('/main/fund/create')
         }
+        init()
         return {state, clickHome, clickUser, clickFundingList, clickFundingOpen}
     }
 };

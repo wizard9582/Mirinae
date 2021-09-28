@@ -43,13 +43,17 @@ export default {
         const clickLogin = (where) =>{
             if(where === 'kakao'){
                 emit('openKakaoLogin')
-            }else if(where === 'naver'){
-                emit('openNaverLogin')
-            }else if(where === 'google'){
-                emit('openGoogleLogin')
             }else{
-                emit('')
+                alert("개발중입니다!")
             }
+            
+            // else if(where === 'naver'){
+            //     emit('openNaverLogin')
+            // }else if(where === 'google'){
+            //     emit('openGoogleLogin')
+            // }else{
+            //     emit('')
+            // }
         }
         return { clickLogin }
     }
