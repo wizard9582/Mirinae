@@ -5,6 +5,7 @@ import com.a506.mirinae.domain.donation.DonationRepository;
 import com.a506.mirinae.domain.funding.Funding;
 import com.a506.mirinae.domain.funding.FundingRepository;
 import com.a506.mirinae.domain.funding.FundingRes;
+import com.a506.mirinae.domain.funding.FundingState;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class AdminService {
         List<FundingRes> fundingResList = new ArrayList<>();
         funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         for(Funding f : funding) {
-            if(!f.getIsAccept()) {
+            if(f.getFundingState().equals(FundingState.WAITING)) {
                 if(f.getDonations().size()==0)
                     fundingResList.add(new FundingRes(f));
                 else {

@@ -38,7 +38,7 @@ public class FundingService {
             funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
         for(Funding f : funding) {
-            if(f.getIsAccept())
+            if(f.getFundingState().equals(FundingState.ACCEPTED))
                 if(f.getDonations().size()==0)
                     fundingResList.add(new FundingRes(f));
                 else {
@@ -77,7 +77,9 @@ public class FundingService {
         if(funding.getStartDatetime().isAfter(LocalDateTime.now()))
             throw new IllegalArgumentException("해당 펀딩은 아직 시작되지 않았습니다!");
         if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다.");
+            throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
+        if(!funding.getFundingState().equals(FundingState.ACCEPTED))
+            throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
 
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
@@ -100,7 +102,7 @@ public class FundingService {
 
         FundingRes fundingRes = new FundingRes(donationRepository.findDonationByFundingId(funding.getId()));
 
-        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getStartDatetime(), funding.getEndDatetime());
+        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getStartDatetime(), funding.getEndDatetime(), funding.getFundingState());
     }
 
     @Transactional
