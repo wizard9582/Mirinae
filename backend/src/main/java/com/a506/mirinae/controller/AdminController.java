@@ -11,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
@@ -34,4 +31,17 @@ public class AdminController {
         Long id = ((User)authentication.getPrincipal()).getId();
         return ResponseEntity.status(HttpStatus.OK).body(adminService.getNotAcceptedFundingList(pageable, id));
     }
+
+    @PostMapping("/{fundingId}")
+    @ApiOperation(value = "펀딩 승인")
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    public ResponseEntity<String> acceptFunding(@ApiIgnore final Authentication authentication, @PathVariable("fundingId") Long fundingId) {
+        if(authentication==null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Long id = ((User)authentication.getPrincipal()).getId();
+        adminService.acceptFunding(id, fundingId);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
+
+
 }

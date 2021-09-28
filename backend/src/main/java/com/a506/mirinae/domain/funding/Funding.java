@@ -82,4 +82,8 @@ public class Funding {
         this.goal = goal;
         this.fundingState = fundingState;
     }
+
+    public void updateFundingState(FundingState fundingState) {
+        this.fundingState = fundingState;
+    }
 }

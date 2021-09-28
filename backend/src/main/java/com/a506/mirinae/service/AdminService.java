@@ -44,4 +44,17 @@ public class AdminService {
         }
         return fundingResList;
     }
+
+    public void acceptFunding(Long id, Long fundingId) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+        if(!user.getIsAdmin())
+            throw new IllegalArgumentException("관리자 계정이 아닙니다!");
+
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+
+        funding.updateFundingState(FundingState.ACCEPTED);
+        fundingRepository.save(funding);
+    }
 }
