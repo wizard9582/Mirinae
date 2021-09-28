@@ -32,16 +32,17 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.getNotAcceptedFundingList(pageable, id));
     }
 
-    @PostMapping("/{fundingId}")
-    @ApiOperation(value = "펀딩 승인")
+    @PatchMapping("/{fundingId}/{fundingState}")
+    @ApiOperation(value = "펀딩 승인/거부")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    public ResponseEntity<String> acceptFunding(@ApiIgnore final Authentication authentication, @PathVariable("fundingId") Long fundingId) {
+    public ResponseEntity<String> fundingStateChange(@ApiIgnore final Authentication authentication,
+                                                @PathVariable("fundingId") Long fundingId,
+                                                @PathVariable("fundingState") String fundingState) {
         if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Long id = ((User)authentication.getPrincipal()).getId();
-        adminService.acceptFunding(id, fundingId);
+        adminService.fundingStateChange(id, fundingId, fundingState);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
-
 
 }

@@ -45,7 +45,7 @@ public class AdminService {
         return fundingResList;
     }
 
-    public void acceptFunding(Long id, Long fundingId) {
+    public void fundingStateChange(Long id, Long fundingId, String fundingState) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         if(!user.getIsAdmin())
@@ -54,7 +54,10 @@ public class AdminService {
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
 
-        funding.updateFundingState(FundingState.ACCEPTED);
+        if(fundingState.equals("accept"))
+            funding.updateFundingState(FundingState.ACCEPTED);
+        else if(fundingState.equals("deny"))
+            funding.updateFundingState(FundingState.DENIED);
         fundingRepository.save(funding);
     }
 }
