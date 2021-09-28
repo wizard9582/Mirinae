@@ -56,7 +56,7 @@ public class Funding {
     private LocalDateTime endDatetime;
 
     @NotNull
-    private Long goal;
+    private Double goal;
 
     @Column(length = 32, columnDefinition = "varchar(32) default 'WAITING'")
     @Enumerated(EnumType.STRING)
@@ -67,7 +67,7 @@ public class Funding {
 
     @Builder
     public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image,
-                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Long goal, FundingState fundingState) {
+                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Double goal, FundingState fundingState) {
         this.id = id;
         this.user = user;
         this.category = category;

@@ -3,11 +3,11 @@ package com.a506.mirinae.domain.funding;
 import java.time.LocalDateTime;
 
 public interface FundingResInterface {
-    Long getBalance();
+    Double getBalance();
     Long getFundingId();
     String getTitle();
     String getCategoryName();
-    Long getGoal();
+    Double getGoal();
     String getThumbnail();
     LocalDateTime getStartDatetime();
     LocalDateTime getEndDatetime();

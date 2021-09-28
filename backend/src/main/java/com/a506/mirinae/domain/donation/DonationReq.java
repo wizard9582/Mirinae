@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class DonationReq {
     Long fundingId;
-    Long amount;
+    Double amount;
 
     public Donation toEntity(User user, Funding funding, String tx_id) {
         return Donation.builder()
