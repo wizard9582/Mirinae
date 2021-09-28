@@ -1,6 +1,6 @@
 
 export function setToken (state, token) {
-    state.authToken = token
+    state.jwt = token
 }
 
 export function setUserId (state, id) {

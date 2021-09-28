@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-welcome class="bg-local bg-galaxy-pattern bg-no-repeat bg-cover"
+        <welcome-content class="bg-local bg-galaxy-pattern bg-no-repeat bg-cover"
         @openKakaoLogin="onOpenKakaoLogin"
         @openNaverLogin="onOpenNaverLogin"
         @openGoogleLogin="onOpenGoogleLogin"/>
@@ -8,7 +8,7 @@
     </div>
 </template>
 <script>
-import ContentWelcome from '@/components/welcome/ContentWelcome.vue'
+import WelcomeContent from '@/components/welcome/WelcomeContent.vue'
 import MainFooter from '@/components/main/MainFooter.vue'
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
@@ -17,7 +17,7 @@ import { useRouter } from 'vue-router'
 export default {
     name: 'WelcomePage',
     components: {
-        ContentWelcome,
+        WelcomeContent,
         MainFooter,
     },
 
@@ -28,10 +28,12 @@ export default {
         })
 
         const onOpenKakaoLogin = ()=>{
+            //카카오 로그인
             const params = {
-                redirectUri: "https://localhost:8080/oauth/kakao",
+                redirectUri: "https://localhost:8083/oauth/kakao",
             };
             window.Kakao.Auth.authorize(params);
+            //router.push('/main/all')
         }
         const onOpenNaverLogin = ()=>{
 
