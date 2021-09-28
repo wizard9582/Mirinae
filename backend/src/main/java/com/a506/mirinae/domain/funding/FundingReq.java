@@ -29,7 +29,6 @@ public class FundingReq {
                 .startDatetime(startDatetime)
                 .endDatetime(endDatetime)
                 .goal(goal)
-                .isAccept(false)
                 .build();
     }
 }

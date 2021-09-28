@@ -5,6 +5,7 @@ import com.a506.mirinae.domain.donation.DonationRepository;
 import com.a506.mirinae.domain.funding.Funding;
 import com.a506.mirinae.domain.funding.FundingRepository;
 import com.a506.mirinae.domain.funding.FundingRes;
+import com.a506.mirinae.domain.funding.FundingState;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class AdminService {
         List<FundingRes> fundingResList = new ArrayList<>();
         funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         for(Funding f : funding) {
-            if(!f.getIsAccept()) {
+            if(f.getFundingState().equals(FundingState.WAITING)) {
                 if(f.getDonations().size()==0)
                     fundingResList.add(new FundingRes(f));
                 else {
@@ -42,5 +43,21 @@ public class AdminService {
             }
         }
         return fundingResList;
+    }
+
+    public void fundingStateChange(Long id, Long fundingId, String fundingState) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
+        if(!user.getIsAdmin())
+            throw new IllegalArgumentException("관리자 계정이 아닙니다!");
+
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+
+        if(fundingState.equals("accept"))
+            funding.updateFundingState(FundingState.ACCEPTED);
+        else if(fundingState.equals("deny"))
+            funding.updateFundingState(FundingState.DENIED);
+        fundingRepository.save(funding);
     }
 }
