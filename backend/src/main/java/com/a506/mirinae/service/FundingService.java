@@ -14,11 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.admin.Admin;
-import org.web3j.protocol.http.HttpService;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +26,7 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
-    private final Web3j web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
-    private final Admin admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
+    
     @Transactional
     public List<FundingRes> getFundingList(String categoryName, Pageable pageable) {
         List<Funding> funding;
@@ -55,11 +50,6 @@ public class FundingService {
 
     public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
         String wallet = "null";
-        try {
-			wallet = admin.personalNewAccount("").send().getAccountId();
-		} catch (IOException e) {
-			throw new IllegalArgumentException("지갑생성중 오류");
-		}
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Category category = categoryRepository.findById(fundingReq.getCategoryId())
@@ -90,7 +80,7 @@ public class FundingService {
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
             throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
-
+        
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
