@@ -26,7 +26,7 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
-
+    
     @Transactional
     public List<FundingRes> getFundingList(String categoryName, Pageable pageable) {
         List<Funding> funding;
@@ -80,7 +80,7 @@ public class FundingService {
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
             throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
-
+        
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
