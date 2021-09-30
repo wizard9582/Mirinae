@@ -53,8 +53,6 @@ public class UserService {
 				try {
 					walletBalance = Double.parseDouble(Convert.fromWei(web3.ethGetBalance(user.getWallet(), DefaultBlockParameterName.LATEST).send()
 							.getBalance().toString(), Unit.ETHER).toString());
-					System.out.println("A"+Convert.fromWei(web3.ethGetBalance(user.getWallet(), DefaultBlockParameterName.LATEST).send()
-							.getBalance().toString(), Unit.ETHER).toString());
 				} catch (NumberFormatException e) {
 					throw new IllegalArgumentException("잔고가 숫자가 아님.");
 				} catch (IOException e) {
