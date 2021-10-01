@@ -5,7 +5,7 @@
             <div class="flex flex-wrap items-center">
                 <div class="relative w-full px-4 max-w-full flex-grow flex-1">
                 <h3 class="font-semibold text-base text-blueGray-700">
-                    {{state.rankingTitle}}
+                    {{rankingTitle}}
                 </h3>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="ranking in state.rankingList" :key="ranking.id">
+                    <tr v-for="ranking in rankingData" :key="ranking.id">
                         <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {{ranking.id}}
                         </th>
@@ -60,18 +60,12 @@ export default {
     components: {
     },
     props:{
-        rankingData:[]
+        rankingData:[],
+        rankingTitle:"",
     },
     setup(){
         const state = reactive({
-            rankingTitle:"title",
-            rankingList:[
-                {
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }
-            ],
+
         })
         return {state}
     }

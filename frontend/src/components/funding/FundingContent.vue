@@ -72,8 +72,19 @@ export default {
             imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
             imgAlt: "funding_id",
             userName: "name",
+            fundingId:0,
         })
 
+        const init=()=>{
+            state.fundingId = router.currentRoute.value.params.id
+            store.dispatch('root/detailFunding', {fundingId: state.fundingId})
+            .then((result)=>{
+                console.log(result)
+            })
+            .catch()
+        }
+
+        init()
         return {state}
     }
 };

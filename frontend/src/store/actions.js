@@ -136,7 +136,17 @@ export function createFunding({state}, payload){
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
-    return $axios.post(url, {headers});
+    const body = {
+        'title' : payload.title,
+        'categoryName' : payload.categoryName,
+        'content' : payload.content,
+        'goal' : payload.goal,
+        'thumbnail' : payload.thumbnail,
+        'image' : payload.image,
+        'startDatatime': payload.startDatatime,
+        'endDatetime': payload.endDatetime,
+    }
+    return $axios.post(url, {headers}, body);
 }
 
 export function getFundingList({state}, payload){

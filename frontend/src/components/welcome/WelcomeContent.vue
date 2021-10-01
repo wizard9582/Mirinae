@@ -17,17 +17,17 @@
             </div>
             <p class="text-sm text-gray mb-3">다른 방법으로 시작하기</p>
             <div class="flex items-center mb-10">
-                <div class="flex items-center bg-gray-200 w-sm h-sm ml-auto mr-3 rounded-3xl cursor-pointer" @click="clickLogin('naver')">
+                <div class="flex items-center bg-gray-200 w-sm h-sm ml-auto mr-3 rounded-3xl cursor-not-allowed" @click="clickLogin('naver')">
                     <svg class="fill-current text-green ml-auto mr-auto w-6 h-6" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg"><g id="N"><path d="m164.828 233.178 182.359 278.822h118.813v-512h-118.623v285.956l-185.215-285.956h-116.162v512h118.828z"/></g></svg>
                 </div>
-                <div class="flex items-center bg-gray-200 w-sm h-sm rounded-3xl cursor-pointer" @click="clickLogin('google')">
+                <div class="flex items-center bg-gray-200 w-sm h-sm rounded-3xl cursor-not-allowed" @click="clickLogin('google')">
                     <img class="ml-auto mr-auto w-6 h-6" src="../../assets/svg/google.svg" alt="google">
                 </div>
-                <div class="flex items-center bg-gray-200 w-sm h-sm ml-3 mr-auto rounded-3xl cursor-pointer" @click="clickLogin('etc')">
+                <div class="flex items-center bg-gray-200 w-sm h-sm ml-3 mr-auto rounded-3xl cursor-not-allowed" @click="clickLogin('etc')">
                     <img class="ml-auto mr-auto w-6 h-6" src="../../assets/svg/instagram.svg" alt="instagram">
                 </div>
             </div>
-            <div class="text-right mr-5 cursor-pointer">
+            <div class="text-right mr-5 cursor-pointer" @click="goHome">
                 <p class="text-xs text-gray mb-5">로그인 하지 않고 둘러보기→</p>
             </div>
         </div>
@@ -35,10 +35,17 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
     name: 'WelcomeContent',
 
     setup(props, {emit}){
+        const store = useStore()
+        const router = useRouter()
+        const state = reactive({})
 
         const clickLogin = (where) =>{
             if(where === 'kakao'){
@@ -55,7 +62,10 @@ export default {
             //     emit('')
             // }
         }
-        return { clickLogin }
+        const goHome = () =>{
+            router.push("/main/all/1")
+        }
+        return { clickLogin, goHome }
     }
 };
 </script>
