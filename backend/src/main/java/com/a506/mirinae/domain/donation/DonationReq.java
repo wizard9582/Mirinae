@@ -9,6 +9,7 @@ import lombok.Getter;
 public class DonationReq {
     Long fundingId;
     Double amount;
+    String key;
 
     public Donation toEntity(User user, Funding funding, String tx_id) {
         return Donation.builder()
