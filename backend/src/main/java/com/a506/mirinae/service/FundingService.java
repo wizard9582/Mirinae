@@ -80,6 +80,8 @@ public class FundingService {
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
             throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
+
+        donationReq.getKey();   // 지갑 비밀 키
         
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
