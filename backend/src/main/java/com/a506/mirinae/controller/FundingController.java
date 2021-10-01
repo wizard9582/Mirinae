@@ -56,7 +56,7 @@ public class FundingController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/join")
     public ResponseEntity<String> joinFunding(@ApiIgnore final Authentication authentication,
-                                              @RequestBody @ApiParam(value = "펀딩 Id, 기부금액") DonationReq donationReq) {
+                                              @RequestBody @ApiParam(value = "펀딩 Id, 기부금액, private key") DonationReq donationReq) {
         if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Long id = ((User)authentication.getPrincipal()).getId();

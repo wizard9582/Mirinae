@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id "org.web3j" version "4.8.7"
 }
 
 group = 'com.a506'
@@ -56,9 +55,8 @@ dependencies {
 	// AWS S3
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
 
-	
 	//web3
-	implementation ('org.web3j:core:4.2.0')
+	implementation('org.web3j:core:4.2.0')
 	implementation("com.squareup.okhttp3:okhttp:4.9.0")
 }
 
