@@ -8,9 +8,8 @@ module.exports = {
         port: 8083,
         open: true,
         proxy: {
-            '^/api': {
+            '/api': {
                 target: backendAPI,
-                changeOrigin: true
             },
             '/v1': {
                 target: kakaoAPI,
