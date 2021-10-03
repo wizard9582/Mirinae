@@ -22,7 +22,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
             , nativeQuery = false)
     Page<RankingResInterface> findRankingByCategoryId(Long categoryId, Pageable pageable);
 
-    @Query(value = "SELECT d.funding.id AS fundingId, d.funding.title AS title, d.funding.category.name AS categoryName," +
+    @Query(value = "SELECT d.funding.id AS fundingId, d.funding.title AS title, d.funding.category.name AS categoryName, d.funding.startDatetime AS startDatetime, d.funding.endDatetime AS endDatetime," +
             "SUM(d.amount) AS balance, d.funding.goal AS goal, d.funding.thumbnail AS thumbnail "+
             "FROM Donation d " +
             "WHERE d.funding.id = :fundingId "

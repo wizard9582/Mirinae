@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
+    
     public LoginRes login(LoginReq loginReq){
         Optional<User> user = userRepository.findByEmailAndOauthType(loginReq.getEmail(), OauthType.valueOf(loginReq.getOauthType()));
         Boolean isJoin = user.isPresent();
@@ -37,7 +37,7 @@ public class UserService {
     public UserRes getUserInfo(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
-        String walletBalance = ""; // 블록체인 구현 후
+        Double walletBalance = 0.0; // 블록체인 구현 후
 
         return new UserRes(user, walletBalance);
     }
@@ -54,7 +54,7 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
-
+        
         userRepository.delete(user);
     }
 
