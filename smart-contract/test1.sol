@@ -4,11 +4,13 @@ pragma solidity ^0.8.7;
 
 contract test1 {
     address public owner;
+    uint max_funding_id;
 
     // 생성자
     constructor() {
         // contract 제작자 저장, 권한 확인용
         owner = msg.sender;
+        max_funding_id = 0;
     }
 
     // 기부자주소, 기부금액, 작성된 블록 번호
@@ -39,12 +41,15 @@ contract test1 {
     event funding_open_success(uint funding_id);
     event funding_donate_success(uint funding_id, uint value);
     event funding_close_success(uint funding_id, bool success, uint current_amount, string message);
+    event funding_abort_success(uint funding_id, uint current_amount, string message);
 
     // 펀딩 여는 함수, OwnerOnly
     function openFunding(uint _funding_id, uint _target_amount, address _target_address, string memory _user_id, string memory _title, string memory _close_time) external onlyOwner {
         funding_list[_funding_id] = funding(_funding_id, _target_amount, 0, _target_address, true, false, false, _user_id, _title, _close_time);
+        if(max_funding_id < _funding_id) max_funding_id = _funding_id;
         emit funding_open_success(_funding_id);
     }
+    
     // 기부 함수
     function donateFunding(uint _funding_id) external payable {
         // 열려있는 펀딩에 대해 가능
@@ -59,6 +64,10 @@ contract test1 {
     function closeFunding(uint _funding_id) external onlyOwner {
         if(funding_list[_funding_id].state_success == true) { _FundingSuccess(_funding_id); }
         else { _FundingFail(_funding_id); }
+    }
+
+    function abortFunding(uint _funding_id) external onlyOwner {
+        _FundingAbort(_funding_id);
     }
 
     // 펀딩 상태 확인
@@ -86,6 +95,14 @@ contract test1 {
 
     function saveEth() external payable onlyOwner returns (uint) {
         return msg.value;
+    }
+
+    function getMaxFundingId() external view returns (uint) {
+        return max_funding_id;
+    }
+
+    function getValue() external view returns (uint) {
+        return address(this).balance;
     }
 
     // 서비스 제공자 확인
@@ -124,7 +141,6 @@ contract test1 {
     function _FundingFail(uint _funding_id) private {
         // 실패 기록
         funding_list[_funding_id].state_opened = false;
-        funding_list[_funding_id].state_aborted = true;
 
         // 모금된 금액 모두 환불
         for(uint i = 0; i < donation_list[_funding_id].length; i++) {
@@ -135,5 +151,17 @@ contract test1 {
         emit funding_close_success(_funding_id, false, funding_list[_funding_id].current_amount, "Fail Funding");
     }
 
+    function _FundingAbort(uint _funding_id) private {
+        // 중지 기록
+        funding_list[_funding_id].state_opened = false;
+        funding_list[_funding_id].state_aborted = true;
 
+        // 모금된 금액 모두 환불
+        for(uint i = 0; i < donation_list[_funding_id].length; i++) {
+            donation memory temp = donation_list[_funding_id][i];
+            payable(temp.donator_address).transfer(temp.price_wei);
+        }
+
+        emit funding_abort_success(_funding_id, funding_list[_funding_id].current_amount, "Abort Funding");
+    }
 }
