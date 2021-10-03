@@ -1,5 +1,6 @@
 const kakaoAPI = 'https://kapi.kakao.com/'
-const backendAPI = 'https://localhost:8080/'
+// const backendAPI = 'https://localhost:8080/'
+const backendAPI = 'https://j5a506.p.ssafy.io/'
 
 module.exports = {
     devServer: {
@@ -23,5 +24,5 @@ module.exports = {
         historyApiFallback: true,
         hot: true
     },
-    lintOnSave: false,
+    lintOnSave: false, 
 }

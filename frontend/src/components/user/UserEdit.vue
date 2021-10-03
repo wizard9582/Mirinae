@@ -25,7 +25,7 @@
                     <p>내가 참여한 펀딩</p>
                 </div>
                 <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
-                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id" :funding = funding />
+                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id"/>
                 </div>
             </div>
             <div class="m-8 divide-y divide-black">
@@ -33,9 +33,7 @@
                     <p>내가 개설한 펀딩</p>
                 </div>
                 <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
-                    <div v-for="funding in state.myFundings" :key="funding.id">
-                        <funding-thumbnail :funding = funding />
-                    </div>
+                    <funding-thumbnail v-for="funding in state.myFundings" :key="funding.id"/>
                 </div>
             </div>
         </div>
@@ -55,27 +53,19 @@ export default {
     },
 
     setup(){
-        const store = useStore()
+        const sotre = useStore()
         const state = reactive({
             userName:"이름",
             userWallet:"1234",
             userBalance: 100,
             myDonations:[
                 {
-                    id: 3,
+                    id: 1,
                     title: "funding_title",
                     imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
                     imgAlt: "funding_id",
                     balance: 0,
                     goal: 100,
-                },
-                {
-                    id: 2,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 100,
-                    goal: 500,
                 },
             ],
             myFundings:[
@@ -90,21 +80,7 @@ export default {
             ],
         })
 
-        const init = () =>{
-            store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
-            .then((result)=>{
-                console.log(result)
-                //지갑주소 없으면 지갑만들기 버튼 보이게, 있으면 있는거 보여주기ㄴ
-            })
-            .catch()
-        }
-
-        const makeWallet = () =>{
-            //지갑 만들기 관련 api
-        }
-
-        init()
-        return {state, makeWallet}
+        return {state}
     }
 };
 </script>

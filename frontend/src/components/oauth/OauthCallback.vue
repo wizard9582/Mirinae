@@ -41,11 +41,11 @@ export default {
 
                     store.dispatch('root/login', { email:email, nickname:nickname, oauthType:oauthType })
                     .then((result)=>{
-                        //console.log(result)
+                        console.log(result)
                         if(result.status === 200){
                             store.commit('root/setToken', result.data.jwt)
                             store.commit('root/setUserId', email)
-                            router.push('/main/all')
+                            router.push('/main/all/1')
                         }else{
                             router.push('/error')
                         }

@@ -136,7 +136,17 @@ export function createFunding({state}, payload){
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
-    return $axios.post(url, {headers});
+    const body = {
+        'title' : payload.title,
+        'categoryName' : payload.categoryName,
+        'content' : payload.content,
+        'goal' : payload.goal,
+        'thumbnail' : payload.thumbnail,
+        'image' : payload.image,
+        'startDatatime': payload.startDatatime,
+        'endDatetime': payload.endDatetime,
+    }
+    return $axios.post(url, {headers}, body);
 }
 
 export function getFundingList({state}, payload){
@@ -231,4 +241,16 @@ export function denyFunding({state}, payload){
         'jwt': 'Bearer ' + payload.jwt,
     }
     return $axios.delete(url,{headers});
+}
+
+//이미지 업로드 API
+
+export function uploadProfileImg({state}, payload){
+    const url = 'https://localhost:8080/api/upload/' + payload.usage
+    const headers = {
+        'Content-Type': 'multipart/form-data'
+    }
+    const body = payload.formdata
+    
+    return $axios.post( url, {headers}, body);
 }

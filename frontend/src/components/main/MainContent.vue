@@ -2,7 +2,7 @@
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
             <div v-for="category in state.categories" :key="category.id" class="group relative mx-auto">
-                <div class="w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="clickCategory">
+                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.name)">
                     <img :src="category.imgSrc" :alt="category.imgAlt" class="shadow rounded-full max-w-full h-auto align-middle border-none" />
                     <p class="text-sm text-gray-700">{{category.name}}</p>
                 </div>
@@ -11,44 +11,37 @@
         <div class="max-w-2xl mt-1 mx-auto py-4 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-t-0 border-4 border-black bg-white divide-y divide-black">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">{{state.category}}</h2>
             <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3  sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" @click="clickFunding"/>
+                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" @click="clickFunding(funding.id)"/>
             </div>
             <div class="bg-white mt-10 px-4 pt-6 pb-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div class="flex-1 flex justify-between sm:hidden">
-                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                    Previous
-                </a>
-                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                    Next
-                </a>
-                </div>
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700">
-                        {{state.index}} of {{state.page}} pages
-                    </p>
-                </div>
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            {{state.page}} of {{state.index}} pages
+                        </p>
+                    </div>
                 <div>
                     <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        &lt;&lt;
-                    </a>
+                    <div class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" @click="clickDir(-1)">
+                        &lt;
+                    </div>
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-                    <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                        1
-                    </a>
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        &gt;&gt;
-                    </a>
+                    <div v-for="page in state.pages" :key="page.id" class="border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium" @click="clickDir(page)">
+                        <div v-if="page == state.page" class="font-bold"> {{page}}</div>
+                        <div v-else> {{page}}</div>
+                    </div>
+                    <div class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" @click="clickDir(0)">
+                        &gt;
+                    </div>
                     </nav>
                 </div>
                 </div>
             </div>
         </div>
         <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
-            <ranking/>
-            <ranking/>
-            <ranking/>
+            <ranking :rankingData = "state.rankingData1" :rankingTitle = "state.rankingTitle1"/>
+            <ranking :rankingData = "state.rankingData2" :rankingTitle = "state.rankingTitle2"/>
+            <ranking :rankingData = "state.rankingData3" :rankingTitle = "state.rankingTitle3"/>
         </div>
     </div>
 </template>
@@ -72,65 +65,108 @@ export default {
         const router = useRouter()
         const state = reactive({
             category: "카테고리명",
+            size: 10,
             page: 1,
             index: 1,
             categories:[
-                {
-                    id: 1,
-                    name: "category",
-                    imgSrc: 'https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-2-800x800.jpg',
-                    imgAlt: "funding_id",
-                }
             ],
             fundings: [
-                {
-                    id: 1,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 0,
-                    goal: 100,
-                },
-                                {
-                    id: 1,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 0,
-                    goal: 100,
-                },
-                                {
-                    id: 1,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 0,
-                    goal: 100,
-                },
-                                {
-                    id: 1,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 0,
-                    goal: 100,
-                },
-                                {
-                    id: 1,
-                    title: "funding_title",
-                    imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-                    imgAlt: "funding_id",
-                    balance: 0,
-                    goal: 100,
-                },
-            ]
+            ],
+            pages:[
+
+            ],
+            rankingData1:[{
+                    id:1,
+                    name:"이름",
+                    amount:100,
+                }],
+            rankingData2:[{
+                    id:1,
+                    name:"이름",
+                    amount:100,
+                }],
+            rankingData3:[{
+                    id:1,
+                    name:"이름",
+                    amount:100,
+                }],
+            rankingTitle1: "전체 랭킹",
+            rankingTitle2: "카테고리 랭킹",
+            rankingTitle3: "펀딩 랭킹",
         })
 
-        const clickFunding = () =>{
-            router.push("/main/fund/id")
+        const init = () => {
+            state.category = router.currentRoute.value.params.id
+            state.page = router.currentRoute.value.params.page
+            
+            let i = Math.max(parseInt(state.page - 2), 1)
+            let k = Math.min(parseInt(state.page) + 2, state.index)
+
+            for(var j = i; j <= k; j++){
+                state.pages.push(j)
+            }
+
+            store.dispatch('root/getCategoryList')
+            .then((result)=>{
+                console.log("category data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getFundingList', { category: state.category, size: state.size, page: state.page })
+            .then((result)=>{
+                console.log("category data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking1 data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking2 data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking3 data----->")
+                console.log(result)
+            })
+            .catch()
         }
 
-        return { state, clickFunding}
+        const clickFunding = (fundingId) =>{
+            router.push("/main/fund/" + fundingId)
+        }
+
+        const clickCategory = (categoryName) =>{
+            router.push("/main/" + categoryName + "/1")
+        }
+
+        const clickDir = (dir) =>{
+            if(dir == -1){
+                if(state.page != 1){
+                    router.push("/main/" + state.category + "/" + parseInt(state.page-1))
+                }
+            }else if(dir == 0){
+                if(state.page < state.index){
+                    state.page++
+                    router.push("/main/" + state.category + "/" + state.page)
+                }
+            }else{
+                router.push("/main/" + state.category + "/" + dir)
+            }
+        }
+
+        init()
+        return { state, clickFunding, clickCategory, clickDir}
     }
 };
 </script>
