@@ -6,7 +6,7 @@ import $axios from 'axios'
 
 const kakaoLogin = {
     REST_API_KEY: '90dd81e93f00e04640a83ff9889069a6',
-    REDIRECT_URI: 'https://localhost:8083/oauth/kakao',
+    REDIRECT_URI: 'https://j5a506.p.ssafy.io/oauth/kakao',
     AUTHORIZATION: 'aa85fc3c27abac4c4cd3f68be514bf66',
     CONTENT_TYPE: 'application/x-www-form-urlencoded;charset=utf-8'
 }
