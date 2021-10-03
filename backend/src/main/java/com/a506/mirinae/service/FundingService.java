@@ -53,7 +53,12 @@ public class FundingService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Category category = categoryRepository.findById(fundingReq.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리 ID=" + fundingReq.getCategoryId()));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리 ID=" + fundingReq.getCategoryId()));
+                
+        // smart-contract openFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
+        
         Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
         return new FundingIdRes(funding.getId());
     }
@@ -76,12 +81,20 @@ public class FundingService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
         if(funding.getStartDatetime().isAfter(LocalDateTime.now()))
             throw new IllegalArgumentException("해당 펀딩은 아직 시작되지 않았습니다!");
-        if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
+        if (funding.getEndDatetime().isBefore(LocalDateTime.now())) {
+
+            // smart-contract closeFunding 삽입 위치
+            // 실패할 경우 분기처리 (Error Exception 추가)
+
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
+        }
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
             throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
 
-        donationReq.getKey();   // 지갑 비밀 키
+        donationReq.getKey(); // 지갑 비밀 키
+
+        // smart-contract doanteFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
         
         String tx_id = "null"; //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
@@ -116,6 +129,10 @@ public class FundingService {
 
         if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException("종료된 펀딩은 삭제할 수 없습니다!");
+
+        // smart-contract abortFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
+
         fundingRepository.delete(funding);
     }
 }

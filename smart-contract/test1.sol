@@ -15,7 +15,6 @@ contract test1 {
     struct donation {
         address donator_address;
         uint price_wei;
-        uint block_number;
     }
 
     // 펀딩ID, 목표금액, 종료일시, 모금주소, 기부내역, 진행상태, 취소여부, 개설자ID, 펀딩이름
@@ -23,13 +22,13 @@ contract test1 {
         uint funding_id;
         uint target_amount;
         uint current_amount;
-        string close_time;
         address target_address;
         bool state_opened;
         bool state_aborted;
         bool state_success;
         string user_id;
         string title;
+        string close_time;
     }
 
     // 전체 펀딩, 기부 리스트 => Key : 펀딩ID
@@ -39,17 +38,11 @@ contract test1 {
     // 펀딩 성공 여부 알림 (사용여부 확인 필요)
     event funding_open_success(uint funding_id);
     event funding_donate_success(uint funding_id, uint value);
-    event funding_close_success(uint funding_id, bool success, string message);
-
-    // 서비스 제공자 확인
-    modifier onlyOwner() {
-        require(owner == msg.sender, "Not Owner, Denied");
-        _;
-    }
+    event funding_close_success(uint funding_id, bool success, uint current_amount, string message);
 
     // 펀딩 여는 함수, OwnerOnly
-    function openFunding(uint _funding_id, uint _target_amount, string memory _close_time, address _target_address, string memory _user_id, string memory _title) external onlyOwner {
-        funding_list[_funding_id] = funding(_funding_id, _target_amount, 0, _close_time, _target_address, true, false, false, _user_id, _title);
+    function openFunding(uint _funding_id, uint _target_amount, address _target_address, string memory _user_id, string memory _title, string memory _close_time) external onlyOwner {
+        funding_list[_funding_id] = funding(_funding_id, _target_amount, 0, _target_address, true, false, false, _user_id, _title, _close_time);
         emit funding_open_success(_funding_id);
     }
     // 기부 함수
@@ -64,53 +57,8 @@ contract test1 {
 
     // 펀딩 종료 함수, OwnerOnly 
     function closeFunding(uint _funding_id) external onlyOwner {
-        if(funding_list[_funding_id].state_success) {
-            _FundingSuccess(_funding_id);
-        }
-        else {
-            _FundingFail(_funding_id);
-        }
-    }
-
-    // 기부 내역 저장
-    function _recordDonation(uint _funding_id, address _donator_address, uint _price_wei) private {
-        // 기부내역 작성
-        donation_list[_funding_id].push(donation(_donator_address, _price_wei, block.number));
-
-        // 펀딩 현재 모금액 업데이트
-        funding_list[_funding_id].current_amount += _price_wei;
-
-        // 펀딩 성공여부 확인
-        if(funding_list[_funding_id].state_success == false) {
-            if(funding_list[_funding_id].current_amount >= funding_list[_funding_id].target_amount) {
-                funding_list[_funding_id].state_success = true;
-            }
-        }
-    }
-
-    // 모금 성공, OwnerOnly
-    function _FundingSuccess(uint _funding_id) private {
-        funding_list[_funding_id].state_opened = false;
-
-        // 모금된 금액 주소로 전송
-        payable(funding_list[_funding_id].target_address).transfer(funding_list[_funding_id].current_amount);
-
-        emit funding_close_success(_funding_id, true, "Success Funding");
-    }
-
-    // 모금 실패, OwnerOnly
-    function _FundingFail(uint _funding_id) private {
-        // 실패 기록
-        funding_list[_funding_id].state_opened = false;
-        funding_list[_funding_id].state_aborted = true;
-
-        // 모금된 금액 모두 환불
-        for(uint i = 0; i < donation_list[_funding_id].length; i++) {
-            donation memory temp = donation_list[_funding_id][i];
-            payable(temp.donator_address).transfer(temp.price_wei);
-        }
-
-        emit funding_close_success(_funding_id, false, "Fail Funding");
+        if(funding_list[_funding_id].state_success == true) { _FundingSuccess(_funding_id); }
+        else { _FundingFail(_funding_id); }
     }
 
     // 펀딩 상태 확인
@@ -132,7 +80,60 @@ contract test1 {
     }
 
     // 새 유저를 위한 수도꼭지, OwnerOnly
-    function faucet(address payable _user_address) external onlyOwner {
-        _user_address.transfer(100 ether);
+    function faucet(address payable _user_address) external {
+        _user_address.transfer(10000000000000000000);
     }
+
+    function saveEth() external payable onlyOwner returns (uint) {
+        return msg.value;
+    }
+
+    // 서비스 제공자 확인
+    modifier onlyOwner() {
+        require(owner == msg.sender, "Not Owner, Denied");
+        _;
+    }
+
+    // 기부 내역 저장
+    function _recordDonation(uint _funding_id, address _donator_address, uint _price_wei) private {
+        // 기부내역 작성
+        donation_list[_funding_id].push(donation(_donator_address, _price_wei));
+
+        // 펀딩 현재 모금액 업데이트
+        funding_list[_funding_id].current_amount += _price_wei;
+
+        // 펀딩 성공여부 확인
+        if(funding_list[_funding_id].state_success == false) {
+            if(funding_list[_funding_id].current_amount >= funding_list[_funding_id].target_amount) {
+                //funding_list[_funding_id].state_success = true;
+            }
+        }
+    }
+
+    // 모금 성공, OwnerOnly
+    function _FundingSuccess(uint _funding_id) private {
+        funding_list[_funding_id].state_opened = false;
+
+        // 모금된 금액 주소로 전송
+        payable(funding_list[_funding_id].target_address).transfer(funding_list[_funding_id].current_amount);
+
+        emit funding_close_success(_funding_id, true, funding_list[_funding_id].current_amount, "Success Funding");
+    }
+
+    // 모금 실패, OwnerOnly
+    function _FundingFail(uint _funding_id) private {
+        // 실패 기록
+        funding_list[_funding_id].state_opened = false;
+        funding_list[_funding_id].state_aborted = true;
+
+        // 모금된 금액 모두 환불
+        for(uint i = 0; i < donation_list[_funding_id].length; i++) {
+            donation memory temp = donation_list[_funding_id][i];
+            payable(temp.donator_address).transfer(temp.price_wei);
+        }
+
+        emit funding_close_success(_funding_id, false, funding_list[_funding_id].current_amount, "Fail Funding");
+    }
+
+
 }

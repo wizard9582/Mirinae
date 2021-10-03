@@ -21,13 +21,13 @@ import org.web3j.utils.Convert.Unit;
 import org.web3j.utils.Numeric;
 
 public class EthereumUtil {
-	private Web3j web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
-    private Admin admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
+	private Web3j web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:2220"));
+    private Admin admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:2220"));
     
     
     public EthereumUtil() {
-    	web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
-    	admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:1220"));
+    	web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:2220"));
+    	admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:2220"));
 	}
 
 	public String transferEhter(String userWallet, String fundingWallet, Double amount, String privateKey) {
