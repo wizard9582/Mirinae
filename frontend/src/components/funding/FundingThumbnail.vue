@@ -4,7 +4,7 @@
             <img :src="funding.imgSrc" :alt="funding.imgAlt" class="w-full h-full object-center object-cover lg:w-full lg:h-full" />
         </div>
         <div v-if="funding.state=='prepare'">prepare</div>
-        <div v-else-if="funding.state=='open'"></div>
+        <div v-else-if="funding.state=='open'">open</div>
         <div v-else>end</div>
         <div class="mt-4">
             <h3 class="text-sm text-gray-700 font-bold">
