@@ -53,6 +53,7 @@ export default {
     },
 
     setup(){
+        const sotre = useStore()
         const state = reactive({
             userName:"이름",
             userWallet:"1234",

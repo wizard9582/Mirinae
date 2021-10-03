@@ -119,6 +119,27 @@ export default {
                 console.log(result)
             })
             .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking1 data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking2 data----->")
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            .then((result)=>{
+                console.log("category Ranking3 data----->")
+                console.log(result)
+            })
+            .catch()
         }
 
         const clickFunding = (fundingId) =>{

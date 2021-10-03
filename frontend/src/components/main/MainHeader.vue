@@ -53,7 +53,7 @@ export default {
         })
         const init = ()=>{
             if(store.getters['root/isLoggedIn']){
-                store.dispatch('root/getUserInfo', store.getters['root/getAuthToken'])
+                store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
                 .then((result)=>{
                     //console.log(result)
                     state.isLoggedIn = true
@@ -65,13 +65,13 @@ export default {
             state.loginPop = true
         }
         const clickHome = ()=>{
-            router.push('/main/all')
+            router.push('/main/all/1')
         }
         const clickUser = ()=>{
             router.push('/main/user/id')
         }
         const clickFundingList = ()=>{
-            router.push('/main/all')
+            router.push('/main/all/1')
         }
         const clickFundingOpen = ()=>{
             router.push('/main/fund/create')
