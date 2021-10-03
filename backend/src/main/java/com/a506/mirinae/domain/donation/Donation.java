@@ -28,7 +28,7 @@ public class Donation {
     private Funding funding;
 
     @NotNull
-    private Long amount;
+    private Double amount;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDatetime;
@@ -37,7 +37,7 @@ public class Donation {
     private String txId;
 
     @Builder
-    public Donation(Long id, User user, Funding funding, Long amount, LocalDateTime createdDatetime, String txId) {
+    public Donation(Long id, User user, Funding funding, Double amount, LocalDateTime createdDatetime, String txId) {
         this.id = id;
         this.user = user;
         this.funding = funding;

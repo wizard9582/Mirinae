@@ -8,9 +8,9 @@ public class UserRes {
     private String image;
     private String nickname;
     private String walletAddress;
-    private String walletBalance;
+    private Double walletBalance;
 
-    public UserRes(User user, String walletBalance) {
+    public UserRes(User user, Double walletBalance) {
         this.email = user.getEmail();
         this.image = user.getProfileImage();
         this.nickname = user.getNickname();

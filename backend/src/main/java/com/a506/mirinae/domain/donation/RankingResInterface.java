@@ -1,7 +1,7 @@
 package com.a506.mirinae.domain.donation;
 
 public interface RankingResInterface {
-    Long getAmount();
+    Double getAmount();
     Long getUserId();
     String getUserProfileImage();
     String getUserNickname();
