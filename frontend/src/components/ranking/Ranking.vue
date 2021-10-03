@@ -18,7 +18,10 @@
                         순위
                         </th>
                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        이름
+                        
+                        </th>
+                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        
                         </th>
                         <th
                         class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left" style="min-width:140px">
@@ -28,10 +31,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="ranking in rankingData" :key="ranking.id">
-                        <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         {{ranking.id}}
                         </th>
-                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td class="border-t-0 pl-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            <img :src="ranking.userThumbnail" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
+                        </td>
+                        <td class="border-t-0 pr-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {{ranking.name}}
                         </td>
                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">

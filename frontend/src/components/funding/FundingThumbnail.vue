@@ -3,6 +3,9 @@
         <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
             <img :src="funding.imgSrc" :alt="funding.imgAlt" class="w-full h-full object-center object-cover lg:w-full lg:h-full" />
         </div>
+        <div v-if="funding.state=='prepare'">prepare</div>
+        <div v-else-if="funding.state=='open'"></div>
+        <div v-else>end</div>
         <div class="mt-4">
             <h3 class="text-sm text-gray-700 font-bold">
                 {{ funding.title }}
@@ -41,6 +44,7 @@ export default {
                     imgAlt: "funding_id",
                     balance: 0,
                     goal: 100,
+                    state: "prepare",
             },
         },
     },
