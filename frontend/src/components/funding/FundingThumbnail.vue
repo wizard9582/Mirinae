@@ -1,22 +1,22 @@
 <template>
     <div class="group relative shadow-md p-4">
         <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
-            <img :src="state.funding.imgSrc" :alt="state.funding.imgAlt" class="w-full h-full object-center object-cover lg:w-full lg:h-full" />
+            <img :src="funding.imgSrc" :alt="funding.imgAlt" class="w-full h-full object-center object-cover lg:w-full lg:h-full" />
         </div>
         <div class="mt-4">
             <h3 class="text-sm text-gray-700 font-bold">
-                {{ state.funding.title }}
+                {{ funding.title }}
             </h3>
         </div>
         <div class="mt-4 flex justify-between">
             <div>
                 <h3 class="text-sm text-gray-700">
                     <span aria-hidden="true" class="absolute inset-0" />
-                    {{ state.funding.balance }}
+                    {{ funding.balance }}
                 </h3>
             </div>
             <div>
-                <p class="text-sm font-medium text-gray-900">{{ state.funding.goal }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ funding.goal }}</p>
             </div>
         </div>
     </div>
@@ -31,19 +31,22 @@ export default {
     name: 'FundingThumbnail',
     components: {
     },
-
-    setup(){
-        const state = reactive({
-            funding:{
+    props:{
+        funding:{
+            type: Object,
+            default: {
                     id: 1,
                     title: "funding_title",
                     imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
                     imgAlt: "funding_id",
                     balance: 0,
                     goal: 100,
-            }
+            },
+        },
+    },
+    setup(){
+        const state = reactive({
         })
-
         return {state}
     }
 };

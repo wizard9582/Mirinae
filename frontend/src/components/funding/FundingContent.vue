@@ -40,6 +40,7 @@
                                 <p class="text-sm text-gray-700">{{donator.name}}</p>
                             </div>
                         </div>
+                        <ranking :rankingData = "state.rankingData" :rankingTitle = "state.rankingTitle"/>
                     </div>
                 </div>
             </div>
@@ -50,6 +51,7 @@
 
 <script>
 import FundingAddon from '@/components/funding/FundingAddon.vue'
+import Ranking from '@/components/ranking/Ranking.vue'
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -58,13 +60,16 @@ import { useRouter } from 'vue-router'
 export default {
     name: 'FundingContent',
     components: {
-        FundingAddon
+        FundingAddon,
+        Ranking
     },
 
     setup(){
         const store = useStore()
         const router = useRouter()
         const state = reactive({
+            rankingTitle: "",
+            rankingData: "",
             fundingTitle:"title",
             amount:100,
             goal:200,
@@ -72,8 +77,26 @@ export default {
             imgSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
             imgAlt: "funding_id",
             userName: "name",
+            fundingId:0,
         })
 
+        const init=()=>{
+            state.fundingId = router.currentRoute.value.params.id
+            store.dispatch('root/detailFunding', {fundingId: state.fundingId})
+            .then((result)=>{
+                console.log(result)
+            })
+            .catch()
+
+            store.dispatch('root/getFundingRanking', {fundingId: "123"})
+            .then((result)=>{
+                console.log("funding Ranking data----->")
+                console.log(result)
+            })
+            .catch()
+        }
+
+        init()
         return {state}
     }
 };

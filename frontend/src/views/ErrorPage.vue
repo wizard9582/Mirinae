@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>Oops! 페이지를 찾을 수 없습니다.</div>
-        <div>이전 페이지로 돌아가기</div>
+        <div class="cursor-pointer" @click="goBack">이전 페이지로 돌아가기</div>
     </div>
 </template>
 
@@ -20,7 +20,11 @@ export default {
         const router = useRouter()
         const state = reactive({})
 
-        return {state}
+        const goBack = () =>{
+            router.go(-1)
+        }
+
+        return {state, goBack}
     }
 };
 </script>
