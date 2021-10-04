@@ -52,11 +52,11 @@ public class EthereumUtil {
 			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 			
 			BigInteger value = Convert.toWei(amount.toString(), Unit.ETHER).toBigInteger();
-			BigInteger gasLimit = BigInteger.valueOf(100000);
-			BigInteger gasPrice = Convert.toWei("1", Unit.GWEI).toBigInteger();
+//			BigInteger gasLimit = BigInteger.valueOf(100000);
+			BigInteger gasPrice = Transaction.DEFAULT_GAS;
 			
 			//서명하기
-			RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, fundingWallet, value);
+			RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, null, fundingWallet, value);
 			Credentials credentials = Credentials.create(privateKey);
 			
 			byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
@@ -106,17 +106,17 @@ public class EthereumUtil {
     	return wallet;
     }
     
-    public Object ethCall(Function function,String userWallet, String privateKey) {
+    public String ethCall(Function function,String userWallet, String privateKey) {
     	String transactionHash = "";
     	try {
 			EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(userWallet, DefaultBlockParameterName.LATEST).send();
 			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 			
-			BigInteger gasLimit = BigInteger.valueOf(100000);
-			BigInteger gasPrice = Convert.toWei("1", Unit.GWEI).toBigInteger();
+//			BigInteger gasLimit = BigInteger.valueOf(100000);
+			BigInteger gasPrice = Transaction.DEFAULT_GAS;
 			
 			//서명하기
-			RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, contract, FunctionEncoder.encode(function));
+			RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, null, contract, FunctionEncoder.encode(function));
 			Credentials credentials = Credentials.create(privateKey);
 			
 			byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
@@ -139,6 +139,45 @@ public class EthereumUtil {
 		}
     	return transactionHash;
     }
+    
+    public String ethSendTransaction(Function function,String userWallet, Double amount, String privateKey) {
+    	String transactionHash = "";
+    	if(amount<getEther(userWallet)) new IllegalArgumentException("보유 이더 부족");
+    	try {
+			EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(userWallet, DefaultBlockParameterName.LATEST).send();
+			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+			
+			BigInteger value = Convert.toWei(amount.toString(), Unit.ETHER).toBigInteger();
+//			BigInteger gasLimit = BigInteger.valueOf(100000);
+			BigInteger gasPrice = Transaction.DEFAULT_GAS;
+			
+			//서명하기
+			RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, null, contract, value, FunctionEncoder.encode(function));
+			Credentials credentials = Credentials.create(privateKey);
+			
+			byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+			String hexValue = Numeric.toHexString(signedMessage);
+			
+			//보내기
+			EthSendTransaction ethSendTransaction = web3.ethSendRawTransaction(hexValue).send();
+			
+			transactionHash = ethSendTransaction.getTransactionHash();
+			//보낸 트랜잭션이 블록에 저장되는지 체크.
+			Optional<TransactionReceipt> transactionReceipt = null;
+			do {
+				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
+				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
+				
+				Thread.sleep(1000);
+			}while(!transactionReceipt.isPresent());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			new IllegalArgumentException("기부하기 실패");
+		}
+    	
+    	return transactionHash;
+    }
+    
     public String openFunding(int fundingId, int targetAmount, String targetAddress, String userId, String title, String closeTime, 
     		String userWallet, String privateKey) {
     	Function function = new Function("openFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId)),new Uint(BigInteger.valueOf(targetAmount)),
@@ -147,9 +186,9 @@ public class EthereumUtil {
     	return ethCall(function, userWallet, privateKey);
     }
     
-    public void donateFunding(int fundingId) {
+    public String donateFunding(int fundingId, String userWallet, Double amount, String privateKey) {
     	Function function = new Function("donateFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),Collections.emptyList());
-    	
+    	return ethSendTransaction(function, userWallet, amount, privateKey);
     }
     
     public void closeFunding(int fundingId) {
