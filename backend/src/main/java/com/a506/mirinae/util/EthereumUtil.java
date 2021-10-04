@@ -199,8 +199,9 @@ public class EthereumUtil {
     	return ethCall(function, userWallet, privateKey);
     }
     
-    public void abortFunding(int fundingId) {
+    public String abortFunding(int fundingId, String userWallet, String privateKey) {
     	Function function = new Function("abortFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),Collections.emptyList());
     	
+    	return ethCall(function, userWallet, privateKey);
     }
 }
