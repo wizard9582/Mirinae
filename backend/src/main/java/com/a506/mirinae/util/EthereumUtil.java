@@ -178,6 +178,8 @@ public class EthereumUtil {
     	return transactionHash;
     }
     
+    
+    
     public String openFunding(int fundingId, int targetAmount, String targetAddress, String userId, String title, String closeTime, 
     		String userWallet, String privateKey) {
     	Function function = new Function("openFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId)),new Uint(BigInteger.valueOf(targetAmount)),
@@ -191,11 +193,14 @@ public class EthereumUtil {
     	return ethSendTransaction(function, userWallet, amount, privateKey);
     }
     
-    public void closeFunding(int fundingId) {
+    public String closeFunding(int fundingId, String userWallet, String privateKey) {
     	Function function = new Function("closeFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),Collections.emptyList());
+    	
+    	return ethCall(function, userWallet, privateKey);
     }
     
     public void abortFunding(int fundingId) {
     	Function function = new Function("abortFunding", Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),Collections.emptyList());
+    	
     }
 }
