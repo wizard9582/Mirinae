@@ -28,7 +28,7 @@ export function getKakaoToken ({state}, payload) {
 }
 
 export function checkKakaoToken ({state}, payload) {
-    const url = '/v1/user/access_token_info'
+    const url = 'https://kapi.kakao.com//v1/user/access_token_info'
     const headers = {
         'Authorization': 'Bearer ' + payload.access_token,
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
@@ -37,7 +37,7 @@ export function checkKakaoToken ({state}, payload) {
 }
 
 export function getKakaoInfo ({state}, payload) {
-    const url = '/v2/user/me'
+    const url = 'https://kapi.kakao.com//v2/user/me'
     const headers = {
         'Authorization': 'Bearer ' + payload.access_token,
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
@@ -46,7 +46,7 @@ export function getKakaoInfo ({state}, payload) {
 }
 
 export function KakaoLogout ({state}, payload) {
-    const url = '/v1/user/logout'
+    const url = 'https://kapi.kakao.com//v1/user/logout'
 
     const headers = {
         'Authorization': 'Bearer ' + payload.access_token,
