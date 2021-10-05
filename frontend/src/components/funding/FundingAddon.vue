@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed opacity-80 bottom-0 left-0 w-full h-24 bg-gray-200">
-        <div class="mr-10 ml-auto mt-10 h-1/2 w-40 bg-gray-700 opacity-100 text-myfont cursor-pointer" @click="joinFunding">
+    <div class="fixed opacity-80 right-40 bottom-36 h-20 w-40 bg-gray-700 text-myfont rounded-full text-center cursor-pointer" @click="joinFunding">
+        <div class="mt-6 font-bold text-lg">
             펀딩 참여하기
         </div>
     </div>
@@ -26,14 +26,17 @@ export default {
         const joinFunding = () =>{
             let fundingId = router.currentRoute.value.params.id
             if(store.getters['root/isLoggedIn']){
-                let jwt = store.getters['root/getAuthToken']
-                store.dispatch('root/joinFunding', {jwt:jwt, fundingId:fundingId, amount: state.amount})
+                store.dispatch('root/joinFunding', {jwt:store.getters['root/getAuthToken'], fundingId:fundingId, amount: state.amount})
                 .then((result)=>{
 
                 })
                 .catch()
             }else{
                 //로그인 화면으로 이동
+                const params = {
+                    redirectUri: "https://j5a506.p.ssafy.io/oauth/kakao",
+                };
+                window.Kakao.Auth.authorize(params);
             }
         }
 
