@@ -31,6 +31,7 @@ export default {
             //카카오 로그인
             const params = {
                 redirectUri: "https://j5a506.p.ssafy.io/oauth/kakao",
+                // redirectUri: "https://localhost:8083/oauth/kakao",
             };
             window.Kakao.Auth.authorize(params);
             //router.push('/main/all')
