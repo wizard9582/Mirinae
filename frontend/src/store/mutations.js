@@ -6,3 +6,8 @@ export function setToken (state, token) {
 export function setUserId (state, id) {
     state.userId = id
 }
+
+export function logout (state){
+    state.jwt = null
+    state.userId = null
+}

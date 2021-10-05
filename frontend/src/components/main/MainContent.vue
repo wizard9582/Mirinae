@@ -2,9 +2,9 @@
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
             <div v-for="category in state.categories" :key="category.id" class="group relative mx-auto">
-                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.name)">
-                    <img :src="category.imgSrc" :alt="category.imgAlt" class="shadow rounded-full max-w-full h-auto align-middle border-none" />
-                    <p class="text-sm text-gray-700">{{category.name}}</p>
+                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.categoryName)">
+                    <img :src="category.imgSrc" :alt="category.categoryName" class="shadow rounded-full max-w-full h-auto align-middle border-none" />
+                    <p class="text-sm text-gray-700">{{category.categoryName}}</p>
                 </div>
             </div>
         </div>
@@ -96,6 +96,8 @@ export default {
         })
 
         const init = () => {
+            let today = new Date();
+
             state.category = router.currentRoute.value.params.id
             state.page = router.currentRoute.value.params.page
             
@@ -108,36 +110,95 @@ export default {
 
             store.dispatch('root/getCategoryList')
             .then((result)=>{
-                console.log("category data----->")
-                console.log(result)
+                //console.log("category data----->")
+                //console.log(result)
+                state.categories = result.data
             })
             .catch()
 
             store.dispatch('root/getFundingList', { category: state.category, size: state.size, page: state.page })
             .then((result)=>{
-                console.log("category data----->")
-                console.log(result)
+                // console.log("fundingList data----->")
+                // console.log(result)
+
+                //funding state : prepare, open, finished
+                result.data.forEach(item => {
+                    let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
+
+                    fundingThumb.id = item.id
+                    fundingThumb.title = item.title
+                    fundingThumb.imgSrc = item.thumbnail
+                    fundingThumb.imgAlt = item.title
+                    fundingThumb.goal = item.goal
+                    fundingThumb.balance = item.balance
+                    
+                    let startDate = item.startDatetime
+                    let endDate = item.endDatetime
+
+                    if(today.getTime() < startDate.getTime()){
+                        fundingThumb.state = "prepare"
+                    }else if(todat.getTime() > endDate.getTime()){
+                        fundingThumb.state = "end"
+                    }else{
+                        fundingThumb.state = "open"
+                    }
+
+                    state.fundings.push(fundingThumb)
+                })
             })
             .catch()
 
-            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            store.dispatch('root/getCategoryRanking', {categoryId: "1"})
             .then((result)=>{
-                console.log("category Ranking1 data----->")
-                console.log(result)
+                //console.log("category Ranking1 data----->")
+                //console.log(result)
+                state.rankingTitle1 = "테스트 1"
+                let no = 1
+                result.data.forEach(item => {
+                    let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+
+                    ranking.userThumbnail = item.userThumbnail
+                    ranking.name = item.userNickname
+                    ranking.amount = item.amount
+
+                    state.rankingData1.push(ranking)
+                })
             })
             .catch()
 
-            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            store.dispatch('root/getCategoryRanking', {categoryId: "2"})
             .then((result)=>{
-                console.log("category Ranking2 data----->")
-                console.log(result)
+                //console.log("category Ranking2 data----->")
+                //console.log(result)
+                state.rankingTitle2 = "테스트 2"
+                let no = 1
+                result.data.forEach(item => {
+                    let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+
+                    ranking.userThumbnail = item.userThumbnail
+                    ranking.name = item.userNickname
+                    ranking.amount = item.amount
+
+                    state.rankingData2.push(ranking)
+                })
             })
             .catch()
 
-            store.dispatch('root/getCategoryRanking', {categoryId: "123"})
+            store.dispatch('root/getCategoryRanking', {categoryId: "3"})
             .then((result)=>{
-                console.log("category Ranking3 data----->")
-                console.log(result)
+                // console.log("category Ranking3 data----->")
+                // console.log(result)
+                state.rankingTitle3 = "테스트 3"
+                let no = 1
+                result.data.forEach(item => {
+                    let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+
+                    ranking.userThumbnail = item.userThumbnail
+                    ranking.name = item.userNickname
+                    ranking.amount = item.amount
+
+                    state.rankingData3.push(ranking)
+                })
             })
             .catch()
         }

@@ -67,7 +67,7 @@ const googleLogin = {
 
 //회원정보 API
 export function getUserInfo({state}, payload){
-    const url = 'https://localhost:8080/api/user'
+    const url = 'api/user'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -76,7 +76,7 @@ export function getUserInfo({state}, payload){
 }
 
 export function saveWallet({state}, payload){
-    const url = 'https://localhost:8080/api/user/wallet'
+    const url = 'api/user/wallet'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -88,14 +88,14 @@ export function saveWallet({state}, payload){
 }
 
 export function login({state}, payload){
-    const url = 'https://localhost:8080/api/user/login'
+    const url = 'api/user/login'
     const body = payload
 
     return $axios.post(url, body);
 }
 
 export function updateUser({state}, payload){
-    const url = 'https://localhost:8080/api/user'
+    const url = 'api/user'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -107,7 +107,7 @@ export function updateUser({state}, payload){
 }
 
 export function deleteUser({state}, payload){
-    const url = 'https://localhost:8080/api/user'
+    const url = 'api/user'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -115,7 +115,7 @@ export function deleteUser({state}, payload){
 }
 
 export function getMyDonation({state}, payload){
-    const url = 'https://localhost:8080/api/user/donation'
+    const url = 'api/user/donation'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -123,7 +123,7 @@ export function getMyDonation({state}, payload){
 }
 
 export function getMyFunding({state}, payload){
-    const url = 'https://localhost:8080/api/user/funding'
+    const url = 'api/user/funding'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -132,7 +132,7 @@ export function getMyFunding({state}, payload){
 //펀딩 API
 
 export function createFunding({state}, payload){
-    const url = 'https://localhost:8080/api/funding' 
+    const url = 'api/funding' 
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -150,19 +150,19 @@ export function createFunding({state}, payload){
 }
 
 export function getFundingList({state}, payload){
-    const url = 'https://localhost:8080/api/funding/' + payload.category + '?size=' + payload.size + '&page=' + payload.page
+    const url = 'api/funding/' + payload.category + '?size=' + payload.size + '&page=' + payload.page
 
     return $axios.get(url);
 }
 
 export function getCategoryList(){
-    const url = 'https://localhost:8080/api/funding/category'
+    const url = 'api/funding/category'
 
     return $axios.get(url);
 }
 
 export function joinFunding({state}, payload){
-    const url = 'https://localhost:8080/api/funding/join'
+    const url = 'api/funding/join'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -174,7 +174,7 @@ export function joinFunding({state}, payload){
 }
 
 export function ckeckFundingOwner({state}, payload){
-    const url = 'https://localhost:8080/api/funding/owner/'+ payload.fundingId
+    const url = 'api/funding/owner/'+ payload.fundingId
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -182,13 +182,13 @@ export function ckeckFundingOwner({state}, payload){
 }
 
 export function detailFunding({state}, payload){
-    const url = 'https://localhost:8080/api/funding/detail/'+ payload.fundingId
+    const url = 'api/funding/detail/'+ payload.fundingId
 
     return $axios.get(url);
 }
 
 export function deleteFunding({state}, payload){
-    const url = 'https://localhost:8080/api/funding/'+ payload.fundingId
+    const url = 'api/funding/'+ payload.fundingId
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -198,7 +198,7 @@ export function deleteFunding({state}, payload){
 //블록체인 API
 
 export function getTransaction({state}, payload){
-    const url = 'https://localhost:8080/api/funding/tx?id=' + payload.txId
+    const url = 'api/funding/tx?id=' + payload.txId
 
     return $axios.get(url);
 }
@@ -206,13 +206,13 @@ export function getTransaction({state}, payload){
 //랭킹 API
 
 export function getFundingRanking({state}, payload){
-    const url = 'https://localhost:8080/api/ranking/funding/'+ payload.fundingId
+    const url = 'api/ranking/funding/'+ payload.fundingId
 
     return $axios.get(url);
 }
 
 export function getCategoryRanking({state}, payload){
-    const url = 'https://localhost:8080/api/ranking/category/'+ payload.categoryId
+    const url = 'api/ranking/category/'+ payload.categoryId
 
     return $axios.get(url);
 }
@@ -220,7 +220,7 @@ export function getCategoryRanking({state}, payload){
 //관리자 API
 
 export function getNotAcceptedFundingList({state}, payload){
-    const url = 'https://localhost:8080/api/admin/funding'
+    const url = 'api/admin/funding'
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -228,7 +228,7 @@ export function getNotAcceptedFundingList({state}, payload){
 }
 
 export function acceptFunding({state}, payload){
-    const url = 'https://localhost:8080/api/admin/' + payload.fundingId
+    const url = 'api/admin/' + payload.fundingId
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -236,7 +236,7 @@ export function acceptFunding({state}, payload){
 }
 
 export function denyFunding({state}, payload){
-    const url = 'https://localhost:8080/api/admin/' + payload.fundingId
+    const url = 'api/admin/' + payload.fundingId
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
@@ -246,7 +246,7 @@ export function denyFunding({state}, payload){
 //이미지 업로드 API
 
 export function uploadProfileImg({state}, payload){
-    const url = 'https://localhost:8080/api/upload/' + payload.usage
+    const url = 'api/upload/' + payload.usage
     const headers = {
         'Content-Type': 'multipart/form-data'
     }

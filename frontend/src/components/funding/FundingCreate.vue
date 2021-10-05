@@ -66,6 +66,7 @@
 import { ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 //import 123 from '@/'
 export default {
     name: 'FundingCreate',
@@ -92,7 +93,6 @@ export default {
             endDatetime: "",
         })
         const submit = ()=>{
-
             //validation() 체크 후
 
             let payload = {
@@ -112,30 +112,69 @@ export default {
             })
             .catch()
         }
-        return { state, submit }
+        return { state, store, submit }
     },
-
     methods:{
-        store : useStore(),
         uploadImage(){
+            // let store = useStore()
+            // let file = this.$refs.imageRoot.files[0]
+            // let formdata = new FormData()
+            // formdata.append('image',file)
+            // store.dispatch('root/uploadProfileImg', {usage:'fundingInfo', formdata: formdata})
+            // .then((result)=>{
+            //     console.log("----->image")
+            //     console.log(result)
+            //     //state.uploadImage = result에서 url 찾아서 대입
+            // })
+            // .catch()
+
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
             formdata.append('image',file)
-            store.dispatch('root/uploadProfileImg', {usage:'fundingInfo', formdata: formdata})
+
+            axios({
+                method: 'post',
+                url: 'https://j5a506.p.ssafy.io/api/upload/fundingInfo',
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                },
+                data:formdata
+            })
             .then((result)=>{
+                console.log("----->image")
                 console.log(result)
                 //state.uploadImage = result에서 url 찾아서 대입
             })
             .catch()
         },
         uploadThumb(){
+            // let store = useStore()
+            // let file = this.$refs.imageRoot.files[0]
+            // let formdata = new FormData()
+            // formdata.append('image',file)
+            // store.dispatch('root/uploadProfileImg', {usage:'fundingThumbnail', formdata: formdata})
+            // .then((result)=>{
+            //     console.log("----->thumb")
+            //     console.log(result)
+            //     //state.uploadThumb = result에서 url 찾아서 대입
+            // })
+            // .catch()
+
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
             formdata.append('image',file)
-            store.dispatch('root/uploadProfileImg', {usage:'fundingThumbnail', formdata: formdata})
+            axios({
+                method: 'post',
+                url: 'https://j5a506.p.ssafy.io/api/upload/fundingThumbnail',
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                },
+                data:formdata
+            })
             .then((result)=>{
+                console.log("----->image")
                 console.log(result)
-                //state.uploadThumb = result에서 url 찾아서 대입
+                //state.uploadImage = result에서 url 찾아서 대입
             })
             .catch()
         }
