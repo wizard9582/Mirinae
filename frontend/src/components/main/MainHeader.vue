@@ -7,7 +7,7 @@
             <div>
                 <p class="text-3xl text-gray-700">미리내</p>
             </div>
-            <div v-if="state.isLoggedIn" class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="clickUser">
+            <div v-if="state.isLoggedIn" class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="openUser">
                 <img :src="state.userprofile" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
                 <p class="text-sm text-gray-700">{{state.userName}}</p>
             </div>
@@ -27,6 +27,20 @@
                 <a href="https://localhost:8083/main/tx/id" class="ml-10 text-sm text-gray-700 cursor-pointer">트랜잭션 조회 페이지(dev)</a>
             </div>
         </div>
+        <div v-if="state.userPop" class="absolute right-4 w-48 h-32 text-right bg-transparent bg-gray-100 border-collapse shadow-lg rounded divide-y divide-gray-300">
+            <div class="h-1/4 pr-4" @click="goUser">
+                내 정보
+            </div>
+            <div class="h-1/4 pr-4" @click="goUserEdit">
+                정보수정
+            </div>
+            <div class="h-1/4 pr-4" @click="goLogout">
+                로그아웃
+            </div>
+            <div class="h-1/4 pr-4" @click="closeUser">
+                x
+            </div>
+        </div>
     </div>
 </template>
 
@@ -43,6 +57,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
+            userPop: false,
             loginPop: false,
             isLoggedIn: false,
             userMail: "",
@@ -62,13 +77,19 @@ export default {
             }
         }
         const clickLogin = ()=>{
-            state.loginPop = true
+            const params = {
+                redirectUri: "https://j5a506.p.ssafy.io/oauth/kakao",
+            };
+            window.Kakao.Auth.authorize(params);
         }
         const clickHome = ()=>{
             router.push('/main/all/1')
         }
-        const clickUser = ()=>{
-            router.push('/main/user/id')
+        const openUser = ()=>{
+            state.userPop = true
+        }
+        const closeUser = ()=>{
+            state.userPop = false
         }
         const clickFundingList = ()=>{
             router.push('/main/all/1')
@@ -76,8 +97,18 @@ export default {
         const clickFundingOpen = ()=>{
             router.push('/main/fund/create')
         }
+        const goUser = ()=>{
+            router.push('/main/user/' + store.getters['root/getUserId'])
+        }
+        const goUserEdit = ()=>{
+            router.push('main/useredit/' + store.getters['root/getUserId'])
+        }
+        const goLogout = ()=>{
+            store.commit('root/logout')
+            router.push('/main/all/1')
+        }
         init()
-        return {state, clickHome, clickUser, clickLogin, clickFundingList, clickFundingOpen}
+        return {state, clickHome, openUser, closeUser, clickLogin, clickFundingList, clickFundingOpen , goUser, goUserEdit, goLogout}
     }
 };
 </script>
