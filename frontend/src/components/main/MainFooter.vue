@@ -39,6 +39,8 @@ export default {
     },
 
     setup(){
+        const store = useStore()
+        const router = useRouter()
         const state = reactive({
             time: "2021.00.00",
             totalFunding: 0,

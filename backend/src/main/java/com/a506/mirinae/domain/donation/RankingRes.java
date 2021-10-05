@@ -11,7 +11,7 @@ public class RankingRes {
     private Long userId;
     private String userProfileImage;
     private String userNickname;
-    private Long amount;
+    private Double amount;
 
     public RankingRes(RankingResInterface rankingResInterface){
         this.userId = rankingResInterface.getUserId();

@@ -3,9 +3,16 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
-import RankingPage from '@/views/RankingPage.vue';
 import ErrorPage from '@/views/ErrorPage.vue';
 import OauthCallback from '@/components/oauth/OauthCallback.vue';
+import MainContent from '@/components/main/MainContent.vue';
+import UserContent from '@/components/user/UserContent.vue';
+import UserEdit from '@/components/user/UserEdit.vue';
+import TransactionContent from '@/components/transaction/TransactionContent.vue';
+import FundingContent from '@/components/funding/FundingContent.vue';
+import FundingCreate from '@/components/funding/FundingCreate.vue';
+import FundingEdit from '@/components/funding/FundingEdit.vue';
+import FundingConfirm from '@/components/admin/FundingConfirm.vue';
 
 const routes = [
     {
@@ -18,17 +25,31 @@ const routes = [
         path: '/main',
         name: 'Main',
         component: MainPage,
-    },
-    {
-        path: '/rank',
-        name: 'Ranking',
-        component: RankingPage,
+        children: [
+            {path: ":id/:page", component: MainContent, meta:{ loginRequired: false } },
+            {path: "user/:id", component: UserContent , meta:{ loginRequired: true } },
+            {path: "useredit/:id/", component: UserEdit , meta:{ loginRequired: true } },
+            {path: "tx/:id", component: TransactionContent , meta:{ loginRequired: false } },
+            {path: "fund/:id", component: FundingContent , meta:{ loginRequired: false } },
+            {path: "fund/create", component: FundingCreate , meta:{ loginRequired: true } },
+            {path: "fund/edit/:id", component: FundingEdit , meta:{ loginRequired: true } },
+            {path: "admin", component: FundingConfirm , meta:{ loginRequired: true } },
+        ],
     },
     {
         path: '/oauth/:portal',
         name: 'Oauth',
         component: OauthCallback,
     },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: "/404"
+    },
+    {
+        path: '/404',
+        name: 'Error',
+        component: ErrorPage,  
+    }
 ];
 
 const router = createRouter({

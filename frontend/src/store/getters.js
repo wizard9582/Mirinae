@@ -1,10 +1,10 @@
 
 export function isLoggedIn(state){
-    return state.authToken ? true : false ;
+    return state.jwt ? true : false ;
 }
 
 export function getAuthToken(state){
-    return state.authToken;
+    return state.jwt;
 }
 
 export function getUserId(state){
