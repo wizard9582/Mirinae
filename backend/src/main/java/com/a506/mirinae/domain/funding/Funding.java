@@ -8,6 +8,7 @@ import com.a506.mirinae.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -47,24 +48,26 @@ public class Funding {
     private LocalDateTime createdDatetime;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDatetime;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDatetime;
 
     @NotNull
-    private Long goal;
+    private Double goal;
 
-    @NotNull
-    @Column(columnDefinition = "boolean default false")
-    private Boolean isAccept;
+    @Column(length = 32, columnDefinition = "varchar(32) default 'WAITING'")
+    @Enumerated(EnumType.STRING)
+    private FundingState fundingState = FundingState.WAITING;
 
     @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
     private List<Donation> donations = new ArrayList<>();
 
     @Builder
     public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image,
-                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Long goal, Boolean isAccept) {
+                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Double goal, FundingState fundingState) {
         this.id = id;
         this.user = user;
         this.category = category;
@@ -77,6 +80,10 @@ public class Funding {
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.goal = goal;
-        this.isAccept = isAccept;
+        this.fundingState = fundingState;
+    }
+
+    public void updateFundingState(FundingState fundingState) {
+        this.fundingState = fundingState;
     }
 }
