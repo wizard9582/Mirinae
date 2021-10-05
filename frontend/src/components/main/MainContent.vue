@@ -75,21 +75,9 @@ export default {
             pages:[
 
             ],
-            rankingData1:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
-            rankingData2:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
-            rankingData3:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
+            rankingData1:[],
+            rankingData2:[],
+            rankingData3:[],
             rankingTitle1: "전체 랭킹",
             rankingTitle2: "카테고리 랭킹",
             rankingTitle3: "펀딩 랭킹",
