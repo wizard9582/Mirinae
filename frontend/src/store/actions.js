@@ -70,7 +70,7 @@ const googleLogin = {
 export function getUserInfo({state}, payload){
     const url = '/api/user'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
 
     return $axios.get(url, {headers});
@@ -79,7 +79,7 @@ export function getUserInfo({state}, payload){
 export function saveWallet({state}, payload){
     const url = '/api/user/wallet'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     const body = {
         'walletAddress' : payload.walletAddress,
@@ -98,7 +98,7 @@ export function login({state}, payload){
 export function updateUser({state}, payload){
     const url = '/api/user'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     const body = {
         'email': payload.email,
@@ -110,7 +110,7 @@ export function updateUser({state}, payload){
 export function deleteUser({state}, payload){
     const url = '/api/user'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.delete(url,{headers});
 }
@@ -118,7 +118,7 @@ export function deleteUser({state}, payload){
 export function getMyDonation({state}, payload){
     const url = '/api/user/donation'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.get(url, {headers});
 }
@@ -126,7 +126,7 @@ export function getMyDonation({state}, payload){
 export function getMyFunding({state}, payload){
     const url = '/api/user/funding'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.get(url, {headers});
 }
@@ -135,7 +135,7 @@ export function getMyFunding({state}, payload){
 export function createFunding({state}, payload){
     const url = '/api/funding' 
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     const body = {
         'title' : payload.title,
@@ -165,7 +165,7 @@ export function getCategoryList(){
 export function joinFunding({state}, payload){
     const url = '/api/funding/join'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     const body = {
         'fundingId' : payload.fundingId,
@@ -177,7 +177,7 @@ export function joinFunding({state}, payload){
 export function ckeckFundingOwner({state}, payload){
     const url = '/api/funding/owner/'+ payload.fundingId
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.get(url, {headers});
 }
@@ -191,7 +191,7 @@ export function detailFunding({state}, payload){
 export function deleteFunding({state}, payload){
     const url = '/api/funding/'+ payload.fundingId
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.delete(url,{headers});
 }
@@ -223,25 +223,17 @@ export function getCategoryRanking({state}, payload){
 export function getNotAcceptedFundingList({state}, payload){
     const url = '/api/admin/funding'
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
     return $axios.get(url,{headers});
 }
 
-export function acceptFunding({state}, payload){
-    const url = '/api/admin/' + payload.fundingId
+export function fundingStateChange({state}, payload){
+    const url = '/api/admin/' + payload.fundingId + '/' + payload.action
     const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
+        'jwt':  payload.jwt,
     }
-    return $axios.post(url, {headers});
-}
-
-export function denyFunding({state}, payload){
-    const url = '/api/admin/' + payload.fundingId
-    const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
-    }
-    return $axios.delete(url,{headers});
+    return $axios.patch(url, {headers});
 }
 
 //이미지 업로드 /API

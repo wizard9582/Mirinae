@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-2 p-8 w-full h-lg bg-dark text-myfont">
+    <div class="md:flex md:justify-between p-8 w-full md:h-lg bg-dark text-myfont">
         <div clsss="text-left whitespace-nowrap">       
             <div class="ml-6 mt-6 text-xl font-semibold">
                 {{state.time}}까지<br/>

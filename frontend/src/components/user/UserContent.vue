@@ -5,25 +5,19 @@
                 <div class="w-full">
                     <p>내 정보</p>
                 </div>
-                <div class="w-full h-60">
-                    닉네임 : {{state.userName}} <br>
-                    메일 : {{state.userMail}} <br>
-                </div>
             </div>
             <div class="m-8 divide-y divide-black">
-                <div class="w-full h-24 flex justify-between">
+                <div class="w-full h-24 md:flex md:justify-between">
                     <div>{{state.userName}} 님의 지갑</div>
                     <div v-if="state.walletFlag">내 지갑주소:{{state.userWallet}}</div>
                     <div v-else>
                         아직 지갑이 없습니다!
-                        <button @click="makeWallet">지갑 만들기</button>
-                    </div>
-                    <div class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="clickUser">
-                        <img src="https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-2-800x800.jpg" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
-                        <p class="text-sm text-gray-700">{{state.userName}}</p>
+                        <button class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded" @click="makeWallet">지갑 만들기</button>
                     </div>
                 </div>
-                <div class="w-full h-60">
+                <div class="w-full">
+                    닉네임 : {{state.userName}} <br>
+                    메일 : {{state.userMail}} <br>
                     ETC {{state.userBalance}}
                 </div>
             </div>
@@ -70,7 +64,6 @@ export default {
     setup(){
         const store = useStore()
         const state = reactive({
-            imgSrc:"",
             userMail:"email",
             userName:"이름",
             walletFlag: false,
