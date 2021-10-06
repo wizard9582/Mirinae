@@ -67,10 +67,11 @@ export default {
             userBalance: "",
         })
         const init = ()=>{
+            console.log('login check --->', store.getters['root/isLoggedIn'])
             if(store.getters['root/isLoggedIn']){
                 store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
                 .then((result)=>{
-                    //console.log(result)
+                    console.log(result)
                     state.isLoggedIn = true
                 })
                 .catch()

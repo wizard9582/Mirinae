@@ -34,15 +34,15 @@ export default {
 
                 store.dispatch('root/getKakaoInfo', { access_token: access_token })
                 .then((result)=>{
-                    console.log('------> kakao return data')
-                    console.log(result)
+                    // console.log('------> kakao return data')
+                    // console.log(result)
                     let email = result.data.kakao_account.email
                     let nickname = result.data.kakao_account.profile.nickname
                     let oauthType = 'KAKAO'
 
                     store.dispatch('root/login', { email:email, nickname:nickname, oauthType:oauthType })
                     .then((result)=>{
-                        console.log(result)
+                        //console.log(result)
                         if(result.status === 200){
                             store.commit('root/setToken', result.data.jwt)
                             store.commit('root/setUserId', email)
