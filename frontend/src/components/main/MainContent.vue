@@ -2,9 +2,9 @@
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
             <div v-for="category in state.categories" :key="category.id" class="group relative mx-auto">
-                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.categoryName)">
-                    <img :src="category.imgSrc" :alt="category.categoryName" class="shadow rounded-full max-w-full h-auto align-middle border-none" />
-                    <p class="text-sm text-gray-700">{{category.categoryName}}</p>
+                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.category_id)">
+                    <img :src="state.imgSrc[category.category_id]" :alt="category.category_name" class="shadow rounded-full w-16 h-16 align-middle border-none" />
+                    <p class="text-sm text-gray-700">{{category.category_name}}</p>
                 </div>
             </div>
         </div>
@@ -64,6 +64,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
+            imgSrc:["","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/m035va.png","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/SoeRsG.jpg",],
             category: "카테고리명",
             size: 10,
             page: 1,
@@ -86,7 +87,7 @@ export default {
         const init = () => {
             let today = new Date();
 
-            state.category = router.currentRoute.value.params.id
+            let categoryId = router.currentRoute.value.params.id
             state.page = router.currentRoute.value.params.page
             
             let i = Math.max(parseInt(state.page - 2), 1)
@@ -101,6 +102,11 @@ export default {
                 //console.log("category data----->")
                 //console.log(result)
                 state.categories = result.data
+                result.data.forEach(item=>{
+                    if(item.category_id == categoryId){
+                        state.category = item.category_name
+                    }
+                })
             })
             .catch()
 

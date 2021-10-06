@@ -29,7 +29,7 @@ const routes = [
             {path: "user/:id", component: UserContent , meta:{ loginRequired: true } },
             {path: "tx/:id", component: TransactionContent , meta:{ loginRequired: false } },
             {path: "fund/:id", component: FundingContent , meta:{ loginRequired: false } },
-            {path: "fund/create", component: FundingCreate , meta:{ loginRequired: true } },
+            {path: "fund/create", component: FundingCreate , meta:{ loginRequired: false } },
             {path: "fund/edit/:id", component: FundingEdit , meta:{ loginRequired: true } },
             {path: "admin", component: FundingConfirm , meta:{ loginRequired: true } },
         ],
