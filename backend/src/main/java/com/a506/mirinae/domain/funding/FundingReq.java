@@ -29,6 +29,7 @@ public class FundingReq {
                 .startDatetime(startDatetime)
                 .endDatetime(endDatetime)
                 .goal(goal)
+                .fundingState(FundingState.WAITING)
                 .build();
     }
 }
