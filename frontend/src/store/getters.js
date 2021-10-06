@@ -10,3 +10,11 @@ export function getAuthToken(state){
 export function getUserId(state){
     return state.userId;
 }
+
+export function getImage(state){
+    return state.image;
+}
+
+export function getThumb(state){
+    return state.thumb;
+}

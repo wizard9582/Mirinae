@@ -82,9 +82,9 @@ export default {
             categories: [],
             dateCheck: false,
             clickable: false,
-            imageFile: "",
+            imageFile: computed(() => store.getters['root/getImage']),
             imageFlag: false,
-            thumbFile: "",
+            thumbFile: computed(() => store.getters['root/getThumb']),
             thumbFlag: false,
             title : "",
             categoryName : "",
@@ -149,6 +149,16 @@ export default {
             })
             .catch()
         }
+
+        watch(() => state.imageFile,() => {
+            state.imageFlag = true
+        })
+
+        watch(() => state.thumbFile,() => {
+            state.thumbFlag = true
+        })
+
+
         init()
         return { state, store, submit, cancel, validationCheck }
     },
@@ -165,7 +175,7 @@ export default {
             //     //state.uploadImage = result에서 url 찾아서 대입
             // })
             // .catch()
-
+            const store = useStore()
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
             formdata.append('file', file)
@@ -182,8 +192,7 @@ export default {
             .then((result)=>{
                 // console.log("----->image")
                 // console.log(result)
-                state.imageFile = result.data
-                state.imageFlag = true
+                store.commit('root/setImage', result.data)
             })
             .catch()
         },
@@ -214,8 +223,7 @@ export default {
             .then((result)=>{
                 // console.log("----->image")
                 // console.log(result)
-                state.thumbFile = result.data
-                state.thumbFlag = true
+                store.commit('root/setThumb', result.data)
             })
             .catch()
         }
