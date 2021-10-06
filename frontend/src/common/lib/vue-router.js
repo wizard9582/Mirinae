@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from "./store.js";
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -55,7 +56,7 @@ const router = createRouter({
 });
 
 const isLoggedIn = function(){
-    return localStorage.getItem('jwt') ? true : false
+    return store.getters['root/isLoggedIn']
 }
 
 router.beforeEach((to, from, next) => {

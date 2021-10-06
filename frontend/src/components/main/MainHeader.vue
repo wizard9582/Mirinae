@@ -84,12 +84,10 @@ export default {
                 let access_token = localStorage.getItem('kakao_access')
                 store.dispatch('root/getKakaoInfo', { access_token: access_token })
                 .then((result)=>{
-                    console.log('------> kakao return data')
-                    console.log(result)
+                    // console.log('------> kakao return data')
+                    // console.log(result)
                     let nickname = result.data.kakao_account.profile.nickname
-                    let image = ""
-                    //result.data.
-                    //state.userProfile = image
+                    let image = result.data.kakao_account.profile.thumbnail_image_url
                     store.dispatch('root/updateUser', { image:image, nickname:nickname })
                     .then((result)=>{
 
