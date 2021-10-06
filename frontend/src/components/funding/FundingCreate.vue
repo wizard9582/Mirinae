@@ -7,16 +7,16 @@
                 </div>
                 <div>
                     <div class="sm:w-full md:w-1/2 h-lg mx-auto my-8 border-4 border-black text-center">
-                        <img v-if="!state.imageFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
-                        <img v-if="state.imageFlag" class="mx-auto mt-auto w-16 h-16" :src="state.imageFile" alt="instagram">
+                        <img v-if="!imageFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="image">
+                        <img v-if="imageFlag" class="mx-auto mt-auto w-16 h-16" :src="imageFile" alt="image">
                         설명이미지 업로드<br/>
                         <label for="imageInput" class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-pointer">파일찾기</label>
                         <input ref="imageRoot" id="imageInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadImage">
                     </div>
                     <div class="md:flex md:justify-between text-center">
                         <div class="sm:w-full md:w-1/4 h-lg mx-auto p-8 border-4 border-black">
-                            <img v-if="!state.thumbFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
-                            <img v-if="state.thumbFlag" class="mx-auto mt-auto w-16 h-16" :src="state.thumbFile" alt="instagram">
+                            <img v-if="!thumbFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="image">
+                            <img v-if="thumbFlag" class="mx-auto mt-auto w-16 h-16" :src="thumbFile" alt="image">
                             썸네일 업로드<br/>
                             <label for="thumbInput" class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-pointer">파일찾기</label>
                             <input ref="thumbRoot" id="thumbInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadThumb">
@@ -24,11 +24,11 @@
                         <div class="sm:w-full md:w-1/2 mt-6">
                             <div class="w-full p-4 flex justify-between">
                                 <p>타이틀 :</p>
-                                <input type="text" class="rounded w-3/5" v-model="state.title" @change="validationCheck">
+                                <input type="text" class="rounded w-3/5" v-model="title" @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>카테고리 :</p>
-                                <select class="rounded w-3/5 multiple" v-model="state.categoryName" @change="validationCheck">
+                                <select class="rounded w-3/5 multiple" v-model="categoryId" @change="validationCheck">
                                     <option v-for="category in state.categories" :key="category.id" :value="category.category_id">
                                         {{ category.category_name }}
                                     </option>
@@ -36,27 +36,27 @@
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>목표금액 :</p>
-                                <input type="number" class="rounded w-3/5" v-model="state.goal"  @change="validationCheck">
+                                <input type="number" class="rounded w-3/5" v-model="goal"  @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>시작날짜 :</p>
-                                <input type="date" class="rounded w-3/5" v-model="state.startDatetime" @change="validationCheck">
+                                <input type="date" class="rounded w-3/5" v-model="startDatetime" @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>종료날짜 :</p>
-                                <input type="date" class="rounded w-3/5" v-model="state.endDatetime" @change="validationCheck">
+                                <input type="date" class="rounded w-3/5" v-model="endDatetime" @change="validationCheck">
                             </div>
                         </div>
                     </div>
                     <div class="w-full mt-6 mb-4 md:flex">
                         <div>설명글 작성</div>
                         <br>
-                        <input type="text" class="rounded sm:w-full md:w-3/4 h-lg mx-auto" v-model="state.content" @change="validationCheck">
+                        <input type="text" class="rounded sm:w-full md:w-3/4 h-lg mx-auto" v-model="content" @change="validationCheck">
                     </div>
                 </div>
                 <div class="md:flex md:justify-end">
-                    <div v-if="!state.clickable" class="m-2">누락된 입력이 존재하거나 날짜가 맞지 않습니다.</div>
-                    <button class="bg-gray-200 text-white font-bold py-2 px-4 m-2 rounded" :class="{'bg-green-500':state.clickable, 'hover:bg-green-700':state.clickable}" @click = "submit">작성</button>
+                    <div v-if="!clickable" class="m-2">누락된 입력이 존재하거나 날짜가 맞지 않습니다.</div>
+                    <button class="bg-gray-200 text-white font-bold py-2 px-4 m-2 rounded" :class="{'bg-green-500':clickable, 'hover:bg-green-700':clickable}" @click = "submit">작성</button>
                     <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-2 rounded" @click = "cancel">취소</button>
                 </div>
             </div>
@@ -95,14 +95,14 @@ export default {
     },
     data() {
         return {
-            dateCheck: false,
+            dateCheckFlag: false,
             clickable: false,
             imageFile: "",
             imageFlag: false,
             thumbFile: "",
             thumbFlag: false,
             title : "",
-            categoryName : "",
+            categoryId : "",
             content : "",
             goal : 0,
             startDatetime: "",
@@ -181,7 +181,7 @@ export default {
             let payload = {
                 'jwt' : this.$store.state.jwt,
                 'title' : this.title,
-                'categoryName' : this.categoryName,
+                'categoryId' : this.categoryId,
                 'content' : this.content,
                 'goal' : this.goal,
                 'thumbnail' : this.thumbnailFile,
@@ -195,14 +195,6 @@ export default {
             })
             .catch()
         },
-        validationCheck(){
-            dateCheck()
-            if(this.imageFlag && this.thumbFlag && this.title!="" && this.content!="" && this.goal!=0 && this.startDatetime!="" && this.endDatetime!="" && this.dateCheck){
-                this.clickable = true
-            }else{
-                this.clickable = false
-            }
-        },
         dateCheck (){
             let startArr = this.startDatetime.split('-')
             let endArr = this.endDatetime.split('-')
@@ -214,9 +206,17 @@ export default {
             // console.log(start.getTime() < end.getTime())
 
             if(start.getTime() < end.getTime()){
-                this.dateCheck = true
+                this.dateCheckFlag = true
             }else{
-                this.dateCheck = false
+                this.dateCheckFlag = false
+            }
+        },
+        validationCheck(){
+            this.dateCheck()
+            if(this.imageFlag && this.thumbFlag && this.title!="" && this.content!="" && this.goal!=0 && this.startDatetime!="" && this.endDatetime!="" && this.dateCheckFlag){
+                this.clickable = true
+            }else{
+                this.clickable = false
             }
         },
         cancel(){
