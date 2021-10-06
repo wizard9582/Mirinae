@@ -74,8 +74,6 @@ export default {
     },
 
     setup(){
-        const imageRoot = ref(null)
-        const thumbRoot = ref(null)
         const store = useStore()
         const router = useRouter()
         const state = reactive({
@@ -130,7 +128,7 @@ export default {
 
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
-            formdata.append('image',file)
+            formdata.append('file',file)
 
             axios({
                 method: 'post',
@@ -162,7 +160,7 @@ export default {
 
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
-            formdata.append('image',file)
+            formdata.append('file',file)
             axios({
                 method: 'post',
                 url: 'https://j5a506.p.ssafy.io/api/upload/fundingThumbnail',
