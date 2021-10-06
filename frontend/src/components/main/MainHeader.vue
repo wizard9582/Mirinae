@@ -8,7 +8,7 @@
                 <p class="text-3xl text-gray-700">미리내</p>
             </div>
             <div v-if="state.isLoggedIn" class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="openUser">
-                <img :src="state.userprofile" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
+                <img :src="state.userProfile" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
                 <p class="text-sm text-gray-700">{{state.userName}}</p>
             </div>
             <div v-else class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="clickLogin">
@@ -30,9 +30,6 @@
         <div v-if="state.userPop" class="absolute right-4 w-48 h-32 text-right bg-transparent bg-gray-100 border-collapse shadow-lg rounded divide-y divide-gray-300">
             <div class="h-1/4 pr-4" @click="goUser">
                 내 정보
-            </div>
-            <div class="h-1/4 pr-4" @click="goUserEdit">
-                정보수정
             </div>
             <div class="h-1/4 pr-4" @click="goLogout">
                 로그아웃
@@ -67,16 +64,39 @@ export default {
             userBalance: "",
         })
         const init = ()=>{
-            console.log('login check --->', store.getters['root/isLoggedIn'])
-            console.log('token check --->', store.getters['root/getAuthToken'])
+            // console.log('login check --->', store.getters['root/isLoggedIn'])
+            // console.log('token check --->', store.getters['root/getAuthToken'])
             if(store.getters['root/isLoggedIn']){
                 store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
                 .then((result)=>{
-                    console.log(result)
+                    // console.log(result)
                     state.isLoggedIn = true
+                    if(result.data.image === null){
+                        setProfile()
+                    }
+                    state.userName = result.data.nickname
+                    state.userProfile = result.data.image
                 })
                 .catch()
             }
+        }
+        const setProfile = ()=>{
+                let access_token = localStorage.getItem('kakao_access')
+                store.dispatch('root/getKakaoInfo', { access_token: access_token })
+                .then((result)=>{
+                    console.log('------> kakao return data')
+                    console.log(result)
+                    let nickname = result.data.kakao_account.profile.nickname
+                    let image = ""
+                    //result.data.
+                    //state.userProfile = image
+                    store.dispatch('root/updateUser', { image:image, nickname:nickname })
+                    .then((result)=>{
+
+                    })
+                    .catch()
+                })
+                .catch()
         }
         const clickLogin = ()=>{
             const params = {
@@ -107,7 +127,7 @@ export default {
         }
         const goLogout = ()=>{
             store.commit('root/logout')
-            router.push('/main/all/1')
+            router.go()
         }
         init()
         return {state, clickHome, openUser, closeUser, clickLogin, clickFundingList, clickFundingOpen , goUser, goUserEdit, goLogout}

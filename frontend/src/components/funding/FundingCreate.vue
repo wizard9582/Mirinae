@@ -6,57 +6,58 @@
                     펀딩 열기
                 </div>
                 <div>
-                    <div class="sm:w-full md:w-1/2 h-lg mx-auto my-8 border-4 border-black">
+                    <div class="sm:w-full md:w-1/2 h-lg mx-auto my-8 border-4 border-black text-center">
                         <img v-if="!state.imageFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
                         <img v-if="state.imageFlag" class="mx-auto mt-auto w-16 h-16" :src="state.imageFile" alt="instagram">
-                        <div class="text-center">
-                            설명이미지 업로드(드래그앤 드롭)<br/>
-                            <label for="imageInput" class="border-4 rounded-t-md cursor-pointer">파일찾기</label>
-                        </div>
+                        설명이미지 업로드<br/>
+                        <label for="imageInput" class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-pointer">파일찾기</label>
                         <input ref="imageRoot" id="imageInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadImage">
                     </div>
-                    <div class="md:flex md:justify-between">
+                    <div class="md:flex md:justify-between text-center">
                         <div class="sm:w-full md:w-1/4 h-lg mx-auto p-8 border-4 border-black">
                             <img v-if="!state.thumbFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
                             <img v-if="state.thumbFlag" class="mx-auto mt-auto w-16 h-16" :src="state.thumbFile" alt="instagram">
-                            <div class="text-center">
-                                썸네일 업로드(드래그앤 드롭)<br/>
-                                <label for="thumbInput" class="border-4 rounded-t-md cursor-pointer">파일찾기</label>
-                            </div>
+                            썸네일 업로드<br/>
+                            <label for="thumbInput" class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-pointer">파일찾기</label>
                             <input ref="thumbRoot" id="thumbInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadThumb">
                         </div>
                         <div class="sm:w-full md:w-1/2 mt-6">
                             <div class="w-full p-4 flex justify-between">
                                 <p>타이틀 :</p>
-                                <input type="text" class="rounded w-3/5" v-model="state.title">
+                                <input type="text" class="rounded w-3/5" v-model="state.title" @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>카테고리 :</p>
-                                <select class="rounded w-3/5 multiple" v-model="state.categoryName"></select>
+                                <select class="rounded w-3/5 multiple" v-model="state.categoryName" @change="validationCheck">
+                                    <option v-for="category in state.categories" :key="category.id" :value="category">
+                                        {{ category }}
+                                    </option>
+                                </select>
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>목표금액 :</p>
-                                <input type="number" class="rounded w-3/5" v-model="state.goal">
+                                <input type="number" class="rounded w-3/5" v-model="state.goal"  @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>시작날짜 :</p>
-                                <input type="date" class="rounded w-3/5" v-model="state.startDatatime">
+                                <input type="date" class="rounded w-3/5" v-model="state.startDatetime" @change="validationCheck">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>종료날짜 :</p>
-                                <input type="date" class="rounded w-3/5" v-model="state.endDatetime">
+                                <input type="date" class="rounded w-3/5" v-model="state.endDatetime" @change="validationCheck">
                             </div>
                         </div>
                     </div>
-                    <div class="w-full mt-6 md:flex">
+                    <div class="w-full mt-6 mb-4 md:flex">
                         <div>설명글 작성</div>
                         <br>
-                        <input type="text" class="rounded sm:w-full md:w-3/4 h-lg mx-auto" v-model="state.content">
+                        <input type="text" class="rounded sm:w-full md:w-3/4 h-lg mx-auto" v-model="state.content" @change="validationCheck">
                     </div>
                 </div>
-                <div class="flex justify-end">
-                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click = "submit">작성</button>
-                    <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click = "cancel">취소</button>
+                <div class="md:flex md:justify-end">
+                    <div v-if="!state.clickable" class="m-2">누락된 입력이 존재하거나 날짜가 맞지 않습니다.</div>
+                    <button class="bg-gray-200 text-white font-bold py-2 px-4 m-2 rounded" :class="{'bg-green-500':state.clickable, 'hover:bg-green-700':state.clickable}" @click = "submit">작성</button>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-2 rounded" @click = "cancel">취소</button>
                 </div>
             </div>
         </div>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -78,21 +79,22 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            imageFile: "https://ifh.cc/g/2zLHyH.jpg",
+            categories: [],
+            dateCheck: false,
+            clickable: false,
+            imageFile: "",
             imageFlag: false,
-            thumbFile: "https://ifh.cc/g/2zLHyH.jpg",
+            thumbFile: "",
             thumbFlag: false,
             title : "",
             categoryName : "",
             content : "",
-            goal : "",
-            thumbnail : "",
-            image : "",
-            startDatatime: "",
+            goal : 0,
+            startDatetime: "",
             endDatetime: "",
         })
         const submit = ()=>{
-            //validation() 체크 후
+            //validation() 체크시에만 버튼 활성
 
             let payload = {
                 'jwt' : store.getters['root/getAuthToken'],
@@ -102,20 +104,53 @@ export default {
                 'goal' : state.goal,
                 'thumbnail' : state.thumbnailFile,
                 'image' : state.imageFile,
-                'startDatatime': state.startDatatime,
+                'startDatetime': state.startDatetime,
                 'endDatetime': state.endDatetime,
             }
             store.dispatch('root/createFunding', payload)
             .then((result)=>{
                 console.log(result)
-                //state.uploadImage = result에서 url 찾아서 대입
             })
             .catch()
+        }
+        const validationCheck = ()=>{
+            dateCheck()
+            if(state.imageFlag && state.thumbFlag && state.title!="" && state.content!="" && state.goal!=0 && state.startDatetime!="" && state.endDatetime!="" && state.dateCheck){
+                state.clickable = true
+            }else{
+                state.clickable = false
+            }
+        }
+        const dateCheck = ()=>{
+            let startArr = state.startDatetime.split('-')
+            let endArr = state.endDatetime.split('-')
+            
+            let start = new Date(startArr[0],startArr[1],startArr[2])
+            let end = new Date(endArr[0],endArr[1],endArr[2])
+            // console.log(start.getTime())
+            // console.log(end.getTime())
+            // console.log(start.getTime() < end.getTime())
+
+            if(start.getTime() < end.getTime()){
+                state.dateCheck = true
+            }else{
+                state.dateCheck = false
+            }
         }
         const cancel = ()=>{
             router.push("/main/all/1")
         }
-        return { state, store, submit, cancel }
+        const init = () =>{
+            store.dispatch('root/getCategoryList')
+            .then((result)=>{
+                //console.log("category data----->")
+                //console.log(result)
+                state.categories = result.data
+            })
+            .catch()
+        }
+        init()
+        return { state, store, submit, cancel, validationCheck }
     },
     methods:{
         uploadImage(){
@@ -134,8 +169,8 @@ export default {
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
             formdata.append('file', file)
-            console.log(file)
-            console.log(formdata)
+            // console.log(file)
+            // console.log(formdata)
             axios({
                 method: 'post',
                 url: 'https://j5a506.p.ssafy.io/api/upload/fundingInfo',
@@ -145,9 +180,10 @@ export default {
                 data:formdata
             })
             .then((result)=>{
-                console.log("----->image")
-                console.log(result)
-                //state.uploadImage = result에서 url 찾아서 대입
+                // console.log("----->image")
+                // console.log(result)
+                state.imageFile = result.data
+                state.imageFlag = true
             })
             .catch()
         },
@@ -164,7 +200,7 @@ export default {
             // })
             // .catch()
 
-            let file = this.$refs.imageRoot.files[0]
+            let file = this.$refs.thumbRoot.files[0]
             let formdata = new FormData()
             formdata.append('file',file)
             axios({
@@ -176,9 +212,10 @@ export default {
                 data:formdata
             })
             .then((result)=>{
-                console.log("----->image")
-                console.log(result)
-                //state.uploadImage = result에서 url 찾아서 대입
+                // console.log("----->image")
+                // console.log(result)
+                state.thumbFile = result.data
+                state.thumbFlag = true
             })
             .catch()
         }

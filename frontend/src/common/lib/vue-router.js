@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import { useStore } from 'vuex'
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -55,23 +54,24 @@ const router = createRouter({
     routes,
 });
 
-// const store = useStore()
+const isLoggedIn = function(){
+    return localStorage.getItem('jwt') ? true : false
+}
 
-// const isLoggedIn = function(){
-//     store.getters['root/isLoggedIn']
-// }
-
-// router.beforeEach((to, from, next) => {
-//     if(to.meta.loginRequired){
-//         if(isLoggedIn()){
-//         next()
-//         }else{
-//         alert("로그인이 필요합니다!")
-//         next("/")
-//         }
-//     }else{
-//         next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if(to.meta.loginRequired){
+        if(isLoggedIn()){
+        next()
+        }else{
+        alert("로그인이 필요합니다!")
+        const params = {
+            redirectUri: "https://j5a506.p.ssafy.io/oauth/kakao",
+        };
+            window.Kakao.Auth.authorize(params);
+        }
+    }else{
+        next()
+    }
+})
 
 export default router;
