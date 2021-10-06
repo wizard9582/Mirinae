@@ -55,8 +55,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button class="" @click = "submit">작성</button>
-                    <button class="" @click = "cancel">취소</button>
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click = "submit">작성</button>
+                    <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click = "cancel">취소</button>
                 </div>
             </div>
         </div>
@@ -112,7 +112,10 @@ export default {
             })
             .catch()
         }
-        return { state, store, submit }
+        const cancel = ()=>{
+            router.push("/main/all/1")
+        }
+        return { state, store, submit, cancel }
     },
     methods:{
         uploadImage(){

@@ -8,7 +8,7 @@
                 <div v-if="state.fundingFlag" class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     <div v-for="funding in state.fundings" :key="funding.id">
                         <funding-thumbnail :funding = funding />
-                        <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="acceptFunding(funding.id)">승인</button>
+                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="acceptFunding(funding.id)">승인</button>
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="denyFunding(funding.id)">거부</button>
                     </div>
                 </div>
