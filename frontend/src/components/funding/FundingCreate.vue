@@ -29,8 +29,8 @@
                             <div class="w-full p-4 flex justify-between">
                                 <p>카테고리 :</p>
                                 <select class="rounded w-3/5 multiple" v-model="state.categoryName" @change="validationCheck">
-                                    <option v-for="category in state.categories" :key="category.id" :value="category">
-                                        {{ category }}
+                                    <option v-for="category in state.categories" :key="category.id" :value="category.category_id">
+                                        {{ category.category_name }}
                                     </option>
                                 </select>
                             </div>
@@ -80,66 +80,7 @@ export default {
         const router = useRouter()
         const state = reactive({
             categories: [],
-            dateCheck: false,
-            clickable: false,
-            imageFile: computed(() => store.getters['root/getImage']),
-            imageFlag: false,
-            thumbFile: computed(() => store.getters['root/getThumb']),
-            thumbFlag: false,
-            title : "",
-            categoryName : "",
-            content : "",
-            goal : 0,
-            startDatetime: "",
-            endDatetime: "",
         })
-        const submit = ()=>{
-            //validation() 체크시에만 버튼 활성
-
-            let payload = {
-                'jwt' : store.getters['root/getAuthToken'],
-                'title' : state.title,
-                'categoryName' : state.categoryName,
-                'content' : state.content,
-                'goal' : state.goal,
-                'thumbnail' : state.thumbnailFile,
-                'image' : state.imageFile,
-                'startDatetime': state.startDatetime,
-                'endDatetime': state.endDatetime,
-            }
-            store.dispatch('root/createFunding', payload)
-            .then((result)=>{
-                console.log(result)
-            })
-            .catch()
-        }
-        const validationCheck = ()=>{
-            dateCheck()
-            if(state.imageFlag && state.thumbFlag && state.title!="" && state.content!="" && state.goal!=0 && state.startDatetime!="" && state.endDatetime!="" && state.dateCheck){
-                state.clickable = true
-            }else{
-                state.clickable = false
-            }
-        }
-        const dateCheck = ()=>{
-            let startArr = state.startDatetime.split('-')
-            let endArr = state.endDatetime.split('-')
-            
-            let start = new Date(startArr[0],startArr[1],startArr[2])
-            let end = new Date(endArr[0],endArr[1],endArr[2])
-            // console.log(start.getTime())
-            // console.log(end.getTime())
-            // console.log(start.getTime() < end.getTime())
-
-            if(start.getTime() < end.getTime()){
-                state.dateCheck = true
-            }else{
-                state.dateCheck = false
-            }
-        }
-        const cancel = ()=>{
-            router.push("/main/all/1")
-        }
         const init = () =>{
             store.dispatch('root/getCategoryList')
             .then((result)=>{
@@ -149,18 +90,24 @@ export default {
             })
             .catch()
         }
-
-        watch(() => state.imageFile,() => {
-            state.imageFlag = true
-        })
-
-        watch(() => state.thumbFile,() => {
-            state.thumbFlag = true
-        })
-
-
         init()
-        return { state, store, submit, cancel, validationCheck }
+        return { state }
+    },
+    data() {
+        return {
+            dateCheck: false,
+            clickable: false,
+            imageFile: "",
+            imageFlag: false,
+            thumbFile: "",
+            thumbFlag: false,
+            title : "",
+            categoryName : "",
+            content : "",
+            goal : 0,
+            startDatetime: "",
+            endDatetime: "",
+        }
     },
     methods:{
         uploadImage(){
@@ -175,7 +122,6 @@ export default {
             //     //state.uploadImage = result에서 url 찾아서 대입
             // })
             // .catch()
-            const store = useStore()
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
             formdata.append('file', file)
@@ -192,7 +138,8 @@ export default {
             .then((result)=>{
                 // console.log("----->image")
                 // console.log(result)
-                store.commit('root/setImage', result.data)
+                this.imageFile = result.data
+                this.imageFlag = true
             })
             .catch()
         },
@@ -223,10 +170,58 @@ export default {
             .then((result)=>{
                 // console.log("----->image")
                 // console.log(result)
-                store.commit('root/setThumb', result.data)
+                this.thumbFile = result.data
+                this.thumbFlag = true
             })
             .catch()
-        }
+        },
+            submit(){
+            //validation() 체크시에만 버튼 활성
+
+            let payload = {
+                'jwt' : this.$store.state.jwt,
+                'title' : this.title,
+                'categoryName' : this.categoryName,
+                'content' : this.content,
+                'goal' : this.goal,
+                'thumbnail' : this.thumbnailFile,
+                'image' : this.imageFile,
+                'startDatetime': this.startDatetime,
+                'endDatetime': this.endDatetime,
+            }
+            store.dispatch('root/createFunding', payload)
+            .then((result)=>{
+                console.log(result)
+            })
+            .catch()
+        },
+        validationCheck(){
+            dateCheck()
+            if(this.imageFlag && this.thumbFlag && this.title!="" && this.content!="" && this.goal!=0 && this.startDatetime!="" && this.endDatetime!="" && this.dateCheck){
+                this.clickable = true
+            }else{
+                this.clickable = false
+            }
+        },
+        dateCheck (){
+            let startArr = this.startDatetime.split('-')
+            let endArr = this.endDatetime.split('-')
+            
+            let start = new Date(startArr[0],startArr[1],startArr[2])
+            let end = new Date(endArr[0],endArr[1],endArr[2])
+            // console.log(start.getTime())
+            // console.log(end.getTime())
+            // console.log(start.getTime() < end.getTime())
+
+            if(start.getTime() < end.getTime()){
+                this.dateCheck = true
+            }else{
+                this.dateCheck = false
+            }
+        },
+        cancel(){
+            router.push("/main/all/1")
+        },
     }
 };
 </script>
