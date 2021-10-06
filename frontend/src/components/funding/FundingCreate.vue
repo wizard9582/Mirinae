@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { computed, watch, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
