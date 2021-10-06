@@ -96,19 +96,19 @@ export function login({state}, payload){
 }
 
 export function updateUser({state}, payload){
-    const url = '/api/user'
+    const url = '/api/user/'
     const headers = {
         'jwt':  payload.jwt,
     }
     const body = {
-        'email': payload.email,
+        'image': payload.image,
         'nickname': payload.nickname,
     }
     return $axios.patch(url, {headers}, body);
 }
 
 export function deleteUser({state}, payload){
-    const url = '/api/user'
+    const url = '/api/user/'
     const headers = {
         'jwt':  payload.jwt,
     }
@@ -133,7 +133,7 @@ export function getMyFunding({state}, payload){
 //펀딩 /API
 
 export function createFunding({state}, payload){
-    const url = '/api/funding' 
+    const url = '/api/funding/' 
     const headers = {
         'jwt':  payload.jwt,
     }
