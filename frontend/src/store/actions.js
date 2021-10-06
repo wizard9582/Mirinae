@@ -68,7 +68,7 @@ const googleLogin = {
 
 //회원정보 API
 export function getUserInfo({state}, payload){
-    const url = '/api/user'
+    const url = '/api/user/'
     const headers = {
         'jwt':  payload.jwt,
     }
