@@ -77,9 +77,9 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            imageFile: "",
+            imageFile: "https://ifh.cc/g/2zLHyH.jpg",
             imageFlag: false,
-            thumbFile: "",
+            thumbFile: "https://ifh.cc/g/2zLHyH.jpg",
             thumbFlag: false,
             title : "",
             categoryName : "",
@@ -128,8 +128,9 @@ export default {
 
             let file = this.$refs.imageRoot.files[0]
             let formdata = new FormData()
-            formdata.append('file',file)
-
+            formdata.append('file', file)
+            console.log(file)
+            console.log(formdata)
             axios({
                 method: 'post',
                 url: 'https://j5a506.p.ssafy.io/api/upload/fundingInfo',
