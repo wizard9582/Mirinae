@@ -11,3 +11,11 @@ export function logout (state){
     state.jwt = null
     state.userId = null
 }
+
+export function setImage (state, src) {
+    state.image = src
+}
+
+export function setThumb (state, src) {
+    state.thumb = src
+}
