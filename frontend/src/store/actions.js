@@ -228,20 +228,12 @@ export function getNotAcceptedFundingList({state}, payload){
     return $axios.get(url,{headers});
 }
 
-export function acceptFunding({state}, payload){
-    const url = '/api/admin/' + payload.fundingId
+export function fundingStateChange({state}, payload){
+    const url = '/api/admin/' + payload.fundingId + '/' + payload.action
     const headers = {
         'jwt': 'Bearer ' + payload.jwt,
     }
-    return $axios.post(url, {headers});
-}
-
-export function denyFunding({state}, payload){
-    const url = '/api/admin/' + payload.fundingId
-    const headers = {
-        'jwt': 'Bearer ' + payload.jwt,
-    }
-    return $axios.delete(url,{headers});
+    return $axios.patch(url, {headers});
 }
 
 //이미지 업로드 /API

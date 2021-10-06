@@ -94,6 +94,7 @@ export default {
             //validation() 체크 후
 
             let payload = {
+                'jwt' : store.getters['root/getAuthToken'],
                 'title' : state.title,
                 'categoryName' : state.categoryName,
                 'content' : state.content,
