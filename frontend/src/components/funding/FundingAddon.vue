@@ -1,8 +1,8 @@
 <template>
     <div class="fixed opacity-80 right-40 bottom-36 h-20 w-40 bg-gray-700 text-myfont rounded-full text-center cursor-pointer" @click="joinFunding">
-        <div class="mt-6 font-bold text-lg">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             펀딩 참여하기
-        </div>
+        </button>
     </div>
 </template>
 

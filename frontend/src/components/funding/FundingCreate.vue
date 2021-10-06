@@ -6,7 +6,7 @@
                     펀딩 열기
                 </div>
                 <div>
-                    <div class="w-1/2 h-lg mx-auto my-8 border-4 border-black">
+                    <div class="sm:w-full md:w-1/2 h-lg mx-auto my-8 border-4 border-black">
                         <img v-if="!state.imageFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
                         <img v-if="state.imageFlag" class="mx-auto mt-auto w-16 h-16" :src="state.imageFile" alt="instagram">
                         <div class="text-center">
@@ -15,8 +15,8 @@
                         </div>
                         <input ref="imageRoot" id="imageInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadImage">
                     </div>
-                    <div class="flex justify-between">
-                        <div class="w-1/4 h-lg mx-auto p-8 border-4 border-black">
+                    <div class="md:flex md:justify-between">
+                        <div class="sm:w-full md:w-1/4 h-lg mx-auto p-8 border-4 border-black">
                             <img v-if="!state.thumbFlag" class="mx-auto mt-auto w-16 h-16" src="../../assets/svg/image.svg" alt="instagram">
                             <img v-if="state.thumbFlag" class="mx-auto mt-auto w-16 h-16" :src="state.thumbFile" alt="instagram">
                             <div class="text-center">
@@ -25,32 +25,33 @@
                             </div>
                             <input ref="thumbRoot" id="thumbInput" type="file" name="image" accept="image/*" class="hidden" @input="uploadThumb">
                         </div>
-                        <div class="w-1/2 mt-6">
+                        <div class="sm:w-full md:w-1/2 mt-6">
                             <div class="w-full p-4 flex justify-between">
-                                <p>펀딩 타이틀 :</p>
-                                <input type="text" class="rounded w-3/4" v-model="state.title">
+                                <p>타이틀 :</p>
+                                <input type="text" class="rounded w-3/5" v-model="state.title">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>카테고리 :</p>
-                                <select class="rounded w-3/4 multiple" v-model="state.categoryName"></select>
+                                <select class="rounded w-3/5 multiple" v-model="state.categoryName"></select>
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>목표금액 :</p>
-                                <input type="number" class="rounded w-3/4" v-model="state.goal">
+                                <input type="number" class="rounded w-3/5" v-model="state.goal">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>시작날짜 :</p>
-                                <input type="date" class="rounded w-3/4" v-model="state.startDatatime">
+                                <input type="date" class="rounded w-3/5" v-model="state.startDatatime">
                             </div>
                             <div class="w-full p-4 flex justify-between">
                                 <p>종료날짜 :</p>
-                                <input type="date" class="rounded w-3/4" v-model="state.endDatetime">
+                                <input type="date" class="rounded w-3/5" v-model="state.endDatetime">
                             </div>
                         </div>
                     </div>
-                    <div class="w-full mt-6 flex">
+                    <div class="w-full mt-6 md:flex">
                         <div>설명글 작성</div>
-                        <input type="text" class="rounded w-3/4 h-lg m-8" v-model="state.content">
+                        <br>
+                        <input type="text" class="rounded sm:w-full md:w-3/4 h-lg mx-auto" v-model="state.content">
                     </div>
                 </div>
                 <div class="flex justify-end">

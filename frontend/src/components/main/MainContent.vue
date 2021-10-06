@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
+        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white md:flex md:justify-between">
             <ranking :rankingData = "state.rankingData1" :rankingTitle = "state.rankingTitle1"/>
             <ranking :rankingData = "state.rankingData2" :rankingTitle = "state.rankingTitle2"/>
             <ranking :rankingData = "state.rankingData3" :rankingTitle = "state.rankingTitle3"/>
