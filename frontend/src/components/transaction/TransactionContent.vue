@@ -61,8 +61,6 @@
 <script>
 import FundingThumbnail from '@/components/funding/FundingThumbnail.vue'
 import { reactive } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 //import 123 from '@/'
 
 export default {

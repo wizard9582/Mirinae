@@ -68,6 +68,7 @@ export default {
         })
         const init = ()=>{
             console.log('login check --->', store.getters['root/isLoggedIn'])
+            console.log('token check --->', store.getters['root/getAuthToken'])
             if(store.getters['root/isLoggedIn']){
                 store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
                 .then((result)=>{

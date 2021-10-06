@@ -35,17 +35,13 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 export default {
     name: 'WelcomeContent',
 
     setup(props, {emit}){
-        const store = useStore()
         const router = useRouter()
-        const state = reactive({})
 
         const clickLogin = (where) =>{
             if(where === 'kakao'){
