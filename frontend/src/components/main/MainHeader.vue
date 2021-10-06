@@ -88,7 +88,8 @@ export default {
                     // console.log(result)
                     let nickname = result.data.kakao_account.profile.nickname
                     let image = result.data.kakao_account.profile.thumbnail_image_url
-                    store.dispatch('root/updateUser', { image:image, nickname:nickname })
+                    state.userProfile = result.data.kakao_account.profile.thumbnail_image_url
+                    store.dispatch('root/updateUser', { jwt: store.getters['root/getAuthToken'], image:image, nickname:nickname })
                     .then((result)=>{
 
                     })
