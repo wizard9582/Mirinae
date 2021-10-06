@@ -16,15 +16,15 @@
                 <p class="text-sm text-gray-700">로그인</p>
             </div>
         </div>
-        <div class="ml-10 flex items-end">
+        <div class="ml-10 flex items-end font-bold sm:text-xs md:text-lg text-light-gray">
             <div @click="clickFundingList">
-                <p class="text-sm text-gray-700 cursor-pointer">펀딩리스트</p>
+                <p class="cursor-pointer">펀딩리스트</p>
             </div>
             <div @click="clickFundingOpen">
-                <p class="ml-10 text-sm text-gray-700 cursor-pointer">펀딩열기</p>
+                <p class="ml-10 cursor-pointer">펀딩열기</p>
             </div>
             <div>
-                <a href="https://localhost:8083/main/tx/id" class="ml-10 text-sm text-gray-700 cursor-pointer">트랜잭션 조회 페이지(dev)</a>
+                <a href="https://localhost:8083/main/tx/id" class="ml-10 cursor-pointer">트랜잭션 조회 페이지(dev)</a>
             </div>
         </div>
         <div v-if="state.userPop" class="absolute right-4 w-48 h-32 text-right bg-transparent bg-gray-100 border-collapse shadow-lg rounded divide-y divide-gray-300">
