@@ -52,8 +52,8 @@ export default {
         const init = () => {
             store.dispatch('root/getNotAcceptedFundingList', { jwt: store.getters['root/getAuthToken']})
             .then((result)=>{
-                // console.log("fundingList data----->")
-                // console.log(result)
+                console.log("fundingList data----->")
+                console.log(result)
 
                 //funding state : prepare, open, finished
                 result.data.forEach(item => {
