@@ -14,6 +14,10 @@
                         아직 지갑이 없습니다!
                         <button class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded" @click="makeWallet">지갑 만들기</button>
                     </div>
+                    <div v-if="state.privateFlag">
+                        개인 키는 최초 지갑 생성시에만 보여집니다. <br>
+                        {{state.privateKey}}
+                    </div>
                 </div>
                 <div class="w-full">
                     닉네임 : {{state.userName}} <br>
@@ -64,6 +68,8 @@ export default {
     setup(){
         const store = useStore()
         const state = reactive({
+            privateFlag: false,
+            privateKey: "",
             userMail:"email",
             userName:"이름",
             walletFlag: false,
@@ -165,13 +171,37 @@ export default {
         }
 
         const makeWallet = () =>{
-            //지갑 만들기 관련 api
-            //지갑 만들고 주소 받은 다음 api로 db 저장
+            const Web3 = require('web3');
+            const ENDPOINT = 'http://j5a5061.p.ssafy.io:2220';
+            const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINT));
 
-            let walletAddress = "1234"
+            alert("지갑이 개설되고 출력되는 개인 키를 꼭 저장해 주세요. 개인 키 분실시 다시 확인 할 수 없습니다!")
+
+            var account =  web3.eth.accounts.create();
+            // console.log('account: ', account);
+            console.log('-------------아이디 생성----------------------');
+            console.log('account.address: ', account.address);
+            console.log('account.privKey: ', account.privateKey);
+
+            state.privateFlag = true
+            state.privateKey = account.privateKey
+
+            // ---------------------root 계정에서 보내기 ------------------
+            web3.eth.defaultAccount = '0x1d34ac7ad89f33ebc663d6ed6234cf9e80db5f7d';
+            // console.log("F",web3.eth.defaultAccount);
+            web3.eth.personal.unlockAccount(web3.eth.defaultAccount,"test");
+            web3.eth.sendTransaction({
+                from: web3.eth.defaultAccount,
+                Flag: account.address,
+                Keyue: web3.utils.toWei('100','ether')
+            });
+
+            let walletAddress = account.address
             store.dispatch('root/saveWallet', {jwt:store.getters['root/getAuthToken'], walletAddress: walletAddress})
             .then((result)=>{
-                init()
+                console.log("----->wallet", result)
+                state.walletFlag = true
+                state.walletAddress = walletAddress
             })
             .catch()
         }
