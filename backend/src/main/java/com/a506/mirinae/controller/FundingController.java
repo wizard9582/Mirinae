@@ -26,9 +26,9 @@ public class FundingController {
     private final FundingService fundingService;
 
     @ApiOperation(value = "전체펀딩리스트")
-    @GetMapping("/{categoryName}")
-    public ResponseEntity<FundingSizeRes> getFundingList(@PathVariable("categoryName") String categoryName, final Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryName, pageable));
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<FundingSizeRes> getFundingList(@PathVariable("categoryId") String categoryId, final Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryId, pageable));
     }
 
     @ApiOperation(value = "펀딩 개설")
