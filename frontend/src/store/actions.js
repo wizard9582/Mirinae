@@ -78,14 +78,16 @@ export function getUserInfo({state}, payload){
 
 export function saveWallet({state}, payload){
     const url = '/api/user/wallet'
-    const headers = {
-        'jwt':  payload.jwt,
-    }
-    const body = {
-        'walletAddress' : payload.walletAddress,
-    }
-
-    return $axios.patch(url, {headers}, body);
+    return $axios({
+        method: 'patch',
+        url: url,
+        headers:{
+            'jwt':  payload.jwt
+        },
+        data:{
+            'walletAddress' : payload.walletAddress,
+        }
+    })
 }
 
 export function login({state}, payload){
@@ -97,14 +99,17 @@ export function login({state}, payload){
 
 export function updateUser({state}, payload){
     const url = '/api/user/'
-    const headers = {
-        'jwt':  payload.jwt,
-    }
-    const body = {
-        'image': payload.image,
-        'nickname': payload.nickname,
-    }
-    return $axios.patch(url, {headers}, body);
+    return $axios({
+        method: 'patch',
+        url: url,
+        headers:{
+            'jwt':  payload.jwt
+        },
+        data:{
+            'image': payload.image,
+            'nickname': payload.nickname,
+        }
+    })
 }
 
 export function deleteUser({state}, payload){

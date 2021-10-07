@@ -109,23 +109,26 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", state: ""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
 
-                        fundingThumb.id = item.id
+                        fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
+                        fundingThumb.goal = item.goal
+                        fundingThumb.balance = item.balance
                         
-                        let startDate = item.startDatetime
-                        let endDate = item.endDatetime
+                        let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
+                        let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
 
                         if(today.getTime() < startDate.getTime()){
                             fundingThumb.state = "prepare"
-                        }else if(todat.getTime() > endDate.getTime()){
+                        }else if(today.getTime() > endDate.getTime()){
                             fundingThumb.state = "end"
                         }else{
                             fundingThumb.state = "open"
                         }
+
                         state.myDonations.push(fundingThumb)
                     })
 
@@ -141,23 +144,26 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", state: ""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
 
-                        fundingThumb.id = item.id
+                        fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
+                        fundingThumb.goal = item.goal
+                        fundingThumb.balance = item.balance
                         
-                        let startDate = item.startDatetime
-                        let endDate = item.endDatetime
+                        let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
+                        let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
 
                         if(today.getTime() < startDate.getTime()){
                             fundingThumb.state = "prepare"
-                        }else if(todat.getTime() > endDate.getTime()){
+                        }else if(today.getTime() > endDate.getTime()){
                             fundingThumb.state = "end"
                         }else{
                             fundingThumb.state = "open"
                         }
+
                         state.myFundings.push(fundingThumb)
                     })
 
@@ -179,22 +185,22 @@ export default {
 
             var account =  web3.eth.accounts.create();
             // console.log('account: ', account);
-            console.log('-------------아이디 생성----------------------');
+            console.log('-----아이디 생성-----');
             console.log('account.address: ', account.address);
             console.log('account.privKey: ', account.privateKey);
 
             state.privateFlag = true
             state.privateKey = account.privateKey
 
-            // ---------------------root 계정에서 보내기 ------------------
-            web3.eth.defaultAccount = '0x1d34ac7ad89f33ebc663d6ed6234cf9e80db5f7d';
-            // console.log("F",web3.eth.defaultAccount);
-            web3.eth.personal.unlockAccount(web3.eth.defaultAccount,"test");
-            web3.eth.sendTransaction({
-                from: web3.eth.defaultAccount,
-                Flag: account.address,
-                Keyue: web3.utils.toWei('100','ether')
-            });
+            // // ---------------------root 계정에서 보내기 ------------------
+            // web3.eth.defaultAccount = '0x1d34ac7ad89f33ebc663d6ed6234cf9e80db5f7d';
+            // // console.log("F",web3.eth.defaultAccount);
+            // web3.eth.personal.unlockAccount(web3.eth.defaultAccount,"test");
+            // web3.eth.sendTransaction({
+            //     from: web3.eth.defaultAccount,
+            //     Flag: account.address,
+            //     Keyue: web3.utils.toWei('100','ether')
+            // });
 
             let walletAddress = account.address
             store.dispatch('root/saveWallet', {jwt:store.getters['root/getAuthToken'], walletAddress: walletAddress})
