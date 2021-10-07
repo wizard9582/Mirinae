@@ -91,13 +91,6 @@ export default {
 
             let categoryId = router.currentRoute.value.params.id
             state.page = router.currentRoute.value.params.page
-            
-            let i = Math.max(parseInt(state.page - 2), 1)
-            let k = Math.min(parseInt(state.page) + 2, state.index)
-
-            for(var j = i; j <= k; j++){
-                state.pages.push(j)
-            }
 
             store.dispatch('root/getCategoryList')
             .then((result)=>{
@@ -116,7 +109,7 @@ export default {
             .then((result)=>{
                 
                 // console.log("fundingList data----->")
-                // console.log(result)
+                console.log(result)
                 state.index = result.data.pageCount
                 //funding state : prepare, open, finished
                 result.data.fundingResList.forEach(item => {
@@ -141,6 +134,12 @@ export default {
                     }
 
                     state.fundings.push(fundingThumb)
+                    let i = Math.max(parseInt(state.page - 2), 1)
+                    let k = Math.min(parseInt(state.page) + 2, state.index)
+                    state.pages = []
+                    for(var j = i; j <= k; j++){
+                        state.pages.push(j)
+                    }
                 })
             })
             .catch()
@@ -235,17 +234,18 @@ export default {
         }
 
         const clickDir = (dir) =>{
+            let categoryId = router.currentRoute.value.params.id
             if(dir == -1){
                 if(state.page != 1){
-                    router.push("/main/" + state.category + "/" + parseInt(state.page-1))
+                    router.push("/main/" + categoryId + "/" + parseInt(state.page-1))
                 }
             }else if(dir == 0){
                 if(state.page < state.index){
                     state.page++
-                    router.push("/main/" + state.category + "/" + state.page)
+                    router.push("/main/" + categoryId + "/" + state.page)
                 }
             }else{
-                router.push("/main/" + state.category + "/" + dir)
+                router.push("/main/" + categoryId + "/" + dir)
             }
         }
 
