@@ -12,6 +12,7 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
@@ -139,12 +140,13 @@ public class EthereumUtil {
 			// TODO Auto-generated catch block
 			new IllegalArgumentException("이더 보내기 오류");
 		}
+    	System.out.println("transaction : "+transactionHash);
     	return transactionHash;
     }
     
     public String ethSendTransaction(Function function,String userWallet, Double amount, String privateKey) {
     	String transactionHash = "";
-//    	if(amount<getEther(userWallet)) new IllegalArgumentException("보유 이더 부족");
+    	if(amount<getEther(userWallet)) new IllegalArgumentException("보유 이더 부족");
     	try {
 			EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(userWallet, DefaultBlockParameterName.LATEST).send();
 			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
@@ -245,6 +247,28 @@ public class EthereumUtil {
 			e.printStackTrace();
 		}
     	 return returnValue;
+    }
+    
+    public void checkFudning(int fundingId,String userWallet) {
+    	Function function = new Function("checkFunding",
+                Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),
+                Arrays.asList(new TypeReference<Bool>() {}));
+    	Transaction transaction = Transaction.createEthCallTransaction(userWallet, contract,
+                FunctionEncoder.encode(function));
+    	 try {
+			EthCall ethCall = admin.ethCall(transaction, DefaultBlockParameterName.LATEST).send();
+			List<Type> decode = FunctionReturnDecoder.decode(ethCall.getResult(),
+                    function.getOutputParameters());
+
+			System.out.println("ethCall.getResult() = " + ethCall.getResult());
+			System.out.println("getValue = " + decode.get(0).getValue());
+			System.out.println("getType = " + decode.get(0).getTypeAsString());
+			
+//			returnValue = (BigInteger)decode.get(0).getValue();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public String openFunding(Long fundingId, int targetAmount, String targetAddress, String userId, String title, String closeTime, 
     		String userWallet, String password) {
