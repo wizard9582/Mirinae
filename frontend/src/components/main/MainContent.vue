@@ -11,7 +11,7 @@
         <div class="max-w-2xl mt-1 mx-auto py-4 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-t-0 border-4 border-black bg-white divide-y divide-black">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">{{state.category}}</h2>
             <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3  sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" @click="clickFunding(funding.id)"/>
+                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" :funding="funding" @click="clickFunding(funding.id)"/>
             </div>
             <div class="bg-white mt-10 px-4 pt-6 pb-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
@@ -64,13 +64,12 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            imgSrc:["","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/m035va.png","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/SoeRsG.jpg",],
-            category: "카테고리명",
+            imgSrc:["https://ifh.cc/g/UgNGha.png","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/m035va.png","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/SoeRsG.jpg",],
+            category: "전체",
             size: 10,
             page: 1,
             index: 1,
-            categories:[
-            ],
+            categories:[ {category_id: 0, category_name: "전체"} ],
             fundings: [
             ],
             pages:[
@@ -101,37 +100,37 @@ export default {
             .then((result)=>{
                 //console.log("category data----->")
                 //console.log(result)
-                state.categories = result.data
                 result.data.forEach(item=>{
                     if(item.category_id == categoryId){
                         state.category = item.category_name
                     }
+                    state.categories.push(item)
                 })
             })
             .catch()
 
-            store.dispatch('root/getFundingList', { category: state.category, size: state.size, page: state.page })
+            store.dispatch('root/getFundingList', { category: categoryId, size: state.size, page: state.page })
             .then((result)=>{
                 // console.log("fundingList data----->")
-                // console.log(result)
+                //console.log(result)
 
                 //funding state : prepare, open, finished
-                result.data.forEach(item => {
+                result.data.fundingResList.forEach(item => {
                     let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
 
-                    fundingThumb.id = item.id
+                    fundingThumb.id = item.fundingId
                     fundingThumb.title = item.title
                     fundingThumb.imgSrc = item.thumbnail
                     fundingThumb.imgAlt = item.title
                     fundingThumb.goal = item.goal
                     fundingThumb.balance = item.balance
                     
-                    let startDate = item.startDatetime
-                    let endDate = item.endDatetime
+                    let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
+                    let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
 
                     if(today.getTime() < startDate.getTime()){
                         fundingThumb.state = "prepare"
-                    }else if(todat.getTime() > endDate.getTime()){
+                    }else if(today.getTime() > endDate.getTime()){
                         fundingThumb.state = "end"
                     }else{
                         fundingThumb.state = "open"

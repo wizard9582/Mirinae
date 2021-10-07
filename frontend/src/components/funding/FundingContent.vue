@@ -103,7 +103,7 @@ export default {
             state.fundingId = router.currentRoute.value.params.id
             store.dispatch('root/detailFunding', {fundingId: state.fundingId})
             .then((result)=>{
-                //console.log(result)
+                console.log(result)
                 state.balance = result.data.balance
                 state.goal = result.data.goal
                 state.percentage = (parseFloat(state.balance) / parseFloat(state.goal)) * 100

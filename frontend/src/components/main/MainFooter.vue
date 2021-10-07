@@ -22,8 +22,8 @@
                     서울 5반 6팀 미리내<br/>
                     <br/>
                     Copyright 2021<br/>
+                    <a href="https://j5a506.p.ssafy.io/main/admin">관리자페이지</a>
                 </p>
-                <a href="https://j5a506.p.ssafy.io/main/admin" class="text-right">관리자페이지</a>
             </div>
         </div>
     </div>
