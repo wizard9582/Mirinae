@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from "./store.js";
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -56,13 +55,13 @@ const router = createRouter({
 });
 
 const isLoggedIn = function(){
-    return store.getters['root/isLoggedIn']
+    return localStorage.getItem('jwt')? true:false;
 }
 
 router.beforeEach((to, from, next) => {
     if(to.meta.loginRequired){
         if(isLoggedIn()){
-        next()
+            next()
         }else{
             alert("로그인이 필요합니다!")
             const params = {
