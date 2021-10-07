@@ -116,7 +116,7 @@ export default {
             .then((result)=>{
                 
                 // console.log("fundingList data----->")
-                // console.log(categoryId)
+                // console.log(result)
                 state.index = result.data.pageCount
                 //funding state : prepare, open, finished
                 result.data.fundingResList.forEach(item => {

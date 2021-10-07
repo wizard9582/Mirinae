@@ -160,8 +160,9 @@ export function getFundingList({state}, payload){
     if(categoryId == 0){
         categoryId = "all"
     }
-    const url = '/api/funding/' + categoryId  + '?size=' + payload.size + '&page=' + payload.page
-    console.log(url)
+    let page = parseInt(payload.page - 1)
+    const url = '/api/funding/' + categoryId  + '?size=' + payload.size + '&page=' + page
+    //console.log(url)
     return $axios.get(url);
 }
 

@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
-                    승인 대기중인 펀딩이 없습니다.
+                    {{state.ment}}
                 </div>
             </div>
             <div v-else class="m-8 divide-y divide-black">
@@ -43,6 +43,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
+            ment: "승인 대기중인 펀딩이 없습니다.",
             accessCode: "",
             accessFlag: false,
             fundingFlag: false,
@@ -52,9 +53,11 @@ export default {
         const init = () => {
             store.dispatch('root/getNotAcceptedFundingList', { jwt: store.getters['root/getAuthToken']})
             .then((result)=>{
-                console.log("fundingList data----->")
-                console.log(result)
-
+                // console.log("fundingList data----->")
+                // console.log(result)
+                if(result.status == 500){
+                    state.ment = "승인된 사용자가 아닙니다."
+                }
                 //funding state : prepare, open, finished
                 result.data.forEach(item => {
                     let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
