@@ -27,7 +27,7 @@ public class FundingController {
 
     @ApiOperation(value = "전체펀딩리스트")
     @GetMapping("/{categoryName}")
-    public ResponseEntity<FundingSizeRes> getFundingList(@PathVariable("categoryName") String categoryName, Pageable pageable) {
+    public ResponseEntity<FundingSizeRes> getFundingList(@PathVariable("categoryName") String categoryName, final Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryName, pageable));
     }
 
