@@ -193,7 +193,7 @@ export default {
             .then((result)=>{
                 store.commit('root/logout')
                 localStorage.removeItem('jwt')
-                router.push("main/all/1")
+                router.push("/main/all/1")
             })
             .catch()
         }

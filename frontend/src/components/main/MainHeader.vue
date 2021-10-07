@@ -139,7 +139,7 @@ export default {
             state.userPop = false
             store.commit('root/logout')
             localStorage.removeItem('jwt')
-            router.push("main/all/1")
+            router.push("/main/all/1")
         }
         init()
         return {state, clickHome, openUser, closeUser, clickLogin, clickFundingList, clickFundingOpen , goUser, goLogout}
