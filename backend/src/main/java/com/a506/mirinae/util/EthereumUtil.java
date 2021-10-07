@@ -72,12 +72,12 @@ public class EthereumUtil {
 			transactionHash = ethSendTransaction.getTransactionHash();
 			//보낸 트랜잭션이 블록에 저장되는지 체크.
 			Optional<TransactionReceipt> transactionReceipt = null;
-			do {
-				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
-				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
-				
-				Thread.sleep(1000);
-			}while(!transactionReceipt.isPresent());
+//			do {
+//				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
+//				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
+//				
+//				Thread.sleep(1000);
+//			}while(!transactionReceipt.isPresent());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			new IllegalArgumentException("이더 보내기 오류");
@@ -131,11 +131,11 @@ public class EthereumUtil {
 			  EthSendTransaction ethSendTransaction = admin.ethSendTransaction(transaction).send();
 			  transactionHash = ethSendTransaction.getTransactionHash();
 			
-			do {
-				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
-				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
-				Thread.sleep(1000);
-			}while(!transactionReceipt.isPresent());
+//			do {
+//				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
+//				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
+//				Thread.sleep(1000);
+//			}while(!transactionReceipt.isPresent());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			new IllegalArgumentException("이더 보내기 오류");
@@ -167,12 +167,12 @@ public class EthereumUtil {
 			transactionHash = ethSendTransaction.getTransactionHash();
 			//보낸 트랜잭션이 블록에 저장되는지 체크.
 			Optional<TransactionReceipt> transactionReceipt = null;
-			do {
-				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
-				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
-				
-				Thread.sleep(1000);
-			}while(!transactionReceipt.isPresent());
+//			do {
+//				EthGetTransactionReceipt ethGetTransactionReceipt = web3.ethGetTransactionReceipt(transactionHash).send();
+//				transactionReceipt = ethGetTransactionReceipt.getTransactionReceipt();
+//				
+//				Thread.sleep(1000);
+//			}while(!transactionReceipt.isPresent());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			new IllegalArgumentException("기부하기 실패");
