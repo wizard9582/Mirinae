@@ -179,7 +179,7 @@ export default {
             //validation() 체크시에만 버튼 활성
 
             let payload = {
-                'jwt' : this.$store.state.jwt,
+                'jwt' : sessionStorage.getItem('jwt'),
                 'title' : this.title,
                 'categoryId' : this.categoryId,
                 'content' : this.content,

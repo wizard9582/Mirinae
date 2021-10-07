@@ -44,6 +44,7 @@ export default {
                     .then((result)=>{
                         //console.log(result)
                         if(result.status === 200){
+                            sessionStorage.setItem('jwt',result.data.jwt)
                             store.commit('root/setToken', result.data.jwt)
                             store.commit('root/setUserId', email)
                             router.push('/main/all/1')
