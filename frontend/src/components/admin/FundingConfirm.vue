@@ -68,7 +68,7 @@ export default {
                     state.fundings.push(fundingThumb)
                 })
                 if(state.fundings.length > 0){
-                    fundingFlag = true
+                    state.fundingFlag = true
                 }
             })
             .catch()

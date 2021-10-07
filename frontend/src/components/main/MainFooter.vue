@@ -23,7 +23,7 @@
                     <br/>
                     Copyright 2021<br/>
                 </p>
-                <a href="https://j5a506.p.ssafy.io/main/admin">관리자페이지</a>
+                <a href="https://j5a506.p.ssafy.io/main/admin" class="text-right">관리자페이지</a>
             </div>
         </div>
     </div>
