@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.web3j.abi.datatypes.Bool;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -62,12 +63,15 @@ public class Funding {
     @Enumerated(EnumType.STRING)
     private FundingState fundingState = FundingState.WAITING;
 
+    @NotNull
+    private Boolean isEnded;
+
     @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
     private List<Donation> donations = new ArrayList<>();
 
     @Builder
     public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image,
-                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Double goal, FundingState fundingState) {
+                   LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Double goal, Boolean isEnded, FundingState fundingState) {
         this.id = id;
         this.user = user;
         this.category = category;
@@ -80,10 +84,19 @@ public class Funding {
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.goal = goal;
+        this.isEnded = isEnded;
         this.fundingState = fundingState;
     }
 
     public void updateFundingState(FundingState fundingState) {
         this.fundingState = fundingState;
+    }
+
+    public void endFunding() {
+        this.isEnded = true;
+    }
+
+    public void deleteDonation() {
+        this.donations = new ArrayList<>();
     }
 }
