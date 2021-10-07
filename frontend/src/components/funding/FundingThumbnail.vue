@@ -3,9 +3,9 @@
         <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
             <img :src="funding.imgSrc" :alt="funding.imgAlt" class="w-full h-full object-center object-cover lg:w-full lg:h-full" />
         </div>
-        <div v-if="funding.state=='prepare'" class="text-gray">오픈전</div>
-        <div v-else-if="funding.state=='open'" class="text-green">진행중</div>
-        <div v-else class="text-black">종료</div>
+        <div v-if="funding.state=='prepare'" class="text-gray font-bold text-xl">오픈전</div>
+        <div v-else-if="funding.state=='open'" class="text-green font-bold text-xl">진행중</div>
+        <div v-else class="text-black font-bold text-xl">종료</div>
         <div class="mt-4">
             <h3 class="text-sm text-gray-700 font-bold">
                 {{ funding.title }}
