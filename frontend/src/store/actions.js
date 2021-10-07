@@ -230,10 +230,13 @@ export function getNotAcceptedFundingList({state}, payload){
 
 export function fundingStateChange({state}, payload){
     const url = '/api/admin/' + payload.fundingId + '/' + payload.action
-    const headers = {
-        'jwt':  payload.jwt,
-    }
-    return $axios.patch(url, {headers});
+    return axios({
+        method: 'patch',
+        url: url,
+        headers:{
+            'jwt':  payload.jwt
+        },
+    })
 }
 
 //이미지 업로드 /API
