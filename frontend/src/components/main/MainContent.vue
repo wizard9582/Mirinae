@@ -113,7 +113,7 @@ export default {
             .then((result)=>{
                 // console.log("fundingList data----->")
                 //console.log(result)
-
+                state.index = result.data.pageCount
                 //funding state : prepare, open, finished
                 result.data.fundingResList.forEach(item => {
                     let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
@@ -144,13 +144,15 @@ export default {
             store.dispatch('root/getCategoryRanking', {categoryId: "1"})
             .then((result)=>{
                 //console.log("category Ranking1 data----->")
-                //console.log(result)
-                state.rankingTitle1 = "테스트 1"
+                console.log(result)
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -163,12 +165,14 @@ export default {
             .then((result)=>{
                 //console.log("category Ranking2 data----->")
                 //console.log(result)
-                state.rankingTitle2 = "테스트 2"
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -180,13 +184,15 @@ export default {
             store.dispatch('root/getCategoryRanking', {categoryId: "3"})
             .then((result)=>{
                 // console.log("category Ranking3 data----->")
-                // console.log(result)
-                state.rankingTitle3 = "테스트 3"
+                //console.log(result)
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
