@@ -7,8 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
-
+import org.springframework.beans.factory.annotation.Value;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
@@ -41,13 +40,13 @@ import org.web3j.utils.Numeric;
 public class EthereumUtil {
 	private Web3j web3;
     private Admin admin;
+    
     private String contract;
     
-    
-    public EthereumUtil(String _address, String _contract) {
-    	web3 = Web3j.build(new HttpService(_address));
-    	admin = Admin.build(new HttpService(_address));
-    	contract = _contract;
+    public EthereumUtil() {
+    	web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:8000"));
+    	admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:8000"));
+    	contract = "0xC02a9db738639D7FF8C4198317E5bB38c8dFF487";
 	}
 
 	public String transferEhter(String userWallet, String fundingWallet, Double amount, String privateKey) {

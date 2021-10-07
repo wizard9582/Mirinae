@@ -32,7 +32,7 @@ public class UserService {
     
     @Value("${blockchain.main.contract}")
     private String contract;
-    private EthereumUtil ethereumUtil = new EthereumUtil(address,contract);
+    private final EthereumUtil ethereumUtil = new EthereumUtil();
     public LoginRes login(LoginReq loginReq){
         Optional<User> user = userRepository.findByEmailAndOauthType(loginReq.getEmail(), OauthType.valueOf(loginReq.getOauthType()));
         Boolean isJoin = user.isPresent();
