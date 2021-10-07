@@ -104,18 +104,29 @@ export default {
             store.dispatch('root/detailFunding', {fundingId: state.fundingId})
             .then((result)=>{
                 console.log(result)
-                state.balance = result.data.balance
-                state.goal = result.data.goal
+                state.balance = result.data.fundingRes.balance
+                state.goal = result.data.fundingRes.goal
                 state.percentage = (parseFloat(state.balance) / parseFloat(state.goal)) * 100
-                state.content = result.data.content
-                state.fundingTitle = result.data.title
-                state.userName = result.data.userNickNam
+                state.fundingTitle = result.data.fundingRes.title
+                state.userName = result.data.userNickName
                 let startDate = result.data.startDatetime[0] + "년 " + result.data.startDatetime[1] + "월 " + result.data.startDatetime[2] + "일 "
                 state.startDate = startDate
                 let endDate = result.data.endDatetime[0] + "년 " + result.data.endDatetime[1] + "월 " + result.data.endDatetime[2] + "일 "
                 state.endDate = endDate
-                state.imgAlt = result.data.title
-                state.imgSrc = result.data.image
+                state.imgAlt = result.data.fundingRes.title
+                state.imgSrc = result.data.fundingRes.thumbnail
+
+                let day = (result.data.endDatetime[0] * 365) - (result.data.startDatetime[0] * 365) 
+                + (result.data.endDatetime[1] * 30) - (result.data.startDatetime[1] * 30)
+                + (result.data.endDatetime[2] - result.data.startDatetime[2])
+                
+                let today = new Date()
+
+                let proceed = (today.getFullYear() * 365) - (result.data.startDatetime[0] * 365) 
+                + ((today.getMonth()+1) * 30) - (result.data.startDatetime[1] * 30)
+                + (today.getDate() - result.data.startDatetime[2])
+
+                state.proceed = Math.round((proceed/day) * 100)
             })
             .catch()
 
