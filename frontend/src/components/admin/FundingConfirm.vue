@@ -1,7 +1,7 @@
 <template>
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white shadow-md">
-            <div class="m-8 divide-y divide-black">
+            <div v-if="state.accessFlag" class="m-8 divide-y divide-black">
                 <div class="w-full">
                     <p>승인 대기중인 펀딩</p>
                 </div>
@@ -15,6 +15,13 @@
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     승인 대기중인 펀딩이 없습니다.
                 </div>
+            </div>
+            <div v-else class="m-8 divide-y divide-black">
+                <div class="w-full">
+                    <p>접속번호를 입력해주세요</p>
+                    <input type="text" class="rounded w-1/2" v-model="state.accessCode">
+                </div>
+                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="access">접속</button>
             </div>
         </div>
     </div>
@@ -36,6 +43,8 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
+            accessCode: "",
+            accessFlag: false,
             fundingFlag: false,
             fundings:[],
         })
@@ -77,8 +86,11 @@ export default {
             })
             .catch()
         }
+        const access = () => {
+
+        }
         init()
-        return {state, acceptFunding, denyFunding}
+        return {state, acceptFunding, denyFunding, access}
     }
 };
 </script>
