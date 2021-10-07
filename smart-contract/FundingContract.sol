@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.7;
 
-contract test1 {
+contract FundingContract {
     address public owner;
     uint max_funding_id;
 
