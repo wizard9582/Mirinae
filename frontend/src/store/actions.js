@@ -174,15 +174,18 @@ export function getCategoryList(){
 
 export function joinFunding({state}, payload){
     const url = '/api/funding/join'
-    const headers = {
-        'jwt':  payload.jwt,
-    }
-    const body = {
-        'fundingId' : payload.fundingId,
-        'amount' : payload.amount,
-        'key' : payload.key
-    }
-    console.log(body)
+    //console.log(body)
+    return $axios({
+        method:'post',
+        url: url,
+        headers: {'jwt':  payload.jwt},
+        data: {
+            'fundingId' : payload.fundingId,
+            'amount' : payload.amount,
+            'key' : payload.key
+        }
+    })
+    
     return $axios.post(url, {headers}, body);
 }
 
