@@ -79,9 +79,9 @@ export default {
             rankingData1:[],
             rankingData2:[],
             rankingData3:[],
-            rankingTitle1: "전체 랭킹",
-            rankingTitle2: "카테고리 랭킹",
-            rankingTitle3: "펀딩 랭킹",
+            rankingTitle1: "연예인 팬덤 랭킹",
+            rankingTitle2: "재난피해 돕기 랭킹",
+            rankingTitle3: "불우이웃 돕기 랭킹",
         })
 
         const init = () => {

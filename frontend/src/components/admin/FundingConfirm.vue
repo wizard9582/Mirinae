@@ -59,7 +59,7 @@ export default {
                 result.data.forEach(item => {
                     let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
 
-                    fundingThumb.id = item.id
+                    fundingThumb.id = item.fundingId
                     fundingThumb.title = item.title
                     fundingThumb.imgSrc = item.thumbnail
                     fundingThumb.imgAlt = item.title
@@ -67,6 +67,9 @@ export default {
                     fundingThumb.balance = item.balance
                     state.fundings.push(fundingThumb)
                 })
+                if(state.fundings.length > 0){
+                    fundingFlag = true
+                }
             })
             .catch()
         }
