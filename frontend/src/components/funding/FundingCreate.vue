@@ -179,7 +179,6 @@ export default {
             //validation() 체크시에만 버튼 활성
 
             let payload = {
-                'jwt' : localStorage.getItem('jwt'),
                 'title' : this.title,
                 'categoryId' : this.categoryId,
                 'content' : this.content,
@@ -193,7 +192,7 @@ export default {
                 method: 'post',
                 url: 'https://j5a506.p.ssafy.io/api/funding/',
                 headers:{
-                    'jwt':  payload.jwt,
+                    'jwt':  localStorage.getItem('jwt'),
                 },
                 data:payload
             })
