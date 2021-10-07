@@ -30,7 +30,7 @@
                     <p>내가 참여한 펀딩</p>
                 </div>
                 <div v-if="state.myDonationFlag" class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
-                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id" :funding = funding />
+                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id" :funding = funding @click="clickFunding(funding.id)"/>
                 </div>
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     아직 참여한 펀딩이 없습니다.
@@ -111,7 +111,7 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:"", type:false}
                         fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
@@ -133,7 +133,7 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:"", type:false}
 
                         fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
@@ -197,8 +197,11 @@ export default {
             })
             .catch()
         }
+        const clickFunding = (fundingId) =>{
+            router.push("/main/fund/" + fundingId)
+        }
         init()
-        return {state, makeWallet, deleteUser}
+        return {state, makeWallet, deleteUser, clickFunding}
     }
 };
 </script>

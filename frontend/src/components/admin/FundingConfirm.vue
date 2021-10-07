@@ -60,7 +60,7 @@ export default {
                 }
                 //funding state : prepare, open, finished
                 result.data.forEach(item => {
-                    let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
+                    let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: "", type:false}
 
                     fundingThumb.id = item.fundingId
                     fundingThumb.title = item.title
