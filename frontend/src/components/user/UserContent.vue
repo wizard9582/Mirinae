@@ -48,9 +48,9 @@
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     아직 개설한 펀딩이 없습니다.
                 </div>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="deleteUser">탈퇴하기</button>
             </div>
         </div>
-        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="deleteUser">탈퇴하기</button>
     </div>
 </template>
 
@@ -111,28 +111,15 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
-
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:""}
                         fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
-                        fundingThumb.goal = item.goal
-                        fundingThumb.balance = item.balance
-                        
-                        let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
-                        let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
+                        fundingThumb.state = item.fundingState
 
-                        if(today.getTime() < startDate.getTime()){
-                            fundingThumb.state = "prepare"
-                        }else if(today.getTime() > endDate.getTime()){
-                            fundingThumb.state = "end"
-                        }else{
-                            fundingThumb.state = "open"
-                        }
-
-                        state.myDonations.push(fundingThumb)
-                    })
+                            state.myDonations.push(fundingThumb)
+                        })
 
                     if(state.myDonations.length > 0){
                         state.myDonationFlag = true
@@ -146,28 +133,16 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:""}
 
                         fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
-                        fundingThumb.goal = item.goal
-                        fundingThumb.balance = item.balance
-                        
-                        let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
-                        let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
+                        fundingThumb.state = item.fundingState
 
-                        if(today.getTime() < startDate.getTime()){
-                            fundingThumb.state = "prepare"
-                        }else if(today.getTime() > endDate.getTime()){
-                            fundingThumb.state = "end"
-                        }else{
-                            fundingThumb.state = "open"
-                        }
-
-                        state.myFundings.push(fundingThumb)
-                    })
+                            state.myFundings.push(fundingThumb)
+                        })
 
                     if(state.myFundings.length > 0){
                         state.myFundingFlag = true
@@ -216,7 +191,9 @@ export default {
         const deleteUser = ()=>{
             store.dispatch('root/deleteUser', {jwt:store.getters['root/getAuthToken']})
             .then((result)=>{
-                router.push('/main/all/1')
+                store.commit('root/logout')
+                localStorage.removeItem('jwt')
+                router.push("main/all/1")
             })
             .catch()
         }
