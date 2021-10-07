@@ -32,19 +32,17 @@ public class FundingService {
         List<Funding> funding;
         List<FundingRes> fundingResList = new ArrayList<>();
         if(categoryName.equals("all")) {
-            funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+            funding = fundingRepository.findAllByFundingState(FundingState.ACCEPTED, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
         else {
-            funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+            funding = fundingRepository.findByCategory_NameAndFundingState(categoryName, FundingState.ACCEPTED ,PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
-        Long pageCount = (long) (funding.size() / pageable.getPageSize() + 1);
+        Long pageCount = (long) (fundingRepository.findAll().size() / pageable.getPageSize() + 1);
         for(Funding f : funding) {
-            if(f.getFundingState().equals(FundingState.ACCEPTED))
-                if(f.getDonations().size()==0)
-                    fundingResList.add(new FundingRes(f));
-                else {
-                    fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
-                }
+            if(f.getDonations().size()==0)
+                fundingResList.add(new FundingRes(f));
+            else
+                fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
         }
         return new FundingSizeRes(fundingResList, pageCount);
     }
