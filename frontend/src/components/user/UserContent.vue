@@ -22,7 +22,7 @@
                 <div class="w-full">
                     닉네임 : {{state.userName}} <br>
                     메일 : {{state.userMail}} <br>
-                    ETC {{state.userBalance}}
+                    ETH {{state.userBalance}}
                 </div>
             </div>
             <div class="m-8 divide-y divide-black">
@@ -50,6 +50,7 @@
                 </div>
             </div>
         </div>
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="deleteUser">탈퇴하기</button>
     </div>
 </template>
 
@@ -67,6 +68,7 @@ export default {
 
     setup(){
         const store = useStore()
+        const router = useRouter()
         const state = reactive({
             privateFlag: false,
             privateKey: "",
@@ -178,7 +180,7 @@ export default {
 
         const makeWallet = () =>{
             const Web3 = require('web3');
-            const ENDPOINT = 'http://j5a5061.p.ssafy.io:2220';
+            const ENDPOINT = 'http://j5a5061.p.ssafy.io:8000';
             const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINT));
 
             alert("지갑이 개설되고 출력되는 개인 키를 꼭 저장해 주세요. 개인 키 분실시 다시 확인 할 수 없습니다!")
@@ -211,9 +213,15 @@ export default {
             })
             .catch()
         }
-
+        const deleteUser = ()=>{
+            store.dispatch('root/deleteUser', {jwt:store.getters['root/getAuthToken']})
+            .then((result)=>{
+                router.push('/main/all/1')
+            })
+            .catch()
+        }
         init()
-        return {state, makeWallet}
+        return {state, makeWallet, deleteUser}
     }
 };
 </script>

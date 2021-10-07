@@ -18,7 +18,7 @@
                     <div class="md:mx-10 flex items-center">
                         <div class="relative w-full">
                             <div class="overflow-hidden h-4 text-xs flex rounded bg-green-200">
-                                <div style="width:`{{state.proceed}}`%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
+                                <div :style="{width:`${state.proceed}%`}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
                                 <p class="mx-10">{{state.proceed}} %</p>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                     <div class="md:mx-10 flex items-center">
                         <div class="relative w-full">
                             <div class="overflow-hidden h-4 text-xs flex rounded bg-red-200">
-                                <div style="width:`{{state.percentage}}`%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                <div :style="{width:`${state.percentage}%`}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
                                 <p class="mx-10">{{state.percentage}} %</p>
                             </div>
                         </div>
@@ -104,29 +104,38 @@ export default {
             store.dispatch('root/detailFunding', {fundingId: state.fundingId})
             .then((result)=>{
                 console.log(result)
-                state.balance = result.data.fundingRes.balance
-                state.goal = result.data.fundingRes.goal
-                state.percentage = (parseFloat(state.balance) / parseFloat(state.goal)) * 100
-                state.fundingTitle = result.data.fundingRes.title
-                state.userName = result.data.userNickName
-                let startDate = result.data.startDatetime[0] + "년 " + result.data.startDatetime[1] + "월 " + result.data.startDatetime[2] + "일 "
-                state.startDate = startDate
-                let endDate = result.data.endDatetime[0] + "년 " + result.data.endDatetime[1] + "월 " + result.data.endDatetime[2] + "일 "
-                state.endDate = endDate
-                state.imgAlt = result.data.fundingRes.title
-                state.imgSrc = result.data.fundingRes.thumbnail
+                let data = result.data.fundingRes
 
-                let day = (result.data.endDatetime[0] * 365) - (result.data.startDatetime[0] * 365) 
-                + (result.data.endDatetime[1] * 30) - (result.data.startDatetime[1] * 30)
-                + (result.data.endDatetime[2] - result.data.startDatetime[2])
+                state.balance = data.balance
+                state.goal = data.goal
+                state.percentage = (parseFloat(state.balance) / parseFloat(state.goal)) * 100
+                state.fundingTitle = data.title
+                state.userName = result.data.userNickName
+                let startDate = data.startDatetime[0] + "년 " + data.startDatetime[1] + "월 " + data.startDatetime[2] + "일 "
+                state.startDate = startDate
+                let endDate = data.endDatetime[0] + "년 " + data.endDatetime[1] + "월 " + data.endDatetime[2] + "일 "
+                state.endDate = endDate
+                state.imgAlt = data.title
+                state.imgSrc = result.data.image
+
+                let day = (data.endDatetime[0] * 365) - (data.startDatetime[0] * 365) 
+                + (data.endDatetime[1] * 30) - (data.startDatetime[1] * 30)
+                + (data.endDatetime[2] - data.startDatetime[2])
                 
                 let today = new Date()
 
-                let proceed = (today.getFullYear() * 365) - (result.data.startDatetime[0] * 365) 
-                + ((today.getMonth()+1) * 30) - (result.data.startDatetime[1] * 30)
-                + (today.getDate() - result.data.startDatetime[2])
+                let proceed = (today.getFullYear() * 365) - (data.startDatetime[0] * 365) 
+                + ((today.getMonth()+1) * 30) - (data.startDatetime[1] * 30)
+                + (today.getDate() - data.startDatetime[2])
 
                 state.proceed = Math.round((proceed/day) * 100)
+
+                if(state.proceed > 100){
+                    state.proceed = 100
+                }
+                if(state.percentage > 100){
+                    state.percentage = 100
+                }
             })
             .catch()
 
@@ -135,8 +144,11 @@ export default {
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -145,14 +157,14 @@ export default {
             })
             .catch()
 
-            store.dispatch('root/ckeckFundingOwner', {jwt:store.getters['root/getAuthToken'], fundingId: state.fundingId})
-            .then((result)=>{
-                // console.log(result)
-                if(result.data.status === 200){
-                    state.isOwn = true
-                }
-            })
-            .catch()
+            // store.dispatch('root/ckeckFundingOwner', {jwt:store.getters['root/getAuthToken'], fundingId: state.fundingId})
+            // .then((result)=>{
+            //     // console.log(result)
+            //     if(result.data.status === 200){
+            //         state.isOwn = true
+            //     }
+            // })
+            // .catch()
         }
 
         init()
