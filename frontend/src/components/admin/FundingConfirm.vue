@@ -87,7 +87,9 @@ export default {
             .catch()
         }
         const access = () => {
-
+            if(accessCode==="a506"){
+                state.accessFlag = true
+            }
         }
         init()
         return {state, acceptFunding, denyFunding, access}
