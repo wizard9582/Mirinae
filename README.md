@@ -76,7 +76,7 @@ __백엔드 서버__
   3. docker network 설정 - 백엔드(java), 프론트엔드(Nginx), DB(Mysql)
   4. mysql 설치 및 유저,DB 생성 [application.properties](/backend/src/resources/application.properties)
   5. certbot을 통한 https 설정 -> etc/letsencrypt
-  6. Jenkins 설치 및 바인딩 [docker-compose](/exec/docker-compose.yml)
+  6. Jenkins 설치 및 바인딩 [docker-compose](/exec/1. 빌드 및 배포 작업 문서/docker-compose.yml)
   7. Jenkins와 Gitlab연동 [파이프라인](/Jenkinsfile)
   8. Jenkins build에 따른 자동배포  
 
