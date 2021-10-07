@@ -38,10 +38,11 @@
                 </div>
             </div>
         </div>
-        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white md:flex md:justify-between">
+        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white md:flex md:justify-between overflow-x-scroll">
             <ranking :rankingData = "state.rankingData1" :rankingTitle = "state.rankingTitle1"/>
             <ranking :rankingData = "state.rankingData2" :rankingTitle = "state.rankingTitle2"/>
             <ranking :rankingData = "state.rankingData3" :rankingTitle = "state.rankingTitle3"/>
+            <ranking :rankingData = "state.rankingData4" :rankingTitle = "state.rankingTitle4"/>
         </div>
     </div>
 </template>
@@ -64,7 +65,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            imgSrc:["https://ifh.cc/g/UgNGha.png","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/m035va.png","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/SoeRsG.jpg",],
+            imgSrc:["https://ifh.cc/g/UgNGha.png","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/m035va.png","https://ifh.cc/g/um111z.png","https://ifh.cc/g/SoeRsG.jpg",],
             category: "전체",
             size: 10,
             page: 1,
@@ -78,9 +79,11 @@ export default {
             rankingData1:[],
             rankingData2:[],
             rankingData3:[],
-            rankingTitle1: "연예인 팬덤 랭킹",
-            rankingTitle2: "재난피해 돕기 랭킹",
-            rankingTitle3: "불우이웃 돕기 랭킹",
+            rankingData4:[],
+            rankingTitle1: "연예인 팬덤",
+            rankingTitle2: "불우이웃돕기",
+            rankingTitle3: "재난피해복구",
+            rankingTitle4: "소아암아동후원",
         })
 
         const init = () => {
@@ -109,10 +112,11 @@ export default {
             })
             .catch()
 
-            store.dispatch('root/getFundingList', { category: categoryId, size: state.size, page: state.page })
+            store.dispatch('root/getFundingList', { categoryId: categoryId, size: state.size, page: state.page })
             .then((result)=>{
+                
                 // console.log("fundingList data----->")
-                //console.log(result)
+                // console.log(categoryId)
                 state.index = result.data.pageCount
                 //funding state : prepare, open, finished
                 result.data.fundingResList.forEach(item => {
@@ -144,7 +148,7 @@ export default {
             store.dispatch('root/getCategoryRanking', {categoryId: "1"})
             .then((result)=>{
                 //console.log("category Ranking1 data----->")
-                console.log(result)
+                //console.log(result)
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
@@ -182,6 +186,26 @@ export default {
             .catch()
 
             store.dispatch('root/getCategoryRanking', {categoryId: "3"})
+            .then((result)=>{
+                // console.log("category Ranking3 data----->")
+                //console.log(result)
+                let no = 1
+                result.data.forEach(item => {
+                    let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
+                    ranking.name = item.userNickname
+                    ranking.amount = item.amount
+
+                    state.rankingData3.push(ranking)
+                })
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "4"})
             .then((result)=>{
                 // console.log("category Ranking3 data----->")
                 //console.log(result)

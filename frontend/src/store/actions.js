@@ -156,8 +156,12 @@ export function createFunding({state}, payload){
 }
 
 export function getFundingList({state}, payload){
-    const url = '/api/funding/' + payload.category + '?size=' + payload.size + '&page=' + payload.page
-
+    let categoryId = payload.categoryId
+    if(categoryId == 0){
+        categoryId = "all"
+    }
+    const url = '/api/funding/' + categoryId  + '?size=' + payload.size + '&page=' + payload.page
+    console.log(url)
     return $axios.get(url);
 }
 
