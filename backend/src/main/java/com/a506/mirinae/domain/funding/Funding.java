@@ -38,9 +38,6 @@ public class Funding {
     @NotNull
     private String content;
 
-    @NotNull
-    private String wallet;
-
     private String thumbnail;
 
     private String image;
@@ -70,14 +67,13 @@ public class Funding {
     private List<Donation> donations = new ArrayList<>();
 
     @Builder
-    public Funding(Long id, User user, Category category, String title, String content, String wallet, String thumbnail, String image,
+    public Funding(Long id, User user, Category category, String title, String content, String thumbnail, String image,
                    LocalDateTime createdDatetime, LocalDateTime startDatetime, LocalDateTime endDatetime, Double goal, Boolean isEnded, FundingState fundingState) {
         this.id = id;
         this.user = user;
         this.category = category;
         this.title = title;
         this.content = content;
-        this.wallet = wallet;
         this.thumbnail = thumbnail;
         this.image = image;
         this.createdDatetime = createdDatetime;

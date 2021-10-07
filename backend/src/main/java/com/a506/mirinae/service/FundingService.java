@@ -67,7 +67,6 @@ public class FundingService {
     }
 
     public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
-        String wallet = "null";
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Category category = categoryRepository.findById(fundingReq.getCategoryId())
@@ -76,8 +75,12 @@ public class FundingService {
                 
         // smart-contract openFunding 삽입 위치
         // 실패할 경우 분기처리 (Error Exception 추가)
-        
-        Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
+        System.out.println("---------------------------------------");
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println(user.getWallet());
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println("---------------------------------------");
+        Funding funding = fundingRepository.save(fundingReq.toEntity(user, category));
         ethereumUtil.openFunding(funding.getId(), funding.getGoal().intValue(), user.getWallet(), user.getNickname(), 
         		funding.getTitle(), funding.getEndDatetime().toString(), owner, password);
         return new FundingIdRes(funding.getId());
