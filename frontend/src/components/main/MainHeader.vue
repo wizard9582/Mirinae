@@ -66,6 +66,10 @@ export default {
         const init = ()=>{
             // console.log('login check --->', store.getters['root/isLoggedIn'])
             // console.log('token check --->', store.getters['root/getAuthToken'])
+            let jwt = sessionStorage.getItem('jwt')
+            if(jwt!=null){
+                store.commit('root/setToken', jwt)
+            }
             if(store.getters['root/isLoggedIn']){
                 store.dispatch('root/getUserInfo', {jwt: store.getters['root/getAuthToken']})
                 .then((result)=>{
@@ -126,6 +130,7 @@ export default {
         }
         const goLogout = ()=>{
             store.commit('root/logout')
+            sessionStorage.removeItem('jwt')
             router.go()
         }
         init()
