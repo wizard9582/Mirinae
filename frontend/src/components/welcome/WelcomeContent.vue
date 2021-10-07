@@ -2,8 +2,6 @@
     <div class="w-full h-2xl md:flex md:justify-between">
         <img class="absolute right-0 w-md h-md m-3" src="../../assets/logo.gif" alt="logo">
         <div class="md:text-5xl sm:text-2xl text-myfont mt-lg md:ml-sm sm:mt-32">
-            <p>블록체인 기반 크라우드 펀딩 플랫폼<br/></p>
-            <p>미리내</p>
         </div>
         <div class="text-center align-middle md:w-1/4 md:h-xl sm:w-full bg-white rounded-3xl mt-lg md:mr-sm">
             <div class="mt-20 mb-5 text-dark bold">
