@@ -144,7 +144,7 @@ public class FundingService {
         else
             fundingRes = new FundingRes(funding);
 
-        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getFundingState(), funding.getImage());
+        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getFundingState(), funding.getImage(), funding.getContent());
     }
 
     @Transactional

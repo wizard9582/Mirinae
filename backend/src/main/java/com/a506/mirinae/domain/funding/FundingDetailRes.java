@@ -11,13 +11,15 @@ public class FundingDetailRes {
     private String image;
     private LocalDateTime createdDatetime;
     private FundingState fundingState;
+    private String content;
 
     public FundingDetailRes(String userNickName, FundingRes fundingRes, LocalDateTime createdDatetime,
-                            FundingState fundingState, String image) {
+                            FundingState fundingState, String image, String content) {
         this.userNickName = userNickName;
         this.fundingRes = fundingRes;
         this.createdDatetime = createdDatetime;
         this.fundingState = fundingState;
         this.image = image;
+        this.content = content;
     }
 }
