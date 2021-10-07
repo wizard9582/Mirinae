@@ -202,8 +202,12 @@ export default {
                 data:payload
             })
             .then((result)=>{
-                console.log("----->funding create")
-                console.log(result)
+                //console.log("----->funding create")
+                //console.log(result)
+                if(result.status == 200){
+                    alert("펀딩이 성공적으로 등록되었습니다. 승인을 기다려주세요")
+                    this.$router.push("/main/all/1")
+                }
             })
             .catch()
         },
