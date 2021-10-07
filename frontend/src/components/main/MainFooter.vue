@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-2 p-8 w-full h-lg bg-dark text-myfont">
+    <div class="md:flex md:justify-between p-8 w-full md:h-lg bg-dark text-myfont">
         <div clsss="text-left whitespace-nowrap">       
             <div class="ml-6 mt-6 text-xl font-semibold">
                 {{state.time}}까지<br/>
@@ -22,8 +22,10 @@
                     서울 5반 6팀 미리내<br/>
                     <br/>
                     Copyright 2021<br/>
+                    <a href="https://j5a506.p.ssafy.io/main/admin">관리자페이지</a>
                 </p>
             </div>
+            <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         </div>
     </div>
 </template>
@@ -39,8 +41,6 @@ export default {
     },
 
     setup(){
-        const store = useStore()
-        const router = useRouter()
         const state = reactive({
             time: "2021.00.00",
             totalFunding: 0,

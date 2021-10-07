@@ -55,9 +55,12 @@ dependencies {
 	// AWS S3
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
 
-	//web3
+	// web3
 	implementation('org.web3j:core:4.2.0')
 	implementation("com.squareup.okhttp3:okhttp:4.9.0")
+
+	// trigger
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 }
 
 test {

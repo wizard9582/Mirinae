@@ -5,26 +5,24 @@
                 <div class="w-full">
                     <p>내 정보</p>
                 </div>
-                <div class="w-full h-60">
-                    닉네임 : {{state.userName}} <br>
-                    메일 : {{state.userMail}} <br>
-                </div>
             </div>
             <div class="m-8 divide-y divide-black">
-                <div class="w-full h-24 flex justify-between">
+                <div class="w-full h-24 md:flex md:justify-between">
                     <div>{{state.userName}} 님의 지갑</div>
                     <div v-if="state.walletFlag">내 지갑주소:{{state.userWallet}}</div>
                     <div v-else>
                         아직 지갑이 없습니다!
-                        <button @click="makeWallet">지갑 만들기</button>
+                        <button class="bg-gray-200 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded" @click="makeWallet">지갑 만들기</button>
                     </div>
-                    <div class="m-4 w-12 h-12 rounded-full bg-white cursor-pointer text-center" @click="clickUser">
-                        <img src="https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-2-800x800.jpg" alt="..." class="shadow rounded-full max-w-full h-auto align-middle border-none" />
-                        <p class="text-sm text-gray-700">{{state.userName}}</p>
+                    <div v-if="state.privateFlag">
+                        개인 키는 최초 지갑 생성시에만 보여집니다. <br>
+                        {{state.privateKey}}
                     </div>
                 </div>
-                <div class="w-full h-60">
-                    ETC {{state.userBalance}}
+                <div class="w-full">
+                    닉네임 : {{state.userName}} <br>
+                    메일 : {{state.userMail}} <br>
+                    ETH {{state.userBalance}}
                 </div>
             </div>
             <div class="m-8 divide-y divide-black">
@@ -32,7 +30,7 @@
                     <p>내가 참여한 펀딩</p>
                 </div>
                 <div v-if="state.myDonationFlag" class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
-                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id" :funding = funding />
+                    <funding-thumbnail v-for="funding in state.myDonations" :key="funding.id" :funding = funding @click="clickFunding(funding.id)"/>
                 </div>
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     아직 참여한 펀딩이 없습니다.
@@ -50,6 +48,7 @@
                 <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full h-96 overflow-x-scroll">
                     아직 개설한 펀딩이 없습니다.
                 </div>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="deleteUser">탈퇴하기</button>
             </div>
         </div>
     </div>
@@ -69,8 +68,10 @@ export default {
 
     setup(){
         const store = useStore()
+        const router = useRouter()
         const state = reactive({
-            imgSrc:"",
+            privateFlag: false,
+            privateKey: "",
             userMail:"email",
             userName:"이름",
             walletFlag: false,
@@ -110,25 +111,15 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", state: ""}
-
-                        fundingThumb.id = item.id
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:"", type:false}
+                        fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
-                        
-                        let startDate = item.startDatetime
-                        let endDate = item.endDatetime
+                        fundingThumb.state = item.fundingState
 
-                        if(today.getTime() < startDate.getTime()){
-                            fundingThumb.state = "prepare"
-                        }else if(todat.getTime() > endDate.getTime()){
-                            fundingThumb.state = "end"
-                        }else{
-                            fundingThumb.state = "open"
-                        }
-                        state.myDonations.push(fundingThumb)
-                    })
+                            state.myDonations.push(fundingThumb)
+                        })
 
                     if(state.myDonations.length > 0){
                         state.myDonationFlag = true
@@ -142,25 +133,16 @@ export default {
 
                 //funding state : prepare, open, finished
                     result.data.forEach(item => {
-                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", state: ""}
+                        let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state:"", type:false}
 
-                        fundingThumb.id = item.id
+                        fundingThumb.id = item.fundingId
                         fundingThumb.title = item.title
                         fundingThumb.imgSrc = item.thumbnail
                         fundingThumb.imgAlt = item.title
-                        
-                        let startDate = item.startDatetime
-                        let endDate = item.endDatetime
+                        fundingThumb.state = item.fundingState
 
-                        if(today.getTime() < startDate.getTime()){
-                            fundingThumb.state = "prepare"
-                        }else if(todat.getTime() > endDate.getTime()){
-                            fundingThumb.state = "end"
-                        }else{
-                            fundingThumb.state = "open"
-                        }
-                        state.myFundings.push(fundingThumb)
-                    })
+                            state.myFundings.push(fundingThumb)
+                        })
 
                     if(state.myFundings.length > 0){
                         state.myFundingFlag = true
@@ -172,19 +154,54 @@ export default {
         }
 
         const makeWallet = () =>{
-            //지갑 만들기 관련 api
-            //지갑 만들고 주소 받은 다음 api로 db 저장
+            const Web3 = require('web3');
+            const ENDPOINT = 'http://j5a5061.p.ssafy.io:8000';
+            const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINT));
 
-            let walletAddress = "1234"
+            alert("지갑이 개설되고 출력되는 개인 키를 꼭 저장해 주세요. 개인 키 분실시 다시 확인 할 수 없습니다!")
+
+            var account =  web3.eth.accounts.create();
+            // console.log('account: ', account);
+            console.log('-----아이디 생성-----');
+            console.log('account.address: ', account.address);
+            console.log('account.privKey: ', account.privateKey);
+
+            state.privateFlag = true
+            state.privateKey = account.privateKey
+
+            // // ---------------------root 계정에서 보내기 ------------------
+            // web3.eth.defaultAccount = '0x1d34ac7ad89f33ebc663d6ed6234cf9e80db5f7d';
+            // // console.log("F",web3.eth.defaultAccount);
+            // web3.eth.personal.unlockAccount(web3.eth.defaultAccount,"test");
+            // web3.eth.sendTransaction({
+            //     from: web3.eth.defaultAccount,
+            //     Flag: account.address,
+            //     Keyue: web3.utils.toWei('100','ether')
+            // });
+
+            let walletAddress = account.address
             store.dispatch('root/saveWallet', {jwt:store.getters['root/getAuthToken'], walletAddress: walletAddress})
             .then((result)=>{
-                init()
+                console.log("----->wallet", result)
+                state.walletFlag = true
+                state.walletAddress = walletAddress
             })
             .catch()
         }
-
+        const deleteUser = ()=>{
+            store.dispatch('root/deleteUser', {jwt:store.getters['root/getAuthToken']})
+            .then((result)=>{
+                store.commit('root/logout')
+                localStorage.removeItem('jwt')
+                router.push("main/all/1")
+            })
+            .catch()
+        }
+        const clickFunding = (fundingId) =>{
+            router.push("/main/fund/" + fundingId)
+        }
         init()
-        return {state, makeWallet}
+        return {state, makeWallet, deleteUser, clickFunding}
     }
 };
 </script>

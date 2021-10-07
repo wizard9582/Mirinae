@@ -28,4 +28,12 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
             "WHERE d.funding.id = :fundingId "
             , nativeQuery = false)
     FundingResInterface findDonationByFundingId(Long fundingId);
+
+    @Query(value =
+            "SELECT SUM(d.amount) AS balance "+
+            "FROM Donation d " +
+            "WHERE d.funding.id = :fundingId "
+            , nativeQuery = false)
+    FundingResInterface findBalanceByFundingId(Long fundingId);
+
 }

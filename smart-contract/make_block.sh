@@ -1,0 +1,1 @@
+docker run -v $(pwd)/eth_data:/root/.ethereum ethereum/client-go:v1.9.17 init /root/.ethereum/genesis.json

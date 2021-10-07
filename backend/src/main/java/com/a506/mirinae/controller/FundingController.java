@@ -1,11 +1,8 @@
 package com.a506.mirinae.controller;
 
 import com.a506.mirinae.domain.category.CategoryRes;
-import com.a506.mirinae.domain.funding.FundingDetailRes;
-import com.a506.mirinae.domain.funding.FundingIdRes;
+import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.donation.DonationReq;
-import com.a506.mirinae.domain.funding.FundingReq;
-import com.a506.mirinae.domain.funding.FundingRes;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.service.FundingService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,9 +26,9 @@ public class FundingController {
     private final FundingService fundingService;
 
     @ApiOperation(value = "전체펀딩리스트")
-    @GetMapping("/{categoryName}")
-    public ResponseEntity<List<FundingRes>> getFundingList(@PathVariable("categoryName") String categoryName, Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryName, pageable));
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<FundingSizeRes> getFundingList(@PathVariable("categoryId") String categoryId, final Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundingList(categoryId, pageable));
     }
 
     @ApiOperation(value = "펀딩 개설")

@@ -22,13 +22,9 @@ export default {
     },
 
     setup(){
-        const store = useStore()
-        const router = useRouter()
-        const state = reactive({
-        })
 
 
-        return { state }
+        return { }
     }
 };
 </script>

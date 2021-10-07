@@ -32,14 +32,13 @@ public class AdminService {
             throw new IllegalArgumentException("관리자 계정이 아닙니다!");
         List<Funding> funding;
         List<FundingRes> fundingResList = new ArrayList<>();
-        funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+        System.out.println(pageable.getPageNumber() + " " + pageable.getPageSize());
+        funding = fundingRepository.findAllByFundingState(FundingState.WAITING, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         for(Funding f : funding) {
-            if(f.getFundingState().equals(FundingState.WAITING)) {
-                if(f.getDonations().size()==0)
-                    fundingResList.add(new FundingRes(f));
-                else {
-                    fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
-                }
+            if(f.getDonations().size()==0)
+                fundingResList.add(new FundingRes(f));
+            else {
+                fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
             }
         }
         return fundingResList;
