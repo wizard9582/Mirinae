@@ -178,6 +178,11 @@ export default {
             submit(){
             //validation() 체크시에만 버튼 활성
 
+            let startArr = this.startDatetime.split('-')
+            let endArr = this.endDatetime.split('-')
+
+            let startDate = startArr[0] + '-' + startArr[1] + '-' + startArr[2] + 'T' + "00:00:00"
+            let endDate = endArr[0] + '-' + endArr[1] + '-' + endArr[2] + 'T' + "00:00:00"
             let payload = {
                 'title' : this.title,
                 'categoryId' : this.categoryId,
@@ -185,8 +190,8 @@ export default {
                 'goal' : this.goal,
                 'thumbnail' : this.thumbFile,
                 'image' : this.imageFile,
-                'startDatetime': this.startDatetime,
-                'endDatetime': this.endDatetime,
+                'startDatetime': startDate,
+                'endDatetime': endDate,
             }
             axios({
                 method: 'post',
