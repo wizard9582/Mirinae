@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FundingRepository extends JpaRepository<Funding, Long> {
-    Page<Funding> findByCategory_Name(String name, Pageable pageable);
+    Page<Funding> findByCategory_NameAndFundingState(String name, FundingState fundingState, Pageable pageable);
+    Page<Funding> findAllByFundingState(FundingState fundingState, Pageable pageable);
 }
