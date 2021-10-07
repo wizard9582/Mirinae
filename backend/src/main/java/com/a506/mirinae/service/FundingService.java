@@ -43,7 +43,7 @@ public class FundingService {
     
     @Value("${blockchain.main.contract}")
     private String contract;
-    private EthereumUtil ethereumUtil = new EthereumUtil(address,contract);
+    private EthereumUtil ethereumUtil = new EthereumUtil();
     @Transactional
     public FundingSizeRes getFundingList(String categoryId, Pageable pageable) {
         List<Funding> funding;
