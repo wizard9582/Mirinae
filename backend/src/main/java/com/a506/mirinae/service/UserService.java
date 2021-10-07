@@ -4,8 +4,11 @@ import com.a506.mirinae.domain.donation.Donation;
 import com.a506.mirinae.domain.donation.RankingRes;
 import com.a506.mirinae.domain.funding.MyFundingRes;
 import com.a506.mirinae.domain.user.*;
+import com.a506.mirinae.util.EthereumUtil;
 import com.a506.mirinae.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +21,18 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    @Value("${blockchain.main.address}")
+    private String address;
     
+    @Value("${blockchain.main.owner}")
+    private String owner;
+    
+    @Value("${blockchain.main.password}")
+    private String password;
+    
+    @Value("${blockchain.main.contract}")
+    private String contract;
+    private EthereumUtil ethereumUtil = new EthereumUtil(address,contract);
     public LoginRes login(LoginReq loginReq){
         Optional<User> user = userRepository.findByEmailAndOauthType(loginReq.getEmail(), OauthType.valueOf(loginReq.getOauthType()));
         Boolean isJoin = user.isPresent();
@@ -82,6 +96,7 @@ public class UserService {
             throw new IllegalArgumentException("이미 개설된 계좌가 존재합니다!");
 
         user.updateWallet(walletReq);
+        ethereumUtil.transferEhter(owner, user.getWallet(), 100.0, password);
         userRepository.save(user);
     }
 }

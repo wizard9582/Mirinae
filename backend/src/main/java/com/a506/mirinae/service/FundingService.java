@@ -9,8 +9,12 @@ import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.domain.user.UserRepository;
+import com.a506.mirinae.util.EthereumUtil;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +32,18 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
-
+    @Value("${blockchain.main.address}")
+    private String address;
+    
+    @Value("${blockchain.main.owner}")
+    private String owner;
+    
+    @Value("${blockchain.main.password}")
+    private String password;
+    
+    @Value("${blockchain.main.contract}")
+    private String contract;
+    private EthereumUtil ethereumUtil = new EthereumUtil(address,contract);
     @Transactional
     public FundingSizeRes getFundingList(String categoryName, Pageable pageable) {
         List<Funding> funding;
@@ -61,6 +76,8 @@ public class FundingService {
         // 실패할 경우 분기처리 (Error Exception 추가)
         
         Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
+        ethereumUtil.openFunding(funding.getId(), funding.getGoal().intValue(), user.getWallet(), user.getNickname(), 
+        		funding.getTitle(), funding.getEndDatetime().toString(), owner, password);
         return new FundingIdRes(funding.getId());
     }
 
@@ -86,7 +103,7 @@ public class FundingService {
 
             // smart-contract closeFunding 삽입 위치
             // 실패할 경우 분기처리 (Error Exception 추가)
-
+        	ethereumUtil.closeFunding(funding.getId(), owner, password);
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
         }
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
@@ -97,7 +114,8 @@ public class FundingService {
         // smart-contract doanteFunding 삽입 위치
         // 실패할 경우 분기처리 (Error Exception 추가)
         
-        String tx_id = "null"; //블록체인 구현 후 tx id 받기
+        String tx_id = ethereumUtil.donateFunding(funding.getId(), user.getWallet(), 
+        		donationReq.getAmount(), donationReq.getKey()); //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
 
@@ -136,7 +154,7 @@ public class FundingService {
 
         // smart-contract abortFunding 삽입 위치
         // 실패할 경우 분기처리 (Error Exception 추가)
-
+        ethereumUtil.abortFunding(funding.getId(), owner, password);
         fundingRepository.delete(funding);
     }
 
@@ -153,7 +171,7 @@ public class FundingService {
                 f.deleteDonation();
             }
             // smart-contract closeFunding 삽입 위치
-
+            ethereumUtil.closeFunding(f.getId(), owner, password);
             fundingRepository.save(f);
         }
     }

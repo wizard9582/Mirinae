@@ -2,18 +2,13 @@ package com.a506.mirinae.util;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.ServletContext;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
+
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
@@ -26,48 +21,28 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.crypto.Wallet;
-import org.web3j.crypto.WalletFile;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
-import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.EthLog.LogResult;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.Contract;
-import org.web3j.tx.RawTransactionManager;
-import org.web3j.tx.TransactionManager;
-import org.web3j.tx.response.PollingTransactionReceiptProcessor;
-import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Convert.Unit;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.web3j.utils.Numeric;
 
 public class EthereumUtil {
 	private Web3j web3;
     private Admin admin;
-    @Value("${blockchain.test.contract}")
     private String contract;
     
-    @Value("${blockchain.test.address}")
-    private String address;
     
     public EthereumUtil(String _address, String _contract) {
     	web3 = Web3j.build(new HttpService(_address));
@@ -176,9 +151,8 @@ public class EthereumUtil {
 			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 			
 			BigInteger value = Convert.toWei(String.valueOf(amount.intValue()), Unit.ETHER).toBigInteger();
-			BigInteger gasLimit = BigInteger.valueOf(100000);
+			BigInteger gasLimit = BigInteger.valueOf(1000000);
 			BigInteger gasPrice = Transaction.DEFAULT_GAS;
-//			System.out.println("보내는값 : " + value);
 			//서명하기
 			RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, contract, value, FunctionEncoder.encode(function));
 			
@@ -186,7 +160,6 @@ public class EthereumUtil {
 			
 			byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
 			String hexValue = Numeric.toHexString(signedMessage);
-			
 			//보내기
 			EthSendTransaction ethSendTransaction = web3.ethSendRawTransaction(hexValue).send();
 			
@@ -203,13 +176,12 @@ public class EthereumUtil {
 			// TODO Auto-generated catch block
 			new IllegalArgumentException("기부하기 실패");
 		}
-    	
     	return transactionHash;
     }
     
     
-    public void getMaxFundingId() {
-    	System.out.println(contract+ " " +address);
+    public BigInteger getMaxFundingId() {
+    	BigInteger returnValue = BigInteger.valueOf(0);
     	Function function = new Function("getMaxFundingId",
                 Collections.emptyList(),
                 Arrays.asList(new TypeReference<Uint>() {}));
@@ -224,14 +196,16 @@ public class EthereumUtil {
 			System.out.println("getValue = " + decode.get(0).getValue());
 			System.out.println("getType = " + decode.get(0).getTypeAsString());
 			
-
+			returnValue = (BigInteger)decode.get(0).getValue();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	 return returnValue;
     }
     
-    public void checkDonation(int fundingId,String userWallet) {
+    public BigInteger checkDonation(int fundingId,String userWallet) {
+    	BigInteger returnValue = BigInteger.valueOf(0);
     	Function function = new Function("checkDonation",
                 Arrays.asList(new Uint(BigInteger.valueOf(fundingId))),
                 Arrays.asList(new TypeReference<Uint>() {}));
@@ -245,21 +219,19 @@ public class EthereumUtil {
 			System.out.println("ethCall.getResult() = " + ethCall.getResult());
 			System.out.println("getValue = " + decode.get(0).getValue());
 			System.out.println("getType = " + decode.get(0).getTypeAsString());
-
-
+			
+			returnValue = (BigInteger)decode.get(0).getValue();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	 return returnValue;
     }
     public String openFunding(Long fundingId, int targetAmount, String targetAddress, String userId, String title, String closeTime, 
     		String userWallet, String password) {
     	BigInteger value = Convert.toWei(String.valueOf(targetAmount), Unit.ETHER).toBigInteger();
-    	System.out.println("펀딩 골 목표 : " +value);
     	Function function = new Function("openFunding", Arrays.asList(new Uint256(BigInteger.valueOf(fundingId)),new Uint256(value),
     			new Address(targetAddress),new Utf8String(userId),new Utf8String(title),new Utf8String("2021-10-07 21:41:33")), Collections.emptyList());
-    	System.out.println(BigInteger.valueOf(fundingId)+" " +value+" "+
-    			new Address(targetAddress).toString()+" "+new Utf8String(userId).toString()+" " +new Utf8String(title).toString()+" " +new Utf8String("2021-10-07 21:41:33").toString());
     	return ethCall(function, userWallet, password);
     }
     
