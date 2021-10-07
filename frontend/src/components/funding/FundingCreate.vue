@@ -183,7 +183,7 @@ export default {
                 'categoryId' : this.categoryId,
                 'content' : this.content,
                 'goal' : this.goal,
-                'thumbnail' : this.thumbnailFile,
+                'thumbnail' : this.thumbFile,
                 'image' : this.imageFile,
                 'startDatetime': this.startDatetime,
                 'endDatetime': this.endDatetime,
