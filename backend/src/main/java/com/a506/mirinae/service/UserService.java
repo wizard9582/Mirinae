@@ -51,7 +51,7 @@ public class UserService {
     public UserRes getUserInfo(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
-        Double walletBalance = 0.0; // 블록체인 구현 후
+        Double walletBalance = ethereumUtil.getEther(user.getWallet()); // 블록체인 구현 후
 
         return new UserRes(user, walletBalance);
     }
