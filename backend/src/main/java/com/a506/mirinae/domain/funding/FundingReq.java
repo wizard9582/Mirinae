@@ -17,19 +17,19 @@ public class FundingReq {
     LocalDateTime startDatetime;
     LocalDateTime endDatetime;
 
-    public Funding toEntity(User user, String wallet, Category category) {
+    public Funding toEntity(User user, Category category) {
         return Funding.builder()
                 .user(user)
                 .category(category)
                 .title(title)
                 .content(content)
-                .wallet(wallet)
                 .thumbnail(thumbnail)
                 .image(image)
                 .startDatetime(startDatetime)
                 .endDatetime(endDatetime)
                 .goal(goal)
                 .fundingState(FundingState.WAITING)
+                .isEnded(false)
                 .build();
     }
 }
