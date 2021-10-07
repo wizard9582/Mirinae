@@ -47,7 +47,7 @@ public class EthereumUtil {
     public EthereumUtil() {
     	web3 = Web3j.build(new HttpService("http://j5a5061.p.ssafy.io:8000"));
     	admin = Admin.build(new HttpService("http://j5a5061.p.ssafy.io:8000"));
-    	contract = "0xC02a9db738639D7FF8C4198317E5bB38c8dFF487";
+    	contract = "0xeCD5551C69FCF656740219306e7E154ba68Dfad6";
 	}
 
 	public String transferEhter(String userWallet, String fundingWallet, Double amount, String privateKey) {
