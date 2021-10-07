@@ -179,8 +179,10 @@ export function joinFunding({state}, payload){
     }
     const body = {
         'fundingId' : payload.fundingId,
-        'amount' : payload.amount
+        'amount' : payload.amount,
+        'key' : payload.key
     }
+    console.log(body)
     return $axios.post(url, {headers}, body);
 }
 
