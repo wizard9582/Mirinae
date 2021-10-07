@@ -4,6 +4,7 @@ import com.a506.mirinae.domain.donation.Donation;
 import com.a506.mirinae.domain.donation.RankingRes;
 import com.a506.mirinae.domain.funding.MyFundingRes;
 import com.a506.mirinae.domain.user.*;
+import com.a506.mirinae.util.DeduplicationUtils;
 import com.a506.mirinae.util.EthereumUtil;
 import com.a506.mirinae.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,7 +80,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
 
-        return user.getDonations().stream().map(MyFundingRes::new).collect(Collectors.toList());
+        return DeduplicationUtils.deduplication(user.getDonations().stream().map(MyFundingRes::new).collect(Collectors.toList()), MyFundingRes::getFundingId);
     }
 
     @Transactional
