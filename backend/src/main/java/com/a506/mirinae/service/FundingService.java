@@ -28,7 +28,7 @@ public class FundingService {
     private final CategoryRepository categoryRepository;
     
     @Transactional
-    public List<FundingRes> getFundingList(String categoryName, Pageable pageable) {
+    public FundingSizeRes getFundingList(String categoryName, Pageable pageable) {
         List<Funding> funding;
         List<FundingRes> fundingResList = new ArrayList<>();
         if(categoryName.equals("all")) {
@@ -37,6 +37,7 @@ public class FundingService {
         else {
             funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
         }
+        Long pageCount = (long) (funding.size() / pageable.getPageSize() + 1);
         for(Funding f : funding) {
             if(f.getFundingState().equals(FundingState.ACCEPTED))
                 if(f.getDonations().size()==0)
@@ -45,7 +46,7 @@ public class FundingService {
                     fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
                 }
         }
-        return fundingResList;
+        return new FundingSizeRes(fundingResList, pageCount);
     }
 
     public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
