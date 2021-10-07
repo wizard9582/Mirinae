@@ -10,6 +10,7 @@ import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FundingService {
@@ -26,7 +28,7 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
-    
+
     @Transactional
     public FundingSizeRes getFundingList(String categoryName, Pageable pageable) {
         List<Funding> funding;
@@ -133,5 +135,23 @@ public class FundingService {
         // 실패할 경우 분기처리 (Error Exception 추가)
 
         fundingRepository.delete(funding);
+    }
+
+    @Transactional
+    public void fundingEnd() {
+        List<Funding> fundings = fundingRepository.findAllByIsEndedAndEndDatetimeBefore(false, LocalDateTime.now());
+        log.info("종료될 펀딩 갯수 : " + fundings.size());
+        for(Funding f : fundings) {
+            f.endFunding();
+            if(f.getDonations().size()!=0 && (double) donationRepository.findBalanceByFundingId(f.getId()).getBalance() < f.getGoal()) {
+                for(Donation d: f.getDonations()){
+                    donationRepository.delete(d);
+                }
+                f.deleteDonation();
+            }
+            // smart-contract closeFunding 삽입 위치
+
+            fundingRepository.save(f);
+        }
     }
 }
