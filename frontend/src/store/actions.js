@@ -185,8 +185,6 @@ export function joinFunding({state}, payload){
             'key' : payload.key
         }
     })
-    
-    return $axios.post(url, {headers}, body);
 }
 
 export function ckeckFundingOwner({state}, payload){

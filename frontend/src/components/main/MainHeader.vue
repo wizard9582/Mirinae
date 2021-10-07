@@ -123,6 +123,7 @@ export default {
             router.push('/main/fund/create')
         }
         const goUser = ()=>{
+            state.userPop = false
             let access_token = localStorage.getItem('kakao_access')
             store.dispatch('root/getKakaoInfo', { access_token: access_token })
             .then((result)=>{
@@ -134,16 +135,14 @@ export default {
             })
             .catch()
         }
-        const goUserEdit = ()=>{
-            router.push('main/useredit/' + store.getters['root/getUserId'])
-        }
         const goLogout = ()=>{
+            state.userPop = false
             store.commit('root/logout')
             localStorage.removeItem('jwt')
             router.go()
         }
         init()
-        return {state, clickHome, openUser, closeUser, clickLogin, clickFundingList, clickFundingOpen , goUser, goUserEdit, goLogout}
+        return {state, clickHome, openUser, closeUser, clickLogin, clickFundingList, clickFundingOpen , goUser, goLogout}
     }
 };
 </script>
