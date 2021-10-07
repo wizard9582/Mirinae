@@ -28,13 +28,13 @@
             </div>
         </div>
         <div v-if="state.userPop" class="absolute right-4 w-48 h-32 text-right bg-transparent bg-gray-100 border-collapse shadow-lg rounded divide-y divide-gray-300">
-            <div class="h-1/4 pr-4" @click="goUser">
+            <div class="h-1/3 pr-4" @click="goUser">
                 내 정보
             </div>
-            <div class="h-1/4 pr-4" @click="goLogout">
+            <div class="h-1/3 pr-4" @click="goLogout">
                 로그아웃
             </div>
-            <div class="h-1/4 pr-4" @click="closeUser">
+            <div class="h-1/3 pr-4" @click="closeUser">
                 x
             </div>
         </div>
@@ -123,7 +123,16 @@ export default {
             router.push('/main/fund/create')
         }
         const goUser = ()=>{
-            router.push('/main/user/' + store.getters['root/getUserId'])
+            let access_token = localStorage.getItem('kakao_access')
+            store.dispatch('root/getKakaoInfo', { access_token: access_token })
+            .then((result)=>{
+                // console.log('------> kakao return data')
+                // console.log(result)
+                let email = result.data.kakao_account.email
+                store.commit('root/setUserId', email)
+                router.push('/main/user/' + store.getters['root/getUserId'])
+            })
+            .catch()
         }
         const goUserEdit = ()=>{
             router.push('main/useredit/' + store.getters['root/getUserId'])
