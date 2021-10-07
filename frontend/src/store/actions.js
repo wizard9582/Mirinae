@@ -230,7 +230,8 @@ export function getNotAcceptedFundingList({state}, payload){
 
 export function fundingStateChange({state}, payload){
     const url = '/api/admin/' + payload.fundingId + '/' + payload.action
-    return axios({
+    
+    return $axios({
         method: 'patch',
         url: url,
         headers:{
