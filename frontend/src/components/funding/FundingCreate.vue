@@ -189,8 +189,16 @@ export default {
                 'startDatetime': this.startDatetime,
                 'endDatetime': this.endDatetime,
             }
-            store.dispatch('root/createFunding', payload)
+            axios({
+                method: 'post',
+                url: 'https://j5a506.p.ssafy.io/api/funding/',
+                headers:{
+                    'jwt':  payload.jwt,
+                },
+                data:payload
+            })
             .then((result)=>{
+                console.log("----->funding create")
                 console.log(result)
             })
             .catch()
