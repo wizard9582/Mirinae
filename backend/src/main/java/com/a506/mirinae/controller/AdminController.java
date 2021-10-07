@@ -25,7 +25,10 @@ public class AdminController {
     @GetMapping("/funding")
     @ApiOperation(value = "승인되지 않은 펀딩 리스트")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    public ResponseEntity<List<FundingRes>> getNotAcceptedFundingList(@ApiIgnore final Authentication authentication, Pageable pageable) {
+    public ResponseEntity<List<FundingRes>> getNotAcceptedFundingList(@ApiIgnore final Authentication authentication, final Pageable pageable) {
+        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println(pageable.getPageSize());
+        System.out.println("-------------------------------------------------------------------------------");
         if(authentication==null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Long id = ((User)authentication.getPrincipal()).getId();

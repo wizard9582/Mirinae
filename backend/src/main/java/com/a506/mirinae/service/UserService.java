@@ -4,11 +4,17 @@ import com.a506.mirinae.domain.donation.Donation;
 import com.a506.mirinae.domain.donation.RankingRes;
 import com.a506.mirinae.domain.funding.MyFundingRes;
 import com.a506.mirinae.domain.user.*;
+import com.a506.mirinae.util.DeduplicationUtils;
+import com.a506.mirinae.util.EthereumUtil;
 import com.a506.mirinae.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,7 +24,18 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    @Value("${blockchain.main.address}")
+    private String address;
     
+    @Value("${blockchain.main.owner}")
+    private String owner;
+    
+    @Value("${blockchain.main.password}")
+    private String password;
+    
+    @Value("${blockchain.main.contract}")
+    private String contract;
+    private final EthereumUtil ethereumUtil = new EthereumUtil();
     public LoginRes login(LoginReq loginReq){
         Optional<User> user = userRepository.findByEmailAndOauthType(loginReq.getEmail(), OauthType.valueOf(loginReq.getOauthType()));
         Boolean isJoin = user.isPresent();
@@ -37,7 +54,7 @@ public class UserService {
     public UserRes getUserInfo(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
-        Double walletBalance = 0.0; // 블록체인 구현 후
+        Double walletBalance = ethereumUtil.getEther(user.getWallet()); // 블록체인 구현 후
 
         return new UserRes(user, walletBalance);
     }
@@ -63,7 +80,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
 
-        return user.getDonations().stream().map(MyFundingRes::new).collect(Collectors.toList());
+        return DeduplicationUtils.deduplication(user.getDonations().stream().map(MyFundingRes::new).collect(Collectors.toList()), MyFundingRes::getFundingId);
     }
 
     @Transactional
@@ -82,6 +99,7 @@ public class UserService {
             throw new IllegalArgumentException("이미 개설된 계좌가 존재합니다!");
 
         user.updateWallet(walletReq);
+        ethereumUtil.sendWallet100Ether(user.getWallet(), owner, password);
         userRepository.save(user);
     }
 }

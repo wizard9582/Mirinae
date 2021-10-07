@@ -1,0 +1,1 @@
+docker run -it --network eth_network -p 7000:7000 -v $(pwd)/eth_data:/root/.ethereum --name eth0 ethereum/client-go:v1.9.17 --networkid 5061  --nodiscover --maxpeers 2 --http --allow-insecure-unlock --http.port "7000" --http.addr "0.0.0.0" --http.corsdomain "*" --http.api "admin,eth,debug,miner,net,txpool,personal,web3,rpc" --port 30303 console

@@ -2,16 +2,16 @@
     <div class="w-full pt-10 pb-20 bg-main-200">
         <div class="max-w-2xl mx-auto mb-0 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
             <div v-for="category in state.categories" :key="category.id" class="group relative mx-auto">
-                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.categoryName)">
-                    <img :src="category.imgSrc" :alt="category.categoryName" class="shadow rounded-full max-w-full h-auto align-middle border-none" />
-                    <p class="text-sm text-gray-700">{{category.categoryName}}</p>
+                <div class="rounded-full bg-white cursor-pointer text-center" @click="clickCategory(category.category_id)">
+                    <img :src="state.imgSrc[category.category_id]" :alt="category.category_name" class="shadow rounded-full w-16 h-16 align-middle border-none" />
+                    <p class="text-sm text-gray-700">{{category.category_name}}</p>
                 </div>
             </div>
         </div>
         <div class="max-w-2xl mt-1 mx-auto py-4 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-t-0 border-4 border-black bg-white divide-y divide-black">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">{{state.category}}</h2>
             <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 pt-3  sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" @click="clickFunding(funding.id)"/>
+                <funding-thumbnail v-for="funding in state.fundings" :key="funding.id" :funding="funding" @click="clickFunding(funding.id)"/>
             </div>
             <div class="bg-white mt-10 px-4 pt-6 pb-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
@@ -38,10 +38,11 @@
                 </div>
             </div>
         </div>
-        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white flex justify-between">
+        <div class="max-w-2xl mx-auto mt-4 py-8 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 border-4 border-black bg-white md:flex md:justify-between overflow-x-scroll">
             <ranking :rankingData = "state.rankingData1" :rankingTitle = "state.rankingTitle1"/>
             <ranking :rankingData = "state.rankingData2" :rankingTitle = "state.rankingTitle2"/>
             <ranking :rankingData = "state.rankingData3" :rankingTitle = "state.rankingTitle3"/>
+            <ranking :rankingData = "state.rankingData4" :rankingTitle = "state.rankingTitle4"/>
         </div>
     </div>
 </template>
@@ -64,86 +65,81 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            category: "카테고리명",
+            imgSrc:["https://ifh.cc/g/UgNGha.png","https://ifh.cc/g/Mq7685.jpg","https://ifh.cc/g/IPp9oQ.png","https://ifh.cc/g/m035va.png","https://ifh.cc/g/um111z.png","https://ifh.cc/g/SoeRsG.jpg",],
+            category: "전체",
             size: 10,
             page: 1,
             index: 1,
-            categories:[
-            ],
+            categories:[ {category_id: 0, category_name: "전체"} ],
             fundings: [
             ],
             pages:[
 
             ],
-            rankingData1:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
-            rankingData2:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
-            rankingData3:[{
-                    id:1,
-                    name:"이름",
-                    amount:100,
-                }],
-            rankingTitle1: "전체 랭킹",
-            rankingTitle2: "카테고리 랭킹",
-            rankingTitle3: "펀딩 랭킹",
+            rankingData1:[],
+            rankingData2:[],
+            rankingData3:[],
+            rankingData4:[],
+            rankingTitle1: "연예인 팬덤",
+            rankingTitle2: "불우이웃돕기",
+            rankingTitle3: "재난피해복구",
+            rankingTitle4: "소아암아동후원",
         })
 
         const init = () => {
             let today = new Date();
 
-            state.category = router.currentRoute.value.params.id
+            let categoryId = router.currentRoute.value.params.id
             state.page = router.currentRoute.value.params.page
-            
-            let i = Math.max(parseInt(state.page - 2), 1)
-            let k = Math.min(parseInt(state.page) + 2, state.index)
-
-            for(var j = i; j <= k; j++){
-                state.pages.push(j)
-            }
 
             store.dispatch('root/getCategoryList')
             .then((result)=>{
                 //console.log("category data----->")
                 //console.log(result)
-                state.categories = result.data
+                result.data.forEach(item=>{
+                    if(item.category_id == categoryId){
+                        state.category = item.category_name
+                    }
+                    state.categories.push(item)
+                })
             })
             .catch()
 
-            store.dispatch('root/getFundingList', { category: state.category, size: state.size, page: state.page })
+            store.dispatch('root/getFundingList', { categoryId: categoryId, size: state.size, page: state.page })
             .then((result)=>{
+                
                 // console.log("fundingList data----->")
-                // console.log(result)
-
+                console.log(result)
+                state.index = result.data.pageCount
                 //funding state : prepare, open, finished
-                result.data.forEach(item => {
-                    let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: ""}
+                result.data.fundingResList.forEach(item => {
+                    let fundingThumb = {id:0, title:"", imgSrc:"", imgAlt:"", goal:0, balance:0, state: "", type: true}
 
-                    fundingThumb.id = item.id
+                    fundingThumb.id = item.fundingId
                     fundingThumb.title = item.title
                     fundingThumb.imgSrc = item.thumbnail
                     fundingThumb.imgAlt = item.title
                     fundingThumb.goal = item.goal
                     fundingThumb.balance = item.balance
                     
-                    let startDate = item.startDatetime
-                    let endDate = item.endDatetime
+                    let startDate = new Date(item.startDatetime[0]+"-"+item.startDatetime[1]+"-"+item.startDatetime[2])
+                    let endDate = new Date(item.endDatetime[0]+"-"+item.endDatetime[1]+"-"+item.endDatetime[2])
 
                     if(today.getTime() < startDate.getTime()){
                         fundingThumb.state = "prepare"
-                    }else if(todat.getTime() > endDate.getTime()){
+                    }else if(today.getTime() > endDate.getTime()){
                         fundingThumb.state = "end"
                     }else{
                         fundingThumb.state = "open"
                     }
 
                     state.fundings.push(fundingThumb)
+                    let i = Math.max(parseInt(state.page - 2), 1)
+                    let k = Math.min(parseInt(state.page) + 2, state.index)
+                    state.pages = []
+                    for(var j = i; j <= k; j++){
+                        state.pages.push(j)
+                    }
                 })
             })
             .catch()
@@ -152,12 +148,14 @@ export default {
             .then((result)=>{
                 //console.log("category Ranking1 data----->")
                 //console.log(result)
-                state.rankingTitle1 = "테스트 1"
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -170,12 +168,14 @@ export default {
             .then((result)=>{
                 //console.log("category Ranking2 data----->")
                 //console.log(result)
-                state.rankingTitle2 = "테스트 2"
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
-
-                    ranking.userThumbnail = item.userThumbnail
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -187,13 +187,35 @@ export default {
             store.dispatch('root/getCategoryRanking', {categoryId: "3"})
             .then((result)=>{
                 // console.log("category Ranking3 data----->")
-                // console.log(result)
-                state.rankingTitle3 = "테스트 3"
+                //console.log(result)
                 let no = 1
                 result.data.forEach(item => {
                     let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
+                    ranking.name = item.userNickname
+                    ranking.amount = item.amount
 
-                    ranking.userThumbnail = item.userThumbnail
+                    state.rankingData3.push(ranking)
+                })
+            })
+            .catch()
+
+            store.dispatch('root/getCategoryRanking', {categoryId: "4"})
+            .then((result)=>{
+                // console.log("category Ranking3 data----->")
+                //console.log(result)
+                let no = 1
+                result.data.forEach(item => {
+                    let ranking = {id:no++, userThumbnail:"", name:"", amount:0}
+                    if(item.userProfileImage){
+                        ranking.userThumbnail = item.userProfileImage
+                    }else{
+                        ranking.userThumbnail = "https://ifh.cc/g/SoeRsG.jpg"
+                    }
                     ranking.name = item.userNickname
                     ranking.amount = item.amount
 
@@ -212,17 +234,18 @@ export default {
         }
 
         const clickDir = (dir) =>{
+            let categoryId = router.currentRoute.value.params.id
             if(dir == -1){
                 if(state.page != 1){
-                    router.push("/main/" + state.category + "/" + parseInt(state.page-1))
+                    router.push("/main/" + categoryId + "/" + parseInt(state.page-1))
                 }
             }else if(dir == 0){
                 if(state.page < state.index){
                     state.page++
-                    router.push("/main/" + state.category + "/" + state.page)
+                    router.push("/main/" + categoryId + "/" + state.page)
                 }
             }else{
-                router.push("/main/" + state.category + "/" + dir)
+                router.push("/main/" + categoryId + "/" + dir)
             }
         }
 

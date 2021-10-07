@@ -9,7 +9,12 @@ import com.a506.mirinae.domain.donation.DonationReq;
 import com.a506.mirinae.domain.funding.*;
 import com.a506.mirinae.domain.user.User;
 import com.a506.mirinae.domain.user.UserRepository;
+import com.a506.mirinae.util.EthereumUtil;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FundingService {
@@ -26,35 +32,57 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
+    @Value("${blockchain.main.address}")
+    private String address;
     
+    @Value("${blockchain.main.owner}")
+    private String owner;
+    
+    @Value("${blockchain.main.password}")
+    private String password;
+    
+    @Value("${blockchain.main.contract}")
+    private String contract;
+    private EthereumUtil ethereumUtil = new EthereumUtil();
     @Transactional
-    public List<FundingRes> getFundingList(String categoryName, Pageable pageable) {
+    public FundingSizeRes getFundingList(String categoryId, Pageable pageable) {
         List<Funding> funding;
         List<FundingRes> fundingResList = new ArrayList<>();
-        if(categoryName.equals("all")) {
-            funding = fundingRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+        Long pageCount;
+        if(categoryId.equals("all")) {
+            funding = fundingRepository.findAllByFundingState(FundingState.ACCEPTED, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+            pageCount = (long) fundingRepository.findAllByFundingState(FundingState.ACCEPTED).size() / pageable.getPageSize() + 1;
         }
         else {
-            funding = fundingRepository.findByCategory_Name(categoryName, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+            funding = fundingRepository.findByCategory_IdAndFundingState(Long.parseLong(categoryId), FundingState.ACCEPTED ,PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
+            pageCount = (long) fundingRepository.findByCategory_IdAndFundingState(Long.parseLong(categoryId), FundingState.ACCEPTED).size() / pageable.getPageSize() + 1;
         }
         for(Funding f : funding) {
-            if(f.getFundingState().equals(FundingState.ACCEPTED))
-                if(f.getDonations().size()==0)
-                    fundingResList.add(new FundingRes(f));
-                else {
-                    fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
-                }
+            if(f.getDonations().size()==0)
+                fundingResList.add(new FundingRes(f));
+            else
+                fundingResList.add(new FundingRes(donationRepository.findDonationByFundingId(f.getId())));
         }
-        return fundingResList;
+        return new FundingSizeRes(fundingResList, pageCount);
     }
 
     public FundingIdRes createFunding(FundingReq fundingReq, Long id) {
-        String wallet = "null";
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. user ID=" + id));
         Category category = categoryRepository.findById(fundingReq.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리 ID=" + fundingReq.getCategoryId()));
-        Funding funding = fundingRepository.save(fundingReq.toEntity(user, wallet, category));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("해당 카테고리가 없습니다. 카테고리 ID=" + fundingReq.getCategoryId()));
+                
+        // smart-contract openFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
+        System.out.println("---------------------------------------");
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println(user.getWallet());
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println("---------------------------------------");
+        Funding funding = fundingRepository.save(fundingReq.toEntity(user, category));
+        ethereumUtil.openFunding(funding.getId(), funding.getGoal().intValue(), user.getWallet(), user.getNickname(), 
+        		funding.getTitle(), funding.getEndDatetime().toString(), owner, password);
         return new FundingIdRes(funding.getId());
     }
 
@@ -76,14 +104,23 @@ public class FundingService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + donationReq.getFundingId()));
         if(funding.getStartDatetime().isAfter(LocalDateTime.now()))
             throw new IllegalArgumentException("해당 펀딩은 아직 시작되지 않았습니다!");
-        if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
+        if (funding.getEndDatetime().isBefore(LocalDateTime.now())) {
+
+            // smart-contract closeFunding 삽입 위치
+            // 실패할 경우 분기처리 (Error Exception 추가)
+        	ethereumUtil.closeFunding(funding.getId(), owner, password);
             throw new IllegalArgumentException("해당 펀딩은 이미 종료되었습니다!");
+        }
         if(!funding.getFundingState().equals(FundingState.ACCEPTED))
             throw new IllegalArgumentException("해당 펀딩은 승인되지 않았습니다!");
 
-        donationReq.getKey();   // 지갑 비밀 키
+        donationReq.getKey(); // 지갑 비밀 키
+
+        // smart-contract doanteFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
         
-        String tx_id = "null"; //블록체인 구현 후 tx id 받기
+        String tx_id = ethereumUtil.donateFunding(funding.getId(), user.getWallet(), 
+        		donationReq.getAmount(), donationReq.getKey()); //블록체인 구현 후 tx id 받기
         donationRepository.save(donationReq.toEntity(user, funding, tx_id));
     }
 
@@ -101,10 +138,13 @@ public class FundingService {
     public FundingDetailRes detailFunding(Long fundingId) {
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 펀딩이 없습니다. 펀딩 ID=" + fundingId));
+        FundingRes fundingRes;
+        if(funding.getDonations().size()!=0)
+            fundingRes = new FundingRes(donationRepository.findDonationByFundingId(funding.getId()));
+        else
+            fundingRes = new FundingRes(funding);
 
-        FundingRes fundingRes = new FundingRes(donationRepository.findDonationByFundingId(funding.getId()));
-
-        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getStartDatetime(), funding.getEndDatetime(), funding.getFundingState());
+        return new FundingDetailRes(funding.getUser().getNickname(), fundingRes, funding.getCreatedDatetime(), funding.getFundingState(), funding.getImage(), funding.getContent());
     }
 
     @Transactional
@@ -116,6 +156,28 @@ public class FundingService {
 
         if(funding.getEndDatetime().isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException("종료된 펀딩은 삭제할 수 없습니다!");
+
+        // smart-contract abortFunding 삽입 위치
+        // 실패할 경우 분기처리 (Error Exception 추가)
+        ethereumUtil.abortFunding(funding.getId(), owner, password);
         fundingRepository.delete(funding);
+    }
+
+    @Transactional
+    public void fundingEnd() {
+        List<Funding> fundings = fundingRepository.findAllByIsEndedAndEndDatetimeBefore(false, LocalDateTime.now());
+        log.info("종료될 펀딩 갯수 : " + fundings.size());
+        for(Funding f : fundings) {
+            f.endFunding();
+            if(f.getDonations().size()!=0 && (double) donationRepository.findBalanceByFundingId(f.getId()).getBalance() < f.getGoal()) {
+                for(Donation d: f.getDonations()){
+                    donationRepository.delete(d);
+                }
+                f.deleteDonation();
+            }
+            // smart-contract closeFunding 삽입 위치
+            ethereumUtil.closeFunding(f.getId(), owner, password);
+            fundingRepository.save(f);
+        }
     }
 }

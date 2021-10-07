@@ -45,7 +45,7 @@
                                 <span class="mr-2">{{ranking.amount}}</span>
                                 <div class="relative w-full">
                                     <div class="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                                        <div style="width:60%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                        <div :style="{width:`${100 - ((ranking.id-1)*10)}%`}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +59,6 @@
 </template>
 <script>
 import { reactive } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 export default {
     name: 'Ranking',
     components: {

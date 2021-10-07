@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import { useStore } from 'vuex'
 
 import WelcomePage from '@/views/WelcomePage.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -7,7 +6,6 @@ import ErrorPage from '@/views/ErrorPage.vue';
 import OauthCallback from '@/components/oauth/OauthCallback.vue';
 import MainContent from '@/components/main/MainContent.vue';
 import UserContent from '@/components/user/UserContent.vue';
-import UserEdit from '@/components/user/UserEdit.vue';
 import TransactionContent from '@/components/transaction/TransactionContent.vue';
 import FundingContent from '@/components/funding/FundingContent.vue';
 import FundingCreate from '@/components/funding/FundingCreate.vue';
@@ -28,7 +26,6 @@ const routes = [
         children: [
             {path: ":id/:page", component: MainContent, meta:{ loginRequired: false } },
             {path: "user/:id", component: UserContent , meta:{ loginRequired: true } },
-            {path: "useredit/:id/", component: UserEdit , meta:{ loginRequired: true } },
             {path: "tx/:id", component: TransactionContent , meta:{ loginRequired: false } },
             {path: "fund/:id", component: FundingContent , meta:{ loginRequired: false } },
             {path: "fund/create", component: FundingCreate , meta:{ loginRequired: true } },
@@ -57,23 +54,24 @@ const router = createRouter({
     routes,
 });
 
-// const store = useStore()
+const isLoggedIn = function(){
+    return localStorage.getItem('jwt')? true:false;
+}
 
-// const isLoggedIn = function(){
-//     store.getters['root/isLoggedIn']
-// }
-
-// router.beforeEach((to, from, next) => {
-//     if(to.meta.loginRequired){
-//         if(isLoggedIn()){
-//         next()
-//         }else{
-//         alert("로그인이 필요합니다!")
-//         next("/")
-//         }
-//     }else{
-//         next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if(to.meta.loginRequired){
+        if(isLoggedIn()){
+            next()
+        }else{
+            alert("로그인이 필요합니다!")
+            const params = {
+                redirectUri: "https://j5a506.p.ssafy.io/oauth/kakao",
+            };
+            window.Kakao.Auth.authorize(params);
+        }
+    }else{
+        next()
+    }
+})
 
 export default router;
