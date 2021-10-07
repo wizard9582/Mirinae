@@ -87,7 +87,7 @@ export default {
             .catch()
         }
         const access = () => {
-            if(accessCode==="a506"){
+            if(state.accessCode==="a506"){
                 state.accessFlag = true
             }
         }
