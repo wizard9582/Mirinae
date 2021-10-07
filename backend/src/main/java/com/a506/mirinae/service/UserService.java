@@ -96,7 +96,7 @@ public class UserService {
             throw new IllegalArgumentException("이미 개설된 계좌가 존재합니다!");
 
         user.updateWallet(walletReq);
-        ethereumUtil.transferEhter(owner, user.getWallet(), 100.0, password);
+        ethereumUtil.sendWallet100Ether(user.getWallet(), owner, password);
         userRepository.save(user);
     }
 }

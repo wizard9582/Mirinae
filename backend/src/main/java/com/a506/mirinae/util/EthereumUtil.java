@@ -178,7 +178,27 @@ public class EthereumUtil {
     	return transactionHash;
     }
     
-    
+    public String sendWallet100Ether(String userWallet, String owner, String password) {
+    	String transactionHash = "";
+//    	if(amount<getEther(userWallet)) new IllegalArgumentException("보유 이더 부족");
+    	try {
+    		PersonalUnlockAccount personalUnlockAccount = admin.personalUnlockAccount(owner,password).send();
+			EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(owner, DefaultBlockParameterName.LATEST).send();
+			BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+			BigInteger value = Convert.toWei(String.valueOf(100), Unit.ETHER).toBigInteger();
+			BigInteger gasLimit = BigInteger.valueOf(1000000);
+			BigInteger gasPrice = Transaction.DEFAULT_GAS;
+			Transaction transaction = Transaction.createEtherTransaction(owner, nonce, gasPrice, gasLimit, userWallet, value);
+			EthSendTransaction ethSendTransaction = admin.ethSendTransaction(transaction).send();
+			transactionHash = ethSendTransaction.getTransactionHash();
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			new IllegalArgumentException("돈보내기 실패");
+		}
+    	return transactionHash;
+    }
     public BigInteger getMaxFundingId() {
     	BigInteger returnValue = BigInteger.valueOf(0);
     	Function function = new Function("getMaxFundingId",
