@@ -71,7 +71,6 @@ __docker images__
 
 ### 개발 환경 조성 순서
 __백엔드 서버__
-```
   1. AWS Ubuntu 20.04 LTS (쾌적환 환경을 위해 2개 운용 권장)
   2. docker 설치 및 위의 이미지 설치
   3. docker network 설정 - 백엔드(java), 프론트엔드(Nginx), DB(Mysql)
@@ -80,24 +79,19 @@ __백엔드 서버__
   6. Jenkins 설치 및 바인딩 [docker-compose](/exec/docker-compose.yml)
   7. Jenkins와 Gitlab연동 [파이프라인](/Jenkinsfile)
   8. Jenkins build에 따른 자동배포  
-```
 
 __블록체인 서버__
-```
   1. AWS Ubuntu 20.04 LTS
   2. docker 설치 및 위의 이미지 설치
   3. docker network 설정 - Node1, Node2, ...
   4. genesis.json 생성 및 init [블록 생성](/smart-contract/make_block.sh)
   5. Geth를 통해 Node실행 - 옵션 필요에 따라 변경 [Geth 실행](/smart-contract/make_network.sh)
   6. Front-End에 Node주소 적용 -> const ENDPOINT [makeWallet](/frontend/src/components/user/UserContent.vue)  
-```
 
 __스마트 컨트랙트 배포__
-```
   1. Remix IDE에 solidity파일 컴파일 -> ABI 코드
   2. Web3 Provider에 Node주소 입력 후 배포 -> 배포 주소
   3. Back-End에 Smart-Contract주소 적용 -> contract [EtereumUtil](/backend/src/main/java/com/a506/mirinae/util/EtereumUtil.java)  
-```
 
 ---
 
