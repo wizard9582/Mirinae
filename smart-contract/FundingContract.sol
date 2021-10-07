@@ -122,7 +122,7 @@ contract FundingContract {
         // 펀딩 성공여부 확인
         if(funding_list[_funding_id].state_success == false) {
             if(funding_list[_funding_id].current_amount >= funding_list[_funding_id].target_amount) {
-                //funding_list[_funding_id].state_success = true;
+                funding_list[_funding_id].state_success = true;
             }
         }
     }
